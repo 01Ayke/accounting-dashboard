@@ -11,7 +11,7 @@
  - Apprendre spring boot, implementer un premier ORM (Hibernate)
 
 ## Equipe SI (Moi... Tout seul miskine)
- - Première implementation de BDD sous postgreSQL
+ - Première implementation de BDD 
  - Faire un diagramme de classe UML
 
 ## Equipe DevOps (Encore moi...)
