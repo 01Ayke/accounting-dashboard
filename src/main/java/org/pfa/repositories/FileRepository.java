@@ -1,8 +1,10 @@
 package org.pfa.repositories;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.pfa.config.HibernateUtil;
 import org.pfa.models.File;
+import org.pfa.models.Journal;
 
 import java.util.List;
 
@@ -16,7 +18,11 @@ public class FileRepository {
 
     public File findById(Long id) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        File file = session.get(File.class, id);
+        File file = session.find(File.class, id);
+        Hibernate.initialize(file.getJournaux());
+        for (Journal journal: file.getJournaux()) {
+            Hibernate.initialize(journal.getEcrituresComptables());
+        }
         session.close();
         return file;
     }
