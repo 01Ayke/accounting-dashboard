@@ -18,7 +18,15 @@ public class File {
 
     @OneToMany(mappedBy = "file", fetch = FetchType.LAZY)
     @JsonManagedReference
-    Set<Journal> journaux;
+    private Set<Journal> journaux;
+
+    @ManyToMany
+    @JoinTable(
+            name = "dossier_representant",
+            joinColumns = { @JoinColumn(name = "id_dossier") },
+            inverseJoinColumns = { @JoinColumn(name = "id_representant") }
+    )
+    private Set<Representant> representants;
 
     public Long getId() {
         return this.id_dossier;
@@ -38,5 +46,9 @@ public class File {
 
     public Set<Journal> getJournaux() {
         return journaux;
+    }
+
+    public Set<Representant> getRepresentants() {
+        return representants;
     }
 }

@@ -5,6 +5,7 @@ import org.hibernate.Session;
 import org.pfa.config.HibernateUtil;
 import org.pfa.models.File;
 import org.pfa.models.Journal;
+import org.pfa.models.Representant;
 
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class FileRepository {
         for (Journal journal: file.getJournaux()) {
             Hibernate.initialize(journal.getEcrituresComptables());
         }
+        Hibernate.initialize(file.getRepresentants());
         session.close();
         return file;
     }
