@@ -1,0 +1,131 @@
+﻿<UserControl x:Class="App.Views.LoginView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:App.ViewModels"
+             >
+
+
+    <UserControl.DataContext>
+        <vm:LoginViewModel/>
+    </UserControl.DataContext>
+
+    <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="/App;component/Images/fond_login.jpg" Stretch="UniformToFill"/>
+        </Grid.Background>
+        <!-- Formulaire centré -->
+        <Border Width="360"
+                Padding="30"
+                CornerRadius="12"
+                Background="#CCFFFFFF"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                Effect="{DynamicResource DropShadowEffect}">
+            <StackPanel>
+                <!-- Icone -->
+                <Border Width="50" Height="50" Background="#0D1B2A" CornerRadius="25" HorizontalAlignment="Center">
+                    <TextBlock Text="🔒" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"/>
+                </Border>
+
+                <TextBlock Text="Espace Expert"
+                           FontSize="22"
+                           FontWeight="Bold"
+                           HorizontalAlignment="Center"
+                           Margin="0,10,0,5"/>
+                <TextBlock Text="Connectez-vous pour accéder à vos dossiers"
+                           FontSize="12"
+                           Foreground="Gray"
+                           HorizontalAlignment="Center"
+                           Margin="0,0,0,20"/>
+                
+                <!-- Identifiant -->
+                <StackPanel Margin="0,5">
+                    <TextBlock Text="Identifiant" FontSize="12" Margin="2,0"/>
+
+                    <Grid>
+                        <TextBox x:Name="UsernameBox"
+                                 Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
+                                 Height="35"
+                                 Padding="5"/>
+
+                        <TextBlock Text="expert@cabinet.fr"
+                                   Margin="8,0,0,0"
+                                   VerticalAlignment="Center"
+                                   Foreground="Gray"
+                                   IsHitTestVisible="False"
+                                   Visibility="{Binding Text.IsEmpty,
+                                        ElementName=UsernameBox,
+                                        Converter={StaticResource BoolToVisibilityConverter}}"/>
+                    </Grid>
+                </StackPanel>
+
+
+                <!-- Mot de passe -->
+                <StackPanel Margin="0,5">
+                    <TextBlock Text="Mot de passe" FontSize="12" Margin="2,0"/>
+
+                    <Grid>
+                        <PasswordBox x:Name="PasswordBox"
+                                     Height="35"
+                                     Padding="5"
+                                     PasswordChanged="PasswordBox_PasswordChanged"/>
+
+                        <TextBlock x:Name="PasswordPlaceholder"
+                                   Text="••••••••"
+                                   Margin="8,0,0,0"
+                                   VerticalAlignment="Center"
+                                   Foreground="Gray"
+                                   IsHitTestVisible="False"/>
+                    </Grid>
+                </StackPanel>
+
+
+                <!-- Bouton -->
+                <Button Content="Se connecter" Width="120" Height="40" FontWeight="SemiBold" Foreground="White" Command="{Binding LoginCommand}">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#0D1B2A"/>
+                            <Setter Property="Cursor" Value="Hand"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="OverridesDefaultStyle" Value="True"/> <!-- Important -->
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="6">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="border" Property="Background" Value="DarkGray"/>
+                                            </Trigger>
+                                            <Trigger Property="IsPressed" Value="True">
+                                                <Setter TargetName="border" Property="Background" Value="Gray"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <StackPanel>
+                    <TextBlock Text="Mot de passe oublié ?" FontSize="11" Margin="0,10">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Foreground" Value="DarkSlateGray"/>
+                                <Setter Property="Cursor" Value="Hand"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="TextDecorations" Value="Underline"/>
+                                        <Setter Property="FontWeight" Value="Bold"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>
