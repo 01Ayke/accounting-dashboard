@@ -4,13 +4,19 @@ services:
     container_name: mysql-db
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: root   
-      MYSQL_DATABASE: lakonta     
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: lakonta
+      MYSQL_GENERAL_LOG: '1'                
+      MYSQL_GENERAL_LOG_FILE: /var/lib/mysql/general.log
     ports:
-      - "2020:3306"             
+      - "2020:3306"
     volumes:
       - mysql-data:/var/lib/mysql
-      - ./mysql-init:/docker-entrypoint-initdb.d  
+      - ./mysql-init:/docker-entrypoint-initdb.d
+    command: >
+      --log-output=TABLE    
+      --general-log=ON
+      --general-log-file=/var/lib/mysql/general.log
 
 volumes:
   mysql-data:

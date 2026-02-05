@@ -102,9 +102,9 @@ CREATE TABLE categorie_document (
   description TEXT NULL,
   id_categorie_parent INT NULL,
   actif BOOLEAN NOT NULL DEFAULT TRUE,
-  
+
   FOREIGN KEY (id_categorie_parent) REFERENCES categorie_document (id_categorie_document) ON DELETE SET NULL,
-  
+
   INDEX idx_code (code),
   INDEX idx_parent (id_categorie_parent)
 );
@@ -119,9 +119,9 @@ CREATE TABLE type_document (
   obligatoire BOOLEAN NOT NULL DEFAULT FALSE,
   description TEXT NULL,
   actif BOOLEAN NOT NULL DEFAULT TRUE,
-  
+
   FOREIGN KEY (id_categorie_document) REFERENCES categorie_document (id_categorie_document) ON DELETE RESTRICT,
-  
+
   INDEX idx_code (code),
   INDEX idx_categorie (id_categorie_document)
 );
@@ -144,10 +144,10 @@ CREATE TABLE adresse (
   pays VARCHAR(45) NOT NULL,
   ville VARCHAR(45) NOT NULL,
   rue VARCHAR(45) NOT NULL,
-  numero VARCHAR(10), 
+  numero VARCHAR(10),
   complement VARCHAR(90),
   code_postal VARCHAR(10),
-  
+
   INDEX idx_ville (ville),
   INDEX idx_pays (pays)
 );
@@ -163,10 +163,10 @@ CREATE TABLE utilisateur (
   date_creation DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   date_derniere_connexion DATETIME NULL,
   actif BOOLEAN NOT NULL DEFAULT TRUE,
-  
+
   UNIQUE KEY uk_mail (mail),
   UNIQUE KEY uk_code (code),
-  
+
   INDEX idx_mail (mail),
   INDEX idx_code (code)
 );
@@ -187,10 +187,10 @@ CREATE TABLE representant (
   date_creation DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   date_modification DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
   actif BOOLEAN NOT NULL DEFAULT TRUE,
-  
+
   UNIQUE KEY uk_mail (mail),
   FOREIGN KEY (id_adresse) REFERENCES adresse (id_adresse) ON DELETE RESTRICT,
-  
+
   INDEX idx_nom_prenom (nom, prenom),
   INDEX idx_mail (mail)
 );
@@ -210,13 +210,13 @@ CREATE TABLE dossier (
   date_creation DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   date_modification DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
   actif BOOLEAN NOT NULL DEFAULT TRUE,
-  
+
   UNIQUE KEY uk_denomination (denomination_sociale),
   FOREIGN KEY (id_adresse) REFERENCES adresse (id_adresse) ON DELETE RESTRICT,
   FOREIGN KEY (id_forme_juridique) REFERENCES forme_juridique (id_forme_juridique),
   FOREIGN KEY (id_regime_fiscal) REFERENCES regime_fiscal (id_regime_fiscal),
   FOREIGN KEY (id_regime_tva) REFERENCES regime_tva (id_regime_tva),
-  
+
   INDEX idx_denomination (denomination_sociale),
   INDEX idx_mail (mail)
 );
@@ -227,11 +227,11 @@ CREATE TABLE utilisateur_role (
   id_role INT NOT NULL,
   date_attribution DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   date_expiration DATETIME NULL,
-  
+
   PRIMARY KEY (id_utilisateur, id_role),
   FOREIGN KEY (id_utilisateur) REFERENCES utilisateur (id_utilisateur) ON DELETE CASCADE,
   FOREIGN KEY (id_role) REFERENCES role_utilisateur (id_role) ON DELETE CASCADE,
-  
+
   INDEX idx_role (id_role),
   INDEX idx_expiration (date_expiration)
 );
@@ -247,11 +247,11 @@ CREATE TABLE dossier_representant (
   date_debut DATE NOT NULL,
   date_fin DATE NULL,
   principal BOOLEAN NOT NULL DEFAULT FALSE,
-  
+
   PRIMARY KEY (id_dossier, id_representant),
   FOREIGN KEY (id_dossier) REFERENCES dossier (id_dossier) ON DELETE CASCADE,
   FOREIGN KEY (id_representant) REFERENCES representant (id_representant) ON DELETE CASCADE,
-  
+
   CHECK (date_fin IS NULL OR date_fin >= date_debut),
   INDEX idx_date_debut (date_debut),
   INDEX idx_representant (id_representant)
@@ -268,13 +268,13 @@ CREATE TABLE comptable_dossier (
   pourcentage_charge INT NULL CHECK (pourcentage_charge BETWEEN 0 AND 100),
   commentaire TEXT NULL,
   actif BOOLEAN NOT NULL DEFAULT TRUE,
-  
+
   UNIQUE KEY uk_utilisateur_dossier_actif (id_utilisateur, id_dossier, actif),
   FOREIGN KEY (id_utilisateur) REFERENCES utilisateur (id_utilisateur) ON DELETE RESTRICT,
   FOREIGN KEY (id_dossier) REFERENCES dossier (id_dossier) ON DELETE CASCADE,
-  
+
   CHECK (date_fin_attribution IS NULL OR date_fin_attribution >= date_attribution),
-  
+
   INDEX idx_utilisateur (id_utilisateur),
   INDEX idx_dossier (id_dossier),
   INDEX idx_date_attribution (date_attribution),
@@ -295,7 +295,7 @@ CREATE TABLE journal (
   UNIQUE KEY uk_dossier_code (id_dossier, code),
   FOREIGN KEY (id_dossier) REFERENCES dossier (id_dossier) ON DELETE RESTRICT,
   FOREIGN KEY (id_type_journal) REFERENCES type_journal (id_type_journal),
-  
+
   INDEX idx_code (code),
   INDEX idx_dossier (id_dossier)
 );
@@ -308,10 +308,10 @@ CREATE TABLE compte (
   id_dossier INT NOT NULL,
   solde DECIMAL(15,2) NOT NULL DEFAULT 0,
   actif BOOLEAN NOT NULL DEFAULT TRUE,
-  
+
   UNIQUE KEY uk_dossier_numero (id_dossier, numero_compte),
   FOREIGN KEY (id_dossier) REFERENCES dossier (id_dossier) ON DELETE RESTRICT,
-  
+
   INDEX idx_numero_compte (numero_compte),
   INDEX idx_dossier (id_dossier)
 );
@@ -327,10 +327,10 @@ CREATE TABLE session_travail (
   nombre_actions INT NOT NULL DEFAULT 0,
   type_travail VARCHAR(45) NULL,
   commentaire TEXT NULL,
-  
+
   FOREIGN KEY (id_utilisateur) REFERENCES utilisateur (id_utilisateur) ON DELETE RESTRICT,
   FOREIGN KEY (id_dossier) REFERENCES dossier (id_dossier) ON DELETE CASCADE,
-  
+
   INDEX idx_utilisateur (id_utilisateur),
   INDEX idx_dossier (id_dossier),
   INDEX idx_date_debut (date_debut),
@@ -343,29 +343,29 @@ CREATE TABLE communication (
   id_utilisateur INT NOT NULL,
   id_representant INT NULL,
   id_dossier INT NOT NULL,
-  
+
   type_communication ENUM('EMAIL', 'TELEPHONE', 'VISIO', 'RENCONTRE', 'COURRIER', 'AUTRE') NOT NULL,
-  
+
   objet VARCHAR(200) NOT NULL,
   contenu TEXT NOT NULL,
-  
+
   date_communication DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   duree_minutes INT NULL,
-  
+
   sens ENUM('ENTRANT', 'SORTANT') NOT NULL,
-  
+
   necessite_suivi BOOLEAN NOT NULL DEFAULT FALSE,
   date_suivi_prevu DATETIME NULL,
   suivi_effectue BOOLEAN NOT NULL DEFAULT FALSE,
   date_suivi_effectue DATETIME NULL,
-  
+
   urgent BOOLEAN NOT NULL DEFAULT FALSE,
   confidentiel BOOLEAN NOT NULL DEFAULT FALSE,
-  
+
   FOREIGN KEY (id_utilisateur) REFERENCES utilisateur (id_utilisateur) ON DELETE RESTRICT,
   FOREIGN KEY (id_representant) REFERENCES representant (id_representant) ON DELETE SET NULL,
   FOREIGN KEY (id_dossier) REFERENCES dossier (id_dossier) ON DELETE CASCADE,
-  
+
   INDEX idx_utilisateur (id_utilisateur),
   INDEX idx_representant (id_representant),
   INDEX idx_dossier (id_dossier),
@@ -381,28 +381,55 @@ CREATE TABLE communication (
 
 -- Table financement
 CREATE TABLE financement (
-  id_financement INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  date_financement DATE NOT NULL,
-  duree_mois INT NOT NULL CHECK (duree_mois > 0),
-  montant DECIMAL(15,2) NOT NULL CHECK (montant > 0),
-  taux DECIMAL(5,2) NOT NULL CHECK (taux >= 0 AND taux <= 100),
-  id_mode_remboursement INT NOT NULL,
-  date_premiere_echeance DATE NOT NULL,
-  remboursement_total DECIMAL(15,2) NOT NULL CHECK (remboursement_total >= montant),
-  cout_assurance DECIMAL(15,2) NOT NULL DEFAULT 0 CHECK (cout_assurance >= 0),
-  montant_interet_premiere_echeance DECIMAL(15,2) NOT NULL CHECK (montant_interet_premiere_echeance >= 0),
-  commentaire TEXT NULL,
-  id_compte INT NOT NULL,
-  etablissement VARCHAR(80) NOT NULL,
-  intitule VARCHAR(80) NOT NULL,
-  actif BOOLEAN NOT NULL DEFAULT TRUE,
-  
-  FOREIGN KEY (id_compte) REFERENCES compte (id_compte) ON DELETE RESTRICT,
-  FOREIGN KEY (id_mode_remboursement) REFERENCES mode_remboursement (id_mode_remboursement),
-  
-  INDEX idx_etablissement (etablissement),
-  INDEX idx_date (date_financement)
+    id_financement INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    date_financement DATE NOT NULL,
+    duree_mois INT NOT NULL CHECK (duree_mois > 0),
+    montant DECIMAL(15,2) NOT NULL CHECK (montant > 0),
+    taux DECIMAL(5,2) NOT NULL CHECK (taux >= 0 AND taux <= 100),
+    id_mode_remboursement INT NOT NULL,
+    date_premiere_echeance DATE NOT NULL,
+    remboursement_total DECIMAL(15,2) NOT NULL CHECK (remboursement_total >= 0),
+    cout_assurance DECIMAL(15,2) NOT NULL DEFAULT 0 CHECK (cout_assurance >= 0),
+    montant_interet_premiere_echeance DECIMAL(15,2) NOT NULL CHECK (montant_interet_premiere_echeance >= 0),
+    commentaire TEXT NULL,
+    id_compte INT NOT NULL,
+    etablissement VARCHAR(80) NOT NULL,
+    intitule VARCHAR(80) NOT NULL,
+    actif BOOLEAN NOT NULL DEFAULT TRUE,
+
+    FOREIGN KEY (id_compte) REFERENCES compte (id_compte) ON DELETE RESTRICT,
+    FOREIGN KEY (id_mode_remboursement) REFERENCES mode_remboursement (id_mode_remboursement),
+
+    INDEX idx_etablissement (etablissement),
+    INDEX idx_date (date_financement)
 );
+
+-- Trigger pour s'assurer que remboursement_total >= montant
+DELIMITER //
+
+CREATE TRIGGER financement_before_insert
+BEFORE INSERT ON financement
+FOR EACH ROW
+BEGIN
+    IF NEW.remboursement_total < NEW.montant THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'remboursement_total doit etre >= montant';
+    END IF;
+END;
+//
+
+CREATE TRIGGER financement_before_update
+BEFORE UPDATE ON financement
+FOR EACH ROW
+BEGIN
+    IF NEW.remboursement_total < NEW.montant THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'remboursement_total doit etre >= montant';
+    END IF;
+END;
+//
+
+DELIMITER ;
 
 -- Table compte_auxiliaire
 CREATE TABLE compte_auxiliaire (
@@ -412,11 +439,11 @@ CREATE TABLE compte_auxiliaire (
   id_type_compte_auxiliaire INT NOT NULL,
   solde DECIMAL(15,2) NOT NULL DEFAULT 0,
   actif BOOLEAN NOT NULL DEFAULT TRUE,
-  
+
   UNIQUE KEY uk_compte_libelle (id_compte_rattachement, libelle),
   FOREIGN KEY (id_compte_rattachement) REFERENCES compte (id_compte) ON DELETE RESTRICT,
   FOREIGN KEY (id_type_compte_auxiliaire) REFERENCES type_compte_auxiliaire (id_type_compte_auxiliaire),
-  
+
   INDEX idx_compte_rattachement (id_compte_rattachement),
   INDEX idx_type (id_type_compte_auxiliaire)
 );
@@ -432,37 +459,37 @@ CREATE TABLE document (
   hash_md5 VARCHAR(32) NOT NULL,
   hash_sha256 VARCHAR(64) NOT NULL,
   mime_type VARCHAR(100) NOT NULL,
-  
+
   id_type_document INT NOT NULL,
   id_statut_document INT NOT NULL,
   id_dossier INT NOT NULL,
-  
+
   titre VARCHAR(200) NOT NULL,
   description TEXT NULL,
   mots_cles VARCHAR(500) NULL,
-  
+
   date_document DATE NULL,
   date_telechargement DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   id_utilisateur_telechargement INT NOT NULL,
-  
+
   numero_version INT NOT NULL DEFAULT 1,
   id_document_parent INT NULL,
-  
+
   date_archivage DATETIME NULL,
   date_suppression DATETIME NULL,
   id_utilisateur_suppression INT NULL,
   motif_suppression TEXT NULL,
-  
+
   confidentiel BOOLEAN NOT NULL DEFAULT FALSE,
   actif BOOLEAN NOT NULL DEFAULT TRUE,
-  
+
   FOREIGN KEY (id_type_document) REFERENCES type_document (id_type_document) ON DELETE RESTRICT,
   FOREIGN KEY (id_statut_document) REFERENCES statut_document (id_statut_document) ON DELETE RESTRICT,
   FOREIGN KEY (id_dossier) REFERENCES dossier (id_dossier) ON DELETE RESTRICT,
   FOREIGN KEY (id_utilisateur_telechargement) REFERENCES utilisateur (id_utilisateur) ON DELETE RESTRICT,
   FOREIGN KEY (id_utilisateur_suppression) REFERENCES utilisateur (id_utilisateur) ON DELETE RESTRICT,
   FOREIGN KEY (id_document_parent) REFERENCES document (id_document) ON DELETE SET NULL,
-  
+
   INDEX idx_nom_fichier (nom_fichier),
   INDEX idx_hash_md5 (hash_md5),
   INDEX idx_hash_sha256 (hash_sha256),
@@ -494,18 +521,18 @@ CREATE TABLE ecriture_comptable (
   date_lettrage DATE NULL,
   montant_devise DECIMAL(15,2) NULL,
   id_type_devise INT NULL,
-  
+
   CONSTRAINT chk_debit_credit CHECK (
-    (debit IS NOT NULL AND credit IS NULL) OR 
+    (debit IS NOT NULL AND credit IS NULL) OR
     (debit IS NULL AND credit IS NOT NULL)
   ),
-  
+
   FOREIGN KEY (id_operateur) REFERENCES utilisateur (id_utilisateur) ON DELETE RESTRICT,
   FOREIGN KEY (id_compte) REFERENCES compte (id_compte) ON DELETE RESTRICT,
   FOREIGN KEY (id_compte_auxiliaire) REFERENCES compte_auxiliaire (id_compte_auxiliaire) ON DELETE RESTRICT,
   FOREIGN KEY (id_journal) REFERENCES journal (id_journal) ON DELETE RESTRICT,
   FOREIGN KEY (id_type_devise) REFERENCES type_devise (id_type_devise),
-  
+
   INDEX idx_date_saisie (date_saisie),
   INDEX idx_date_validation (date_validation),
   INDEX idx_operateur (id_operateur),
@@ -536,13 +563,13 @@ CREATE TABLE immobilisation (
   id_type_immobilisation INT NOT NULL,
   intitule VARCHAR(80) NOT NULL,
   actif BOOLEAN NOT NULL DEFAULT TRUE,
-  
+
   FOREIGN KEY (id_compte_immobilisation) REFERENCES compte (id_compte) ON DELETE RESTRICT,
   FOREIGN KEY (id_financement) REFERENCES financement (id_financement) ON DELETE SET NULL,
   FOREIGN KEY (id_mode_amortissement_economique) REFERENCES mode_amortissement (id_mode_amortissement),
   FOREIGN KEY (id_mode_amortissement_fiscal) REFERENCES mode_amortissement (id_mode_amortissement),
   FOREIGN KEY (id_type_immobilisation) REFERENCES type_immobilisation (id_type_immobilisation),
-  
+
   INDEX idx_date_acquisition (date_acquisition),
   INDEX idx_type (id_type_immobilisation)
 );
@@ -550,13 +577,13 @@ CREATE TABLE immobilisation (
 -- Table log_interaction
 CREATE TABLE log_interaction (
   id_log INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  
+
   id_utilisateur INT NOT NULL,
   id_representant INT NULL,
-  
+
   id_type_action INT NOT NULL,
   description TEXT NOT NULL,
-  
+
   id_dossier INT NULL,
   id_ecriture_comptable INT NULL,
   id_document INT NULL,
@@ -564,18 +591,18 @@ CREATE TABLE log_interaction (
   id_financement INT NULL,
   id_compte INT NULL,
   id_journal INT NULL,
-  
+
   date_action DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   duree_secondes INT NULL,
   adresse_ip VARCHAR(45) NULL,
   user_agent VARCHAR(255) NULL,
-  
+
   ancienne_valeur JSON NULL,
   nouvelle_valeur JSON NULL,
-  
+
   contexte VARCHAR(100) NULL,
   commentaire_utilisateur TEXT NULL,
-  
+
   FOREIGN KEY (id_utilisateur) REFERENCES utilisateur (id_utilisateur) ON DELETE RESTRICT,
   FOREIGN KEY (id_representant) REFERENCES representant (id_representant) ON DELETE SET NULL,
   FOREIGN KEY (id_type_action) REFERENCES type_action (id_type_action) ON DELETE RESTRICT,
@@ -586,7 +613,7 @@ CREATE TABLE log_interaction (
   FOREIGN KEY (id_financement) REFERENCES financement (id_financement) ON DELETE CASCADE,
   FOREIGN KEY (id_compte) REFERENCES compte (id_compte) ON DELETE CASCADE,
   FOREIGN KEY (id_journal) REFERENCES journal (id_journal) ON DELETE CASCADE,
-  
+
   INDEX idx_utilisateur (id_utilisateur),
   INDEX idx_representant (id_representant),
   INDEX idx_type_action (id_type_action),
@@ -601,11 +628,11 @@ CREATE TABLE log_interaction (
 CREATE TABLE document_ecriture (
   id_document INT NOT NULL,
   id_ecriture_comptable INT NOT NULL,
-  
+
   PRIMARY KEY (id_document, id_ecriture_comptable),
   FOREIGN KEY (id_document) REFERENCES document (id_document) ON DELETE CASCADE,
   FOREIGN KEY (id_ecriture_comptable) REFERENCES ecriture_comptable (id_ecriture_comptable) ON DELETE CASCADE,
-  
+
   INDEX idx_ecriture (id_ecriture_comptable)
 );
 
@@ -613,11 +640,11 @@ CREATE TABLE document_ecriture (
 CREATE TABLE document_immobilisation (
   id_document INT NOT NULL,
   id_immobilisation INT NOT NULL,
-  
+
   PRIMARY KEY (id_document, id_immobilisation),
   FOREIGN KEY (id_document) REFERENCES document (id_document) ON DELETE CASCADE,
   FOREIGN KEY (id_immobilisation) REFERENCES immobilisation (id_immobilisation) ON DELETE CASCADE,
-  
+
   INDEX idx_immobilisation (id_immobilisation)
 );
 
@@ -625,11 +652,11 @@ CREATE TABLE document_immobilisation (
 CREATE TABLE document_financement (
   id_document INT NOT NULL,
   id_financement INT NOT NULL,
-  
+
   PRIMARY KEY (id_document, id_financement),
   FOREIGN KEY (id_document) REFERENCES document (id_document) ON DELETE CASCADE,
   FOREIGN KEY (id_financement) REFERENCES financement (id_financement) ON DELETE CASCADE,
-  
+
   INDEX idx_financement (id_financement)
 );
 
@@ -637,11 +664,11 @@ CREATE TABLE document_financement (
 CREATE TABLE document_representant (
   id_document INT NOT NULL,
   id_representant INT NOT NULL,
-  
+
   PRIMARY KEY (id_document, id_representant),
   FOREIGN KEY (id_document) REFERENCES document (id_document) ON DELETE CASCADE,
   FOREIGN KEY (id_representant) REFERENCES representant (id_representant) ON DELETE CASCADE,
-  
+
   INDEX idx_representant (id_representant)
 );
 
@@ -649,11 +676,11 @@ CREATE TABLE document_representant (
 CREATE TABLE communication_document (
   id_communication INT NOT NULL,
   id_document INT NOT NULL,
-  
+
   PRIMARY KEY (id_communication, id_document),
   FOREIGN KEY (id_communication) REFERENCES communication (id_communication) ON DELETE CASCADE,
   FOREIGN KEY (id_document) REFERENCES document (id_document) ON DELETE CASCADE,
-  
+
   INDEX idx_document (id_document)
 );
 
@@ -666,10 +693,10 @@ CREATE TABLE historique_document (
   date_action DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   details TEXT NULL,
   adresse_ip VARCHAR(45) NULL,
-  
+
   FOREIGN KEY (id_document) REFERENCES document (id_document) ON DELETE CASCADE,
   FOREIGN KEY (id_utilisateur) REFERENCES utilisateur (id_utilisateur) ON DELETE RESTRICT,
-  
+
   INDEX idx_document (id_document),
   INDEX idx_utilisateur (id_utilisateur),
   INDEX idx_date_action (date_action),
@@ -686,11 +713,11 @@ CREATE TABLE droit_acces_document (
   suppression BOOLEAN NOT NULL DEFAULT FALSE,
   date_attribution DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   date_expiration DATETIME NULL,
-  
+
   UNIQUE KEY uk_document_utilisateur (id_document, id_utilisateur),
   FOREIGN KEY (id_document) REFERENCES document (id_document) ON DELETE CASCADE,
   FOREIGN KEY (id_utilisateur) REFERENCES utilisateur (id_utilisateur) ON DELETE CASCADE,
-  
+
   INDEX idx_document (id_document),
   INDEX idx_utilisateur (id_utilisateur),
   INDEX idx_expiration (date_expiration)
@@ -704,11 +731,11 @@ CREATE TABLE commentaire_document (
   commentaire TEXT NOT NULL,
   date_commentaire DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   id_commentaire_parent INT NULL,
-  
+
   FOREIGN KEY (id_document) REFERENCES document (id_document) ON DELETE CASCADE,
   FOREIGN KEY (id_utilisateur) REFERENCES utilisateur (id_utilisateur) ON DELETE RESTRICT,
   FOREIGN KEY (id_commentaire_parent) REFERENCES commentaire_document (id_commentaire) ON DELETE CASCADE,
-  
+
   INDEX idx_document (id_document),
   INDEX idx_utilisateur (id_utilisateur),
   INDEX idx_date (date_commentaire),
@@ -720,27 +747,27 @@ CREATE TABLE notification (
   id_notification INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
   id_utilisateur_destinataire INT NOT NULL,
   id_utilisateur_emetteur INT NULL,
-  
+
   titre VARCHAR(200) NOT NULL,
   message TEXT NOT NULL,
   type_notification VARCHAR(45) NOT NULL,
-  
+
   id_log_interaction INT NULL,
   id_communication INT NULL,
   id_dossier INT NULL,
-  
+
   date_creation DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   date_lecture DATETIME NULL,
   lue BOOLEAN NOT NULL DEFAULT FALSE,
-  
+
   priorite ENUM('BASSE', 'NORMALE', 'HAUTE', 'URGENTE') NOT NULL DEFAULT 'NORMALE',
-  
+
   FOREIGN KEY (id_utilisateur_destinataire) REFERENCES utilisateur (id_utilisateur) ON DELETE CASCADE,
   FOREIGN KEY (id_utilisateur_emetteur) REFERENCES utilisateur (id_utilisateur) ON DELETE SET NULL,
   FOREIGN KEY (id_log_interaction) REFERENCES log_interaction (id_log) ON DELETE CASCADE,
   FOREIGN KEY (id_communication) REFERENCES communication (id_communication) ON DELETE CASCADE,
   FOREIGN KEY (id_dossier) REFERENCES dossier (id_dossier) ON DELETE CASCADE,
-  
+
   INDEX idx_destinataire (id_utilisateur_destinataire),
   INDEX idx_date_creation (date_creation),
   INDEX idx_lue (lue),
@@ -748,59 +775,11 @@ CREATE TABLE notification (
 );
 
 -- -----------------------------------------------------
--- Vues
--- -----------------------------------------------------
-
--- Vue pour les dossiers actifs par comptable
-CREATE VIEW v_dossiers_comptable AS
-SELECT 
-  cd.id_utilisateur,
-  u.nom AS nom_comptable,
-  u.prenom AS prenom_comptable,
-  cd.id_dossier,
-  d.denomination_sociale,
-  cd.responsable_principal,
-  cd.pourcentage_charge,
-  cd.date_attribution,
-  cd.date_fin_attribution,
-  COUNT(DISTINCT li.id_log) AS nombre_interactions_mois,
-  MAX(li.date_action) AS derniere_interaction
-FROM comptable_dossier cd
-JOIN utilisateur u ON cd.id_utilisateur = u.id_utilisateur
-JOIN dossier d ON cd.id_dossier = d.id_dossier
-LEFT JOIN log_interaction li ON li.id_dossier = cd.id_dossier 
-  AND li.id_utilisateur = cd.id_utilisateur
-  AND li.date_action >= DATE_SUB(NOW(), INTERVAL 1 MONTH)
-WHERE cd.actif = TRUE
-GROUP BY cd.id_utilisateur, cd.id_dossier, u.nom, u.prenom, d.denomination_sociale, 
-         cd.responsable_principal, cd.pourcentage_charge, cd.date_attribution, cd.date_fin_attribution;
-
--- Vue pour le résumé des activités par dossier
-CREATE VIEW v_activite_dossier AS
-SELECT 
-  d.id_dossier,
-  d.denomination_sociale,
-  COUNT(DISTINCT li.id_log) AS nombre_interactions_total,
-  COUNT(DISTINCT ec.id_ecriture_comptable) AS nombre_ecritures,
-  COUNT(DISTINCT doc.id_document) AS nombre_documents,
-  COUNT(DISTINCT com.id_communication) AS nombre_communications,
-  MAX(li.date_action) AS derniere_activite,
-  COUNT(DISTINCT cd.id_utilisateur) AS nombre_comptables_assignes
-FROM dossier d
-LEFT JOIN log_interaction li ON li.id_dossier = d.id_dossier
-LEFT JOIN ecriture_comptable ec ON ec.id_compte IN (SELECT id_compte FROM compte WHERE id_dossier = d.id_dossier)
-LEFT JOIN document doc ON doc.id_dossier = d.id_dossier
-LEFT JOIN communication com ON com.id_dossier = d.id_dossier
-LEFT JOIN comptable_dossier cd ON cd.id_dossier = d.id_dossier AND cd.actif = TRUE
-WHERE d.actif = TRUE
-GROUP BY d.id_dossier, d.denomination_sociale;
-
--- -----------------------------------------------------
 -- Données de référence
 -- -----------------------------------------------------
 
 -- Types de journaux
-INSERT INTO type_journal (libelle, code) VALUES 
+INSERT INTO type_journal (libelle, code) VALUES
 ('Achats', 'ACH'),
 ('Ventes', 'VTE'),
 ('Banque', 'BQ'),
@@ -809,7 +788,7 @@ INSERT INTO type_journal (libelle, code) VALUES
 ('À nouveaux', 'AN');
 
 -- Formes juridiques
-INSERT INTO forme_juridique (libelle, code) VALUES 
+INSERT INTO forme_juridique (libelle, code) VALUES
 ('SARL', 'SARL'),
 ('SAS', 'SAS'),
 ('SASU', 'SASU'),
@@ -820,51 +799,51 @@ INSERT INTO forme_juridique (libelle, code) VALUES
 ('Auto-entrepreneur', 'AE');
 
 -- Régimes fiscaux
-INSERT INTO regime_fiscal (libelle, code) VALUES 
+INSERT INTO regime_fiscal (libelle, code) VALUES
 ('Impôt sur les sociétés', 'IS'),
 ('Impôt sur le revenu', 'IR'),
 ('Micro-entreprise', 'MICRO');
 
 -- Régimes TVA
-INSERT INTO regime_tva (libelle, code) VALUES 
+INSERT INTO regime_tva (libelle, code) VALUES
 ('Réel normal', 'RN'),
 ('Réel simplifié', 'RS'),
 ('Franchise en base', 'FB'),
 ('Mini-réel', 'MR');
 
 -- Modes de remboursement
-INSERT INTO mode_remboursement (libelle, code) VALUES 
+INSERT INTO mode_remboursement (libelle, code) VALUES
 ('Amortissement constant', 'AC'),
 ('Mensualités constantes', 'MC'),
 ('In fine', 'IF');
 
 -- Modes d'amortissement
-INSERT INTO mode_amortissement (libelle, code) VALUES 
+INSERT INTO mode_amortissement (libelle, code) VALUES
 ('Linéaire', 'LIN'),
 ('Dégressif', 'DEG'),
 ('Exceptionnel', 'EXC');
 
 -- Types d'immobilisation
-INSERT INTO type_immobilisation (libelle, code) VALUES 
+INSERT INTO type_immobilisation (libelle, code) VALUES
 ('Incorporelle', 'INCORP'),
 ('Corporelle', 'CORP'),
 ('Financière', 'FIN');
 
 -- Types de compte auxiliaire
-INSERT INTO type_compte_auxiliaire (libelle, code) VALUES 
+INSERT INTO type_compte_auxiliaire (libelle, code) VALUES
 ('Client', 'CLI'),
 ('Fournisseur', 'FRS'),
 ('Autre', 'AUT');
 
 -- Devises
-INSERT INTO type_devise (code, libelle, symbole) VALUES 
+INSERT INTO type_devise (code, libelle, symbole) VALUES
 ('EUR', 'Euro', '€'),
-('USD', 'Dollar américain', '),
+('USD', 'Dollar américain', '$'),
 ('GBP', 'Livre sterling', '£'),
 ('CHF', 'Franc suisse', 'CHF');
 
 -- Rôles utilisateurs
-INSERT INTO role_utilisateur (libelle, code, description, niveau_acces) VALUES 
+INSERT INTO role_utilisateur (libelle, code, description, niveau_acces) VALUES
 ('Administrateur', 'ADMIN', 'Accès complet au système', 10),
 ('Expert-comptable', 'EXPERT', 'Expert-comptable avec accès étendu', 8),
 ('Comptable confirmé', 'COMPTA_CONF', 'Comptable avec accès complet aux dossiers attribués', 6),
@@ -874,7 +853,7 @@ INSERT INTO role_utilisateur (libelle, code, description, niveau_acces) VALUES
 ('Client', 'CLIENT', 'Accès client via portail', 1);
 
 -- Types d'actions pour le logging
-INSERT INTO type_action (libelle, code, categorie, niveau_importance) VALUES 
+INSERT INTO type_action (libelle, code, categorie, niveau_importance) VALUES
 -- Dossiers
 ('Création de dossier', 'DOSSIER_CREATE', 'DOSSIER', 'INFO'),
 ('Modification de dossier', 'DOSSIER_UPDATE', 'DOSSIER', 'INFO'),
@@ -932,7 +911,7 @@ INSERT INTO type_action (libelle, code, categorie, niveau_importance) VALUES
 ('Sauvegarde', 'SYS_BACKUP', 'SYSTEME', 'CRITICAL');
 
 -- Catégories de documents
-INSERT INTO categorie_document (libelle, code, description) VALUES 
+INSERT INTO categorie_document (libelle, code, description) VALUES
 ('Documents comptables', 'COMPTA', 'Documents liés à la comptabilité'),
 ('Documents juridiques', 'JURID', 'Statuts, contrats, actes juridiques'),
 ('Documents fiscaux', 'FISCAL', 'Déclarations fiscales et liasses'),
@@ -942,7 +921,7 @@ INSERT INTO categorie_document (libelle, code, description) VALUES
 ('Documents administratifs', 'ADMIN', 'Courriers administratifs divers');
 
 -- Types de documents
-INSERT INTO type_document (libelle, code, id_categorie_document, conservation_annees, obligatoire) VALUES 
+INSERT INTO type_document (libelle, code, id_categorie_document, conservation_annees, obligatoire) VALUES
 -- Documents comptables
 ('Facture d''achat', 'FACT_ACH', 1, 10, TRUE),
 ('Facture de vente', 'FACT_VTE', 1, 10, TRUE),
@@ -978,7 +957,7 @@ INSERT INTO type_document (libelle, code, id_categorie_document, conservation_an
 ('Bon de livraison', 'BL', 6, 10, FALSE);
 
 -- Statuts de documents
-INSERT INTO statut_document (libelle, code, description) VALUES 
+INSERT INTO statut_document (libelle, code, description) VALUES
 ('Brouillon', 'BROUILLON', 'Document en cours de préparation'),
 ('En attente de validation', 'ATTENTE_VAL', 'Document en attente de validation'),
 ('Validé', 'VALIDE', 'Document validé et finalisé'),
