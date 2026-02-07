@@ -2,10 +2,7 @@ package org.pfa.config;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import org.pfa.models.AccountingEntry;
-import org.pfa.models.File;
-import org.pfa.models.Journal;
-import org.pfa.models.Representant;
+import org.pfa.models.*;
 
 public class HibernateUtil {
 
@@ -19,6 +16,7 @@ public class HibernateUtil {
                     .addAnnotatedClass(Journal.class)
                     .addAnnotatedClass(AccountingEntry.class)
                     .addAnnotatedClass(Representant.class)
+                    .addAnnotatedClass(User.class)
                     .buildSessionFactory();
         } catch (Throwable ex) {
             System.err.println("Erreur Hibernate : " + ex);

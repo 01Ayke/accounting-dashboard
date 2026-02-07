@@ -10,7 +10,7 @@ import java.util.Set;
 public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_dossier;
+    private Integer id_dossier;
 
     private String telephone;
     private String mail;
@@ -28,7 +28,7 @@ public class File {
     )
     private Set<Representant> representants;
 
-    public Long getId() {
+    public Integer getId() {
         return this.id_dossier;
     }
 

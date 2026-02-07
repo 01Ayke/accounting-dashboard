@@ -11,7 +11,7 @@ import java.util.Date;
 public class AccountingEntry {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_ecriture_comptable;
+    private Integer id_ecriture_comptable;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public Float debit;
@@ -28,7 +28,7 @@ public class AccountingEntry {
     @JsonBackReference
     private Journal journal;
 
-    public Long getId_ecriture_comptable() {
+    public Integer getId_ecriture_comptable() {
         return id_ecriture_comptable;
     }
 

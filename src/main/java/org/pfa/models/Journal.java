@@ -1,11 +1,8 @@
 package org.pfa.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import java.util.Set;
 
@@ -14,7 +11,7 @@ import java.util.Set;
 public class Journal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_journal;
+    private Integer id_journal;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_dossier")
@@ -29,7 +26,7 @@ public class Journal {
         return file;
     }
 
-    public Long getIdJournal() {
+    public Integer getIdJournal() {
         return id_journal;
     }
 

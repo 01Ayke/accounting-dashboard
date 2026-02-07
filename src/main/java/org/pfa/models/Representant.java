@@ -9,7 +9,7 @@ import java.util.Set;
 public class Representant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_representant;
+    private Integer id_representant;
 
     private String telephone;
     private String mail;
@@ -20,7 +20,7 @@ public class Representant {
     @ManyToMany(mappedBy = "representants")
     private Set<File> files;
 
-    public Long getId_representant() {
+    public Integer getId_representant() {
         return id_representant;
     }
 
