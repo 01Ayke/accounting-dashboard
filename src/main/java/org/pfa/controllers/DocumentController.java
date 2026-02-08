@@ -3,20 +3,27 @@ package org.pfa.controllers;
 import io.javalin.http.Context;
 import org.pfa.models.Document;
 import org.pfa.services.DocumentService;
-import com.fasterxml.jackson.databind.ObjectMapper; // Import pour le JSON
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.LocalDate;
 
 public class DocumentController {
 
     private static final DocumentService service = new DocumentService();
-    private static final ObjectMapper mapper = new ObjectMapper(); 
+    
+    private static class DocumentInput {
+        public String nom;
+        public Integer id_type_document;
+        public LocalDate dateDocument;
+        public Integer id_utilisateur;
+    }
 
     public static void getAll(Context ctx) {
-        ctx.json(service.getAll());
+        ctx.json(service.getAllDocuments());
     }
 
     public static void getOne(Context ctx) {
         Integer id = Integer.parseInt(ctx.pathParam("id"));
-        Document doc = service.getOne(id);
+        Document doc = service.getDocumentById(id);
         if (doc != null) {
             ctx.json(doc);
         } else {
@@ -25,35 +32,41 @@ public class DocumentController {
     }
 
     public static void create(Context ctx) throws Exception {
-        Document doc = mapper.readValue(ctx.body(), Document.class);
-        
-        if (doc.dateAjout == null) doc.dateAjout = new java.util.Date();
+        try {
+            DocumentInput input = ctx.bodyAsClass(DocumentInput.class);
 
-        service.create(doc);
-        ctx.status(201).json(doc);
+            Document doc = service.createDocument(
+                input.nom,
+                input.id_type_document,
+                LocalDate.parse(input.dateDocument.toString()),
+                input.id_utilisateur
+            );
+            ctx.status(201).json(doc);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ctx.status(400).result("Erreur: " + e.getMessage());
+        }
     }
 
     public static void update(Context ctx) throws Exception {
         Integer id = Integer.parseInt(ctx.pathParam("id"));
-        Document existingDoc = service.getOne(id);
-
-        if (existingDoc == null) {
-            ctx.status(404).result("Document non trouvé");
-            return;
+        try {
+            DocumentInput input = ctx.bodyAsClass(DocumentInput.class);
+            Document updatedDoc = service.updateDocument(
+                id,
+                input.nom,
+                input.id_type_document,
+                input.dateDocument
+            );
+            ctx.json(updatedDoc);
+        } catch (Exception e) {
+            ctx.status(400).result(e.getMessage());
         }
-
-        Document docRecu = mapper.readValue(ctx.body(), Document.class);
-        existingDoc.nom = docRecu.nom;
-        existingDoc.type = docRecu.type;
-        if(docRecu.dateDocument != null) existingDoc.dateDocument = docRecu.dateDocument;
-
-        service.update(existingDoc);
-        ctx.json(existingDoc);
     }
 
     public static void delete(Context ctx) {
         Integer id = Integer.parseInt(ctx.pathParam("id"));
-        service.delete(id);
+        service.deleteDocument(id);
         ctx.status(204);
     }
 }

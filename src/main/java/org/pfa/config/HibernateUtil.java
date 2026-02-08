@@ -18,6 +18,8 @@ public class HibernateUtil {
                     .addAnnotatedClass(Representant.class)
                     .addAnnotatedClass(User.class)
                     .addAnnotatedClass(Document.class)
+                    .addAnnotatedClass(CategorieDocument.class)
+                    .addAnnotatedClass(TypeDocument.class)
                     .buildSessionFactory();
         } catch (Throwable ex) {
             System.err.println("Erreur Hibernate : " + ex);

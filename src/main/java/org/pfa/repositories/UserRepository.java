@@ -14,4 +14,9 @@ public class UserRepository {
         session.close();
         return user;
     }
+    public User findById(Integer id) {
+        try (org.hibernate.Session session = org.pfa.config.HibernateUtil.getSessionFactory().openSession()) {
+            return session.get(org.pfa.models.User.class, id);
+        }
+    }
 }

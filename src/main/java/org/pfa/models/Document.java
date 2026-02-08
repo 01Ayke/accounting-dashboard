@@ -1,7 +1,12 @@
 package org.pfa.models;
 
 import jakarta.persistence.*;
-import java.util.Date;
+import org.hibernate.annotations.CreationTimestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 @Entity
 @Table(name = "documents")
@@ -9,26 +14,49 @@ public class Document {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long id;
+    private Integer id;
 
-    public String nom;
-    public String type; // Comptable, Fiscal, ...etc
+    private String nom;
+    @ManyToOne
+    @JoinColumn(name = "id_type_document", nullable = false)
+    private TypeDocument typeDocument;
     
-    public Integer clientId;
-    
-    @Temporal(TemporalType.DATE)
-    public Date dateDocument; // date d'écriture du document
+    @Column(name = "date_document")
+    private LocalDate dateDocument; // date d'écriture du document
 
-    @Temporal(TemporalType.TIMESTAMP)
-    public Date dateAjout; // date de l'ajout du document
+    @CreationTimestamp
+    @Column(name = "date_ajout", updatable = false)
+    private LocalDateTime dateAjout; // date de l'ajout du document
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_utilisateur", nullable = false)
+    @JsonIgnoreProperties({"documents", "mot_de_passe"})
+    private User user;
     
     public Document() {}
 
-    public Document(String nom, String type, Integer clientId, Date dateDocument) {
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
+
+    public String getNom() { return nom; }
+    public void setNom(String nom) { this.nom = nom; }
+
+    public LocalDate getDateDocument() { return dateDocument; }
+    public void setDateDocument(LocalDate dateDocument) { this.dateDocument = dateDocument; }
+
+    public LocalDateTime getDateAjout() { return dateAjout; }
+    public void setDateAjout(LocalDateTime dateAjout) { this.dateAjout = dateAjout; }
+
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
+
+    public void setTypeDocument(TypeDocument typeDocument) { this.typeDocument = typeDocument; }
+    public TypeDocument getTypeDocument() { return typeDocument; }
+
+    public Document(String nom, TypeDocument typeDocument, User user, LocalDate dateDocument) {
         this.nom = nom;
-        this.type = type;
-        this.clientId = clientId;
+        this.typeDocument = typeDocument;
+        this.user = user;
         this.dateDocument = dateDocument;
-        this.dateAjout = new Date();
     }
 }
