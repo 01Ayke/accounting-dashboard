@@ -2,8 +2,7 @@ package org.pfa.config;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import org.pfa.models.User;
-import org.pfa.models.Document;
+import org.pfa.models.*;
 
 public class HibernateUtil {
 
@@ -13,8 +12,11 @@ public class HibernateUtil {
         try {
             return new Configuration()
                     .configure("hibernate.cfg.xml") // fichier XML à créer
+                    .addAnnotatedClass(File.class)
+                    .addAnnotatedClass(Journal.class)
+                    .addAnnotatedClass(AccountingEntry.class)
+                    .addAnnotatedClass(Representant.class)
                     .addAnnotatedClass(User.class)
-                    .addAnnotatedClass(Document.class)
                     .buildSessionFactory();
         } catch (Throwable ex) {
             System.err.println("Erreur Hibernate : " + ex);

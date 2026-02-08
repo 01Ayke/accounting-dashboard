@@ -3,8 +3,7 @@ package org.pfa.routes;
 import io.javalin.Javalin;
 import org.pfa.controllers.DocumentController;
 
-public class DocumentRoutes {
-
+public class DocumentRoutes implements RouteInterface {
     public static void register(Javalin app) {
         app.get("/documents", DocumentController::getAll);
         app.post("/documents", DocumentController::create);
