@@ -11,7 +11,8 @@
 
     <Grid>
         <Grid.Background>
-            <ImageBrush ImageSource="/App;component/Images/fond_login.jpg" Stretch="UniformToFill"/>
+            <ImageBrush ImageSource="/App;component/Images/fond_login.jpg" Stretch="UniformToFill"
+                        Opacity="0.4"/>
         </Grid.Background>
         <!-- Formulaire centré -->
         <Border Width="360"

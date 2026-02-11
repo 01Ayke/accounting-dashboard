@@ -35,7 +35,8 @@ public class LoginViewModel : INotifyPropertyChanged
 
     public LoginViewModel()
     {
-        LoginCommand = new RelayCommand(Login);
+        // On utilise RelayCommand<object> même si Login n'a pas de paramètre
+        LoginCommand = new RelayCommand<object>(_ => Login());
     }
 
     private void Login()

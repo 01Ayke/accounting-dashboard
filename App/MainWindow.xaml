@@ -6,8 +6,9 @@
         xmlns:views="clr-namespace:App.Views"
         mc:Ignorable="d"
         Title="Application"
-        Height="450"
-        Width="800">
+        WindowState="Maximized"
+        WindowStyle="SingleBorderWindow"
+        ResizeMode="CanResize">
 
     <!-- UN SEUL root -->
     <Grid>
