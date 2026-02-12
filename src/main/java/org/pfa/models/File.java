@@ -20,6 +20,10 @@ public class File {
     @JsonManagedReference
     private Set<Journal> journaux;
 
+    @OneToMany(mappedBy = "file", fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private Set<Document> documents;
+
     @ManyToMany
     @JoinTable(
             name = "dossier_representant",
@@ -51,4 +55,6 @@ public class File {
     public Set<Representant> getRepresentants() {
         return representants;
     }
+
+    public Set<Document> getDocuments() { return documents; }
 }
