@@ -15,6 +15,7 @@ public class File {
     private String telephone;
     private String mail;
     private String denomination_sociale;
+    private Float capital;
 
     @OneToMany(mappedBy = "file", fetch = FetchType.LAZY)
     @JsonManagedReference
@@ -23,6 +24,14 @@ public class File {
     @OneToMany(mappedBy = "file", fetch = FetchType.LAZY)
     @JsonManagedReference
     private Set<Document> documents;
+
+    @ManyToOne
+    @JoinColumn(name = "id_forme_juridique")
+    private LegalStatus legalStatus;
+
+    @ManyToOne
+    @JoinColumn(name = "id_adresse")
+    private Address address;
 
     @ManyToMany
     @JoinTable(
@@ -48,6 +57,8 @@ public class File {
         return this.denomination_sociale;
     }
 
+    public Float getCapital() { return capital; }
+
     public Set<Journal> getJournaux() {
         return journaux;
     }
@@ -57,4 +68,10 @@ public class File {
     }
 
     public Set<Document> getDocuments() { return documents; }
+
+    public LegalStatus getLegalStatus() { return legalStatus; }
+
+    public Address getAddress() {
+        return address;
+    }
 }

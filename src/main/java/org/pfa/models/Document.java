@@ -38,6 +38,10 @@ public class Document {
     @JoinColumn(name = "id_dossier")
     @JsonBackReference
     private File file;
+
+    @ManyToOne
+    @JoinColumn(name = "id_statut_document")
+    private DocumentStatus status;
     
     public Document() {}
 
@@ -59,6 +63,10 @@ public class Document {
 
     //public User getUser() { return user; }
     public void setUser(User user) { this.user = user; }
+
+    public DocumentStatus getStatus() {
+        return status;
+    }
 
     public void setTypeDocument(TypeDocument typeDocument) { this.typeDocument = typeDocument; }
     public TypeDocument getTypeDocument() { return typeDocument; }
