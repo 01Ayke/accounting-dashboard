@@ -1,23 +1,44 @@
 package org.pfa.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
-import org.pfa.models.LoginRequest;
+
 import org.pfa.models.User;
+import org.pfa.models.dto.LoginRequest;
+import org.pfa.models.dto.LogoutRequest;
+import org.pfa.services.SessionManager;
 import org.pfa.services.UserService;
+import org.pfa.models.dto.Response;
 
-import java.util.Map;
-
-public class UserController {
+public class UserController extends Controller {
     private static final UserService service = new UserService();
-    private static final ObjectMapper mapper = new ObjectMapper();
+    private final SessionManager sessionManager;
 
-    public static void handleLogin(Context ctx) throws Exception {
-        LoginRequest login = mapper.readValue(ctx.body(), LoginRequest.class);
+    public UserController(SessionManager sessionManager) {
+        super(sessionManager);
+        this.sessionManager = sessionManager;
+    }
+
+    public void handleLogin(Context ctx) throws Exception {
+        LoginRequest login = new LoginRequest(ctx);
         User user = service.getOne(login.getMail(), login.getPassword());
-        if (user != null)
-            ctx.status(201).json(Map.of("status", "success", "message", "Login successful"));
-        else
-            ctx.status(401).json(Map.of("status", "error", "message", "Invalid credentials"));
+        if (user != null) {
+            String token = sessionManager.createSession(user.getId());
+            Response response = new Response(token, "success", "Login successful", 200);
+            response.setContext(ctx);
+        } else {
+            Response response = new Response("error", "Invalid email or password", 401);
+            response.setContext(ctx);
+        }
+    }
+
+    public void handleLogout(Context ctx) {
+        LogoutRequest logoutRequest = new LogoutRequest(ctx);
+        if (super.checkToken(ctx)) {
+            String token = logoutRequest.getToken();
+            sessionManager.invalidate(token);
+            Response response = new Response("success", "Logout successful", 200);
+            response.setContext(ctx);
+        } 
     }
 }
+
