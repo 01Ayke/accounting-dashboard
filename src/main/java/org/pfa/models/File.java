@@ -25,6 +25,10 @@ public class File {
     @JsonManagedReference
     private Set<Document> documents;
 
+    @OneToMany(mappedBy = "file", fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private Set<Account> comptes;
+
     @ManyToOne
     @JoinColumn(name = "id_forme_juridique")
     private LegalStatus legalStatus;
@@ -68,6 +72,8 @@ public class File {
     }
 
     public Set<Document> getDocuments() { return documents; }
+
+    public Set<Account> getComptes() { return comptes; }
 
     public LegalStatus getLegalStatus() { return legalStatus; }
 
