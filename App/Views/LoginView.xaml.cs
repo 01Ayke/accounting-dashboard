@@ -22,7 +22,14 @@ namespace App.Views
         public LoginView()
         {
             InitializeComponent();
-            this.PreviewKeyDown += LoginView_PreviewKeyDown;
+            var vm = new LoginViewModel();
+            vm.LoginSucceeded += () =>
+            {
+                var mainWindow = new MainWindow();
+                mainWindow.Show();
+                Window.GetWindow(this)?.Close();
+            };
+            DataContext = vm;
         }
     
         private void LoginView_PreviewKeyDown(object sender, KeyEventArgs e)

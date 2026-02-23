@@ -45,7 +45,7 @@
 
                     <Grid>
                         <TextBox x:Name="UsernameBox"
-                                 Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
+                                 Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"
                                  Height="35"
                                  Padding="5"/>
 

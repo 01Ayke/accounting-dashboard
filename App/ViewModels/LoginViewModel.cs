@@ -4,66 +4,49 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using App.Services;
 
 namespace App.ViewModels;
-
-public class LoginViewModel : INotifyPropertyChanged
+public class LoginViewModel
 {
-    private string _username = "";
-    private string _password = "";
-    private string _message = "";
+    private readonly AuthService _authService = new AuthService();
+    
+    public event Action? LoginSucceeded;
 
-    public string Username
-    {
-        get => _username;
-        set { _username = value; OnPropertyChanged(); }
-    }
+    public string? Email { get; set; }
+    public string? Password { get; set; }
 
-    public string Password
-    {
-        get => _password;
-        set { _password = value; OnPropertyChanged(); }
-    }
-
-    public string Message
-    {
-        get => _message;
-        set { _message = value; OnPropertyChanged(); }
-    }
-
-    public ICommand LoginCommand { get; }
+    public RelayCommand<object> LoginCommand { get; }
 
     public LoginViewModel()
     {
-        // On utilise RelayCommand<object> même si Login n'a pas de paramètre
-        LoginCommand = new RelayCommand<object>(_ => Login());
+        LoginCommand = new RelayCommand<object>(_ => _ = Login());
     }
 
-    private void Login()
+    public async Task Login()
     {
-        // Exemple basique : remplacer par vérif réelle / Service
-        // Il faudra appeler une fonction dans Services qui enverra une requête au back
-        if (Username == "0000" && Password == "0000")
+        if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
         {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                if (Application.Current.MainWindow is MainWindow mainWindow)
-                {
-                    mainWindow.NavigateToHome();
-                }
-            });
+            MessageBox.Show("Veuillez remplir tous les champs");
+            return;
         }
-        else
+
+        try
         {
-            Message = "Nom d’utilisateur ou mot de passe incorrect.";
+            var response = await _authService.LoginAsync(Email, Password);
+            if (response.Status == "success")
+            {
+                // Déclenche l'événement pour ouvrir la nouvelle fenêtre
+                LoginSucceeded?.Invoke();
+            }
+            else
+            {
+                MessageBox.Show(response.Message);
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Erreur lors de la connexion : " + ex.Message);
         }
     }
-    
-    
-
-
-    
-    public event PropertyChangedEventHandler? PropertyChanged;
-    private void OnPropertyChanged([CallerMemberName] string? name = null) 
-        => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 }
