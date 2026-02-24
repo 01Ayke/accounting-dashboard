@@ -1,4 +1,4 @@
-﻿using App.Helpers;
+using App.Helpers;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -7,14 +7,55 @@ using System.Windows.Input;
 using App.Services;
 
 namespace App.ViewModels;
-public class LoginViewModel
+public class LoginViewModel : INotifyPropertyChanged
 {
-    private readonly AuthService _authService = new AuthService();
+    private readonly AuthService _authService = new AuthService(useTestMode: false);
     
     public event Action? LoginSucceeded;
+    public event PropertyChangedEventHandler? PropertyChanged;
 
-    public string? Email { get; set; }
-    public string? Password { get; set; }
+    private string? _email;
+    private string? _password;
+    private string? _errorMessage;
+
+    public string? Email
+    {
+        get => _email;
+        set
+        {
+            if (_email != value)
+            {
+                _email = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+
+    public string? Password
+    {
+        get => _password;
+        set
+        {
+            if (_password != value)
+            {
+                _password = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+
+    public string? ErrorMessage
+    {
+        get => _errorMessage;
+        set
+        {
+            if (_errorMessage != value)
+            {
+                _errorMessage = value;
+                OnPropertyChanged();
+            }
+        }
+    }
 
     public RelayCommand<object> LoginCommand { get; }
 
@@ -25,28 +66,36 @@ public class LoginViewModel
 
     public async Task Login()
     {
+        ErrorMessage = null; // Efface l'erreur précédente
+
         if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
         {
-            MessageBox.Show("Veuillez remplir tous les champs");
+            ErrorMessage = "Veuillez remplir tous les champs";
             return;
         }
 
         try
         {
             var response = await _authService.LoginAsync(Email, Password);
-            if (response.Status == "success")
+            
+            if (response?.Status == "success")
             {
-                // Déclenche l'événement pour ouvrir la nouvelle fenêtre
+                // Déclenche l'événement pour naviguer
                 LoginSucceeded?.Invoke();
             }
             else
             {
-                MessageBox.Show(response.Message);
+                ErrorMessage = "Mauvais identifiant ou mauvais mot de passe";
             }
         }
         catch (Exception ex)
         {
-            MessageBox.Show("Erreur lors de la connexion : " + ex.Message);
+            ErrorMessage = "Erreur lors de la connexion : " + ex.Message;
         }
+    }
+
+    protected void OnPropertyChanged([CallerMemberName] string? name = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 }

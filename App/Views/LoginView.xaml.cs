@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Windows;               // pour RoutedEventArgs
 using System.Windows.Controls;
@@ -25,9 +25,12 @@ namespace App.Views
             var vm = new LoginViewModel();
             vm.LoginSucceeded += () =>
             {
-                var mainWindow = new MainWindow();
-                mainWindow.Show();
-                Window.GetWindow(this)?.Close();
+                // Récupère la MainWindow existante au lieu d'en créer une nouvelle
+                var mainWindow = Window.GetWindow(this) as MainWindow;
+                if (mainWindow != null)
+                {
+                    mainWindow.NavigateToHome();
+                }
             };
             DataContext = vm;
         }
