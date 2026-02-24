@@ -50,6 +50,19 @@ namespace App.Views
             }
         }
 
+        private void LoginView_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Return)
+            {
+                if (this.DataContext is LoginViewModel vm)
+                {
+                    if (vm.LoginCommand.CanExecute(null))
+                        vm.LoginCommand.Execute(null);
+                }
+                e.Handled = true;
+            }
+        }
+
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
             PasswordPlaceholder.Visibility =

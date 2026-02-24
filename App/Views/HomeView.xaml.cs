@@ -1,4 +1,4 @@
-﻿using System.Windows;
+using System.Windows;
 using System.Windows.Controls;
 using App.Models;
 using App.ViewModels;
@@ -11,6 +11,20 @@ public partial class HomeView : UserControl
     {
         InitializeComponent();
     }
+
+    private void Dossier_DoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    {
+        if (sender is ListBox listBox && listBox.SelectedItem is DossierFactice dossier)
+        {
+            // Naviguer vers le dashboard
+            var mainWindow = Window.GetWindow(this) as MainWindow;
+            if (mainWindow != null)
+            {
+                mainWindow.NavigateToDashboard(dossier);
+            }
+        }
+    }
+
     private void OpenContextMenu(object sender, RoutedEventArgs e)
     {
         if (sender is Button button && button.ContextMenu != null)
@@ -21,6 +35,38 @@ public partial class HomeView : UserControl
         }
     }
 
+    private void ResearchBox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+    {
+        if (e.Key == System.Windows.Input.Key.Tab && SuggestionsListBox.Items.Count > 0)
+        {
+            SuggestionsListBox.SelectedIndex = 0;
+            if (SuggestionsListBox.SelectedItem is string suggestion)
+            {
+                ResearchBox.Text = suggestion;
+                ResearchBox.CaretIndex = ResearchBox.Text.Length;
+            }
 
+            e.Handled = true;
+        }
+        else if (e.Key == System.Windows.Input.Key.Escape)
+        {
+            SuggestionsPopup.IsOpen = false;
+            e.Handled = true;
+        }
+        else if (e.Key == System.Windows.Input.Key.Down && SuggestionsListBox.Items.Count > 0)
+        {
+            SuggestionsListBox.Focus();
+            SuggestionsListBox.SelectedIndex = 0;
+            e.Handled = true;
+        }
+    }
 
+    private void SuggestionsListBox_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    {
+        if (SuggestionsListBox.SelectedItem is string suggestion)
+        {
+            ResearchBox.Text = suggestion;
+            SuggestionsListBox.Visibility = Visibility.Collapsed;
+        }
+    }
 }

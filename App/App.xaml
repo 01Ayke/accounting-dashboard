@@ -65,6 +65,8 @@
         <converters:HeightMultiplierConverter x:Key="HeightMultiplierConverter"/>
         <helpers:EmptyStringToVisibilityConverter x:Key="EmptyStringToVisibilityConverter"/>
         <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+        <converters:ObjectToVisibilityConverter x:Key="ObjectToVisibilityConverter"/>
+        <converters:DossierDetailViewModelConverter x:Key="DossierDetailViewModelConverter"/>
         
     </Application.Resources>
     

@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -10,6 +10,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using App.Views;
+using App.Models;
+using App.ViewModels;
 
 namespace App
 {
@@ -24,6 +26,18 @@ namespace App
         }
 
         public void NavigateToHome()
+        {
+            MainContent.Content = new HomeView();
+        }
+
+        public void NavigateToDashboard(DossierFactice dossier)
+        {
+            var viewModel = new DossierDetailViewModel { Dossier = dossier };
+            var dashboardView = new DashboardView { DataContext = viewModel };
+            MainContent.Content = dashboardView;
+        }
+
+        public void NavigateBack()
         {
             MainContent.Content = new HomeView();
         }

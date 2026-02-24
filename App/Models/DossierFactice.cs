@@ -1,8 +1,9 @@
-﻿namespace App.Models;
+namespace App.Models;
 
 
 public class DossierFactice
 {
+    public int IdDossier { get; set; }
     public required string NomEntreprise { get; set; }
     public required string Siret { get; set; }
 
