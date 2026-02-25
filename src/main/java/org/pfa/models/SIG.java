@@ -87,7 +87,7 @@ public class SIG {
             if (estComptabilise(compte, "77.*"))
                 resultatExceptionnel += compte.getSolde();
             else if (estComptabilise(compte, "67.*"))
-                resultatExceptionnels -= compte.getSolde();
+                resultatExceptionnel -= compte.getSolde();
         }
         return resultatExceptionnel;
     }
