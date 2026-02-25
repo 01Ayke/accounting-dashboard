@@ -13,6 +13,8 @@ import java.util.stream.Collectors;
 
 public class FileRepository {
     private void initializeFile(File file) {
+        if (file == null) return;
+        
         Hibernate.initialize(file.getJournaux());
         for (Journal journal: file.getJournaux()) {
             Hibernate.initialize(journal.getEcrituresComptables());
@@ -37,17 +39,11 @@ public class FileRepository {
     public File findById(Long id) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         File file = session.find(File.class, id);
-
-//        Hibernate.initialize(file.getJournaux());
-//        for (Journal journal: file.getJournaux()) {
-//            Hibernate.initialize(journal.getEcrituresComptables());
-//        }
-//
-//        Hibernate.initialize(file.getDocuments());
-//        Hibernate.initialize((file.getComptes()));
-//
-//        Hibernate.initialize(file.getRepresentants());
-        initializeFile(file);
+        
+        if (file != null) {
+            initializeFile(file);
+        }
+        
         session.close();
         return file;
     }
