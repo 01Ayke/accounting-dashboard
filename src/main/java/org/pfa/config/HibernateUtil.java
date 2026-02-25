@@ -23,6 +23,7 @@ public class HibernateUtil {
                     .addAnnotatedClass(DocumentStatus.class)
                     .addAnnotatedClass(LegalStatus.class)
                     .addAnnotatedClass(Address.class)
+                    .addAnnotatedClass(Account.class)
                     .buildSessionFactory();
         } catch (Throwable ex) {
             System.err.println("Erreur Hibernate : " + ex);

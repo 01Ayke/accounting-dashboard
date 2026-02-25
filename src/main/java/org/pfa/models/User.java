@@ -29,4 +29,8 @@ public class User {
     public String getMot_de_passe() {
         return mot_de_passe;
     }
+
+    public Integer getId() {
+        return id_utilisateur;
+    }
 }

@@ -28,6 +28,7 @@ public class FileRepository {
         }
 
         Hibernate.initialize(file.getDocuments());
+        Hibernate.initialize((file.getComptes()));
 
         Hibernate.initialize(file.getRepresentants());
         session.close();
