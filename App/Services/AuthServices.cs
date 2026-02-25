@@ -6,6 +6,7 @@ using System;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 public class AuthService
 {
@@ -35,25 +36,53 @@ public class AuthService
 
         try
         {
-            var response = await _httpClient.PostAsJsonAsync("login", new
+            // Le backend attend form-urlencoded, pas JSON
+            var content = new FormUrlEncodedContent(new[]
             {
-                mail = email,      // ⚠️ IMPORTANT : ton backend attend "mail"
-                password = password
+                new KeyValuePair<string, string>("mail", email),
+                new KeyValuePair<string, string>("password", password)
             });
 
-            if (!response.IsSuccessStatusCode)
-            {
-                return await response.Content.ReadFromJsonAsync<LoginResponse>();
-            }
+            System.Diagnostics.Debug.WriteLine($"AuthService: Envoi POST à login avec mail={email}");
+            var response = await _httpClient.PostAsync("login", content);
 
-            return await response.Content.ReadFromJsonAsync<LoginResponse>();
+            System.Diagnostics.Debug.WriteLine($"AuthService: Status code = {response.StatusCode}");
+            
+            var rawContent = await response.Content.ReadAsStringAsync();
+            System.Diagnostics.Debug.WriteLine($"AuthService: Contenu brut reçu: {rawContent}");
+            
+            try
+            {
+                var loginResponse = await response.Content.ReadFromJsonAsync<LoginResponse>();
+                System.Diagnostics.Debug.WriteLine($"AuthService: LoginResponse parsée - Status: {loginResponse?.Status}, Message: {loginResponse?.Message}, Code: {loginResponse?.Code}");
+                return loginResponse;
+            }
+            catch (System.Text.Json.JsonException ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"AuthService: Erreur JSON parsing: {ex.Message}");
+                return new LoginResponse
+                {
+                    Status = "error",
+                    Message = $"Erreur parsing JSON: {rawContent.Substring(0, Math.Min(200, rawContent.Length))}"
+                };
+            }
         }
         catch (HttpRequestException ex)
         {
+            System.Diagnostics.Debug.WriteLine($"AuthService: HttpRequestException - {ex.Message}");
             return new LoginResponse
             {
                 Status = "error",
                 Message = $"Erreur de connexion au serveur : {ex.Message}"
+            };
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"AuthService: Exception générale - {ex.GetType().Name}: {ex.Message}");
+            return new LoginResponse
+            {
+                Status = "error",
+                Message = $"Erreur : {ex.Message}"
             };
         }
     }
