@@ -1,0 +1,149 @@
+<UserControl x:Class="App.Views.DashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:App.ViewModels">
+
+    <UserControl.DataContext>
+        <vm:DossierDetailViewModel/>
+    </UserControl.DataContext>
+
+    <Grid x:Name="RootGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Fond avec image -->
+        <Grid.Background>
+            <ImageBrush ImageSource="/App;component/Images/fond_login.jpg" Stretch="UniformToFill" Opacity="0.4"/>
+        </Grid.Background>
+
+        <!-- En-tête avec bouton retour -->
+        <Border Grid.Row="0" Background="AliceBlue" Padding="20" Margin="20,20,20,0" CornerRadius="12,12,0,0" BorderThickness="0,0,0,1" BorderBrush="LightGray">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Bouton retour -->
+                <Button Grid.Column="0" Content="← Retour" Width="100" Height="40" Click="Retour_Click" VerticalAlignment="Center">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#0D1B2A"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Cursor" Value="Hand"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}" CornerRadius="6" Padding="10">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="DarkGray"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
+                <!-- Titre -->
+                <TextBlock Grid.Column="1" Text="Dashboard" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" Margin="30,0,0,0"/>
+            </Grid>
+        </Border>
+
+        <!-- Border principal avec 2 colonnes -->
+        <Border Grid.Row="1" Padding="10" CornerRadius="0,0,12,12" Background="White" HorizontalAlignment="Center" VerticalAlignment="Stretch" Width="1100" Effect="{DynamicResource DropShadowEffect}" Margin="20,0,20,20">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- COLONNE GAUCHE : Infos du dossier -->
+                <Border Grid.Column="0" Background="#F9F9F9" CornerRadius="8" Padding="20">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel>
+                            <!-- Section : Entreprise -->
+                            <TextBlock Text="Informations de l'Entreprise" FontSize="16" FontWeight="Bold" Margin="0,0,0,15" Foreground="#0D1B2A"/>
+                            
+                            <StackPanel Margin="0,0,0,20">
+                                <TextBlock Text="Raison Sociale" FontSize="11" Foreground="Gray" FontWeight="Bold" Margin="0,0,0,5"/>
+                                <TextBlock Text="{Binding Dossier.NomEntreprise}" FontSize="14" FontWeight="Bold" TextWrapping="Wrap"/>
+                            </StackPanel>
+
+                            <StackPanel Margin="0,0,0,20">
+                                <TextBlock Text="SIRET" FontSize="11" Foreground="Gray" FontWeight="Bold" Margin="0,0,0,5"/>
+                                <TextBlock Text="{Binding Dossier.Siret}" FontSize="14"/>
+                            </StackPanel>
+
+                            <!-- Section : Contact -->
+                            <Border BorderThickness="0,1,0,0" BorderBrush="LightGray" Padding="0,15,0,0" Margin="0,15,0,0">
+                                <StackPanel>
+                                    <TextBlock Text="Contact Principal" FontSize="16" FontWeight="Bold" Margin="0,0,0,15" Foreground="#0D1B2A"/>
+
+                                    <StackPanel Margin="0,0,0,20">
+                                        <TextBlock Text="Nom &amp; Prénom" FontSize="11" Foreground="Gray" FontWeight="Bold" Margin="0,0,0,5"/>
+                                        <TextBlock Text="{Binding Dossier.PrenomNomContact}" FontSize="14" FontWeight="Bold"/>
+                                    </StackPanel>
+
+                                    <StackPanel Margin="0,0,0,20">
+                                        <TextBlock Text="Email" FontSize="11" Foreground="Gray" FontWeight="Bold" Margin="0,0,0,5"/>
+                                        <TextBlock Text="{Binding Dossier.EmailContact}" FontSize="14" Foreground="Blue"/>
+                                    </StackPanel>
+
+                                    <StackPanel Margin="0,0,0,20">
+                                        <TextBlock Text="Secteur" FontSize="11" Foreground="Gray" FontWeight="Bold" Margin="0,0,0,5"/>
+                                        <TextBlock Text="{Binding Dossier.Secteur}" FontSize="14"/>
+                                    </StackPanel>
+
+                                    <StackPanel>
+                                        <TextBlock Text="Statut" FontSize="11" Foreground="Gray" FontWeight="Bold" Margin="0,0,0,5"/>
+                                        <Border Background="LightGreen" BorderBrush="Green" BorderThickness="1" CornerRadius="4" Padding="8,4" Width="Auto" HorizontalAlignment="Left">
+                                            <TextBlock Text="{Binding Dossier.Statut}" FontSize="13" Foreground="DarkGreen" FontWeight="Bold"/>
+                                        </Border>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Border>
+
+                <!-- Séparateur -->
+                <Border Grid.Column="1" Background="LightGray"/>
+
+                <!-- COLONNE DROITE : SIG -->
+                <Border Grid.Column="2" Background="#F9F9F9" CornerRadius="8" Padding="20">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel>
+                            <TextBlock Text="Soldes et Indicateurs de Gestion (SIG)" FontSize="16" FontWeight="Bold" Margin="0,0,0,15" Foreground="#0D1B2A"/>
+
+                            <!-- Liste des SIG avec cartes -->
+                            <ItemsControl ItemsSource="{Binding SIGAffichage}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Background="White" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                                            <StackPanel>
+                                                <!-- Label du SIG -->
+                                                <TextBlock Text="{Binding Label}" FontSize="13" FontWeight="Bold" Foreground="#0D1B2A" Margin="0,0,0,5"/>
+                                                
+                                                <!-- Valeur formatée -->
+                                                <TextBlock Text="{Binding ValeurFormatee}" FontSize="16" FontWeight="Bold" Foreground="{Binding CouleurValeur}"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
