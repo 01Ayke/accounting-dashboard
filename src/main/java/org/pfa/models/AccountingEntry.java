@@ -23,12 +23,16 @@ public class AccountingEntry {
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public Float debit;
+    public Double debit; // public car sinon problème avec le serializer json
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public Float credit;
+    public Double credit;
 
     private String code_operation;
+
+    private String numero_facture;
+
+    private String libelle;
 
     private Date date_facture;
 
@@ -46,10 +50,12 @@ public class AccountingEntry {
         return id_ecriture_comptable;
     }
 
+//    @JsonInclude(JsonInclude.Include.NON_NULL)
 //    public float getCredit() {
 //        return credit;
 //    }
 //
+//    @JsonInclude(JsonInclude.Include.NON_NULL)
 //    public float getDebit() {
 //        return debit;
 //    }
@@ -57,6 +63,12 @@ public class AccountingEntry {
     public String getCode_operation() {
         return code_operation;
     }
+
+    public String getNumero_facture() {
+        return numero_facture;
+    }
+
+    public String getLibelle() { return libelle; }
 
     public Date getDate_facture() {
         return date_facture;

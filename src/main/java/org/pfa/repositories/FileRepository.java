@@ -18,6 +18,9 @@ public class FileRepository {
         }
         for (Account compte: file.getComptes()) {
             Hibernate.initialize(compte.getEcrituresComptables());
+            for (AccountingEntry ecriture: compte.getEcrituresComptables()) {
+                Hibernate.initialize(ecriture.getJournal());
+            }
         }
 
         Hibernate.initialize(file.getDocuments());

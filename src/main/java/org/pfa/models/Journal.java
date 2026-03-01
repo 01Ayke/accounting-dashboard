@@ -13,6 +13,8 @@ public class Journal {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id_journal;
 
+    private String code;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_dossier")
     @JsonBackReference
@@ -28,6 +30,10 @@ public class Journal {
 
     public Integer getIdJournal() {
         return id_journal;
+    }
+
+    public String getCode() {
+        return code;
     }
 
     public Set<AccountingEntry> getEcrituresComptables() {
