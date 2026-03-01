@@ -3,10 +3,7 @@ package org.pfa.repositories;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.pfa.config.HibernateUtil;
-import org.pfa.models.Document;
-import org.pfa.models.File;
-import org.pfa.models.Journal;
-import org.pfa.models.Representant;
+import org.pfa.models.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,6 +15,9 @@ public class FileRepository {
         Hibernate.initialize(file.getJournaux());
         for (Journal journal: file.getJournaux()) {
             Hibernate.initialize(journal.getEcrituresComptables());
+        }
+        for (Account compte: file.getComptes()) {
+            Hibernate.initialize(compte.getEcrituresComptables());
         }
 
         Hibernate.initialize(file.getDocuments());

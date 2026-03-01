@@ -2,11 +2,8 @@ package org.pfa;
 
 import io.javalin.Javalin;
 
-import org.pfa.routes.DashboardRoutes;
-import org.pfa.routes.UserRoutes;
-import org.pfa.routes.FileRoutes;
+import org.pfa.routes.*;
 import org.pfa.services.SessionManager;
-import org.pfa.routes.DocumentRoutes;
 
 public class App {
     public static void main(String[] args) {
@@ -16,7 +13,8 @@ public class App {
         UserRoutes.register(app, sessionManager);
         DocumentRoutes.register(app);
         FileRoutes.register(app);
+        GrandLivreRoutes.register(app);
         Runtime.getRuntime().addShutdownHook(new Thread(sessionManager::shutdown));
-        System.out.println("Serveur démarré sur http://localhost:7070");
+        System.out.println("Serveur démarré sur http://localhost:7070") ;
     }
 }

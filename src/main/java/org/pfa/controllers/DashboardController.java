@@ -10,7 +10,6 @@ public class DashboardController {
     public static void getOne(Context ctx) {
         Long id = Long.parseLong(ctx.pathParam("id"));
         Dashboard dashboard = dashboardService.getOne(id);
-        System.out.println(dashboard);
         if (dashboard.getFile() != null)
             ctx.json(dashboard);
         else

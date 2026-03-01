@@ -1,7 +1,10 @@
 package org.pfa.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+
+import java.util.Set;
 
 @Entity
 @Table(name = "compte")
@@ -21,6 +24,10 @@ public class Account {
     @JsonBackReference
     private File file;
 
+    @OneToMany(mappedBy = "compte", fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private Set<AccountingEntry> ecrituresComptables;
+
     public Integer getId_compte() {
         return id_compte;
     }
@@ -39,5 +46,9 @@ public class Account {
 
     public Boolean getActif() {
         return actif;
+    }
+
+    public Set<AccountingEntry> getEcrituresComptables() {
+        return ecrituresComptables;
     }
 }
