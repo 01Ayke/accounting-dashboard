@@ -368,7 +368,7 @@ public class Response {
     public String message;
     public Integer code;
     
-    // Constructeur avec token (pour le login)
+    // Constructeur avec token (pour tous)
     public Response(String token, String status, String message, Integer code) {
         this.token = token;
         this.status = status;
@@ -376,7 +376,7 @@ public class Response {
         this.code = code;
     }
 
-    // Constructeur sans token (pour les autres cas)
+    // Constructeur sans token (pour le login)
     public Response(String status, String message, Integer code) {
         this.token = null;
         this.status = status;
