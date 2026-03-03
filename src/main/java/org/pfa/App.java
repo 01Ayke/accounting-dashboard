@@ -9,7 +9,7 @@ public class App {
     public static void main(String[] args) {
         Javalin app = Javalin.create().start(7070);
         SessionManager sessionManager = new SessionManager();
-        DashboardRoutes.register(app);
+        DashboardRoutes.register(app, sessionManager);
         UserRoutes.register(app, sessionManager);
         DocumentRoutes.register(app);
         FileRoutes.register(app);
