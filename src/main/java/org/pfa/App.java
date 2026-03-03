@@ -13,7 +13,7 @@ public class App {
         UserRoutes.register(app, sessionManager);
         DocumentRoutes.register(app);
         FileRoutes.register(app);
-        GrandLivreRoutes.register(app);
+        GrandLivreRoutes.register(app, sessionManager);
         Runtime.getRuntime().addShutdownHook(new Thread(sessionManager::shutdown));
         System.out.println("Serveur démarré sur http://localhost:7070") ;
     }

@@ -7,10 +7,10 @@ import java.util.Map;
 public class Response {
     public String token;
     public String status;
-    public String message;
+    public Object message;
     public Integer code;
     
-    public Response(String token, String status, String message, Integer code) {
+    public Response(String token, String status, Object message, Integer code) {
         this.token = token;
         this.status = status;
         this.message = message;
@@ -26,7 +26,12 @@ public class Response {
 
     public void setContext(Context ctx) {
         if (code >= 200 && code < 300) {
-            ctx.status(code).json(Map.of("status", status, "message", message, "sID", token));
+            try {
+                ctx.status(code).json(Map.of("status", status, "message", message, "sID", token));
+            }
+            catch (Exception e) {
+                System.out.println("problem");
+            }
         } else {
             ctx.status(code).json(Map.of("status", status, "message", message));
         }
