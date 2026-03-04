@@ -16,6 +16,9 @@ public class DashboardController extends Controller {
     }
 
     public void getOne(Context ctx) {
+        if (!super.checkToken(ctx)) {
+            return;
+        }
         Long id = Long.parseLong(ctx.pathParam("id"));
         Dashboard dashboard = dashboardService.getOne(id);
         if (dashboard.getFile() != null) {
