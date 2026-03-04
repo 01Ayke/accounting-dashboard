@@ -9,10 +9,10 @@ public class LogoutRequest {
         this.token = ctx.header("Authorization");
     }
 
-     public String getToken() {
-         return token;
-     }
-     public void setToken(String token) {
-         this.token = token;
-     }
+    public String getToken() {
+        return token;
+    }
+    public void setToken(String token) {
+        this.token = token;
+    }
 }
