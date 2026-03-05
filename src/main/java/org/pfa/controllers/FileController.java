@@ -3,19 +3,21 @@ package org.pfa.controllers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
-import org.pfa.models.Address;
-import org.pfa.models.File;
+import org.pfa.models.*;
 import org.pfa.models.dto.Response;
-import org.pfa.services.AdresseService;
-import org.pfa.services.FileService;
-import org.pfa.services.SessionManager;
+import org.pfa.services.*;
 
 import java.util.List;
 import java.util.Map;
 
 public class FileController extends Controller {
+
     private static final FileService fileService = new FileService();
     private static final AdresseService adresseService = new AdresseService();
+    private static final RegimeFiscalService regimeFiscalService = new RegimeFiscalService();
+    private static final RegimeTVAService regimeTVAService = new RegimeTVAService();
+    private static final FormeJuridiqueService formeJuridiqueService = new FormeJuridiqueService();
+
     private static final ObjectMapper mapper = new ObjectMapper();
     private final SessionManager sessionManager;
 
@@ -48,12 +50,42 @@ public class FileController extends Controller {
         if (!super.checkToken(ctx)) {
             return;
         }
-        System.out.println("before mapper");
         File file = mapper.readValue(ctx.body(), File.class);
-        System.out.println("File correctly mapped");
-        System.out.println(file.getAdresse());
+
         Address fileAdresse = file.getAdresse();
         file.setAdresse(adresseService.createOrGet(fileAdresse));
+
+        RegimeFiscal regimeFiscal = regimeFiscalService.fromCode(file.getRegimeFiscal().getCode());
+        if (regimeFiscal != null) {
+            file.setRegimeFiscal(regimeFiscal);
+        }
+        else {
+            Response response = new Response("token", "error", "Régime fiscal invalide", 400);
+            response.setContext(ctx);
+            return;
+        }
+
+        RegimeTVA regimeTVA = regimeTVAService.fromCode(file.getRegimeTVA().getCode());
+        if (regimeTVA != null) {
+            file.setRegimeTVA(regimeTVA);
+        }
+        else {
+            Response response = new Response("token", "error", "Régime TVA invalide", 400);
+            response.setContext(ctx);
+            return;
+        }
+
+        FormeJuridique formeJuridique = formeJuridiqueService.fromCode(file.getFormeJuridique().getCode());
+        if (formeJuridique != null) {
+            file.setFormeJuridique(formeJuridique);
+        }
+        else {
+            Response response = new Response("token", "error", "Forme juridique invalide    ", 400);
+            response.setContext(ctx);
+            return;
+        }
+        System.out.println("après forme juridique");
+
         fileService.create(file);
         Response response = new Response("token", "ok", "Dossier créé", 200);
         response.setContext(ctx);

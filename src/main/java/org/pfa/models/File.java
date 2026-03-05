@@ -34,7 +34,7 @@ public class File {
 
     @ManyToOne
     @JoinColumn(name = "id_forme_juridique")
-    private LegalStatus formeJuridique;
+    private FormeJuridique formeJuridique;
 
     @ManyToOne
     @JoinColumn(name = "id_regime_fiscal")
@@ -86,14 +86,26 @@ public class File {
 
     public Set<Account> getComptes() { return comptes; }
 
-    public LegalStatus getFormeJuridique() { return formeJuridique; }
+    public FormeJuridique getFormeJuridique() { return formeJuridique; }
+
+    public void setFormeJuridique(FormeJuridique formeJuridique) {
+        this.formeJuridique = formeJuridique;
+    }
 
     public RegimeFiscal getRegimeFiscal() {
         return regimeFiscal;
     }
 
+    public void setRegimeFiscal(RegimeFiscal regimeFiscal) {
+        this.regimeFiscal = regimeFiscal;
+    }
+
     public RegimeTVA getRegimeTVA() {
         return regimeTVA;
+    }
+
+    public void setRegimeTVA(RegimeTVA regimeTVA) {
+        this.regimeTVA = regimeTVA;
     }
 
     public Address getAdresse() {

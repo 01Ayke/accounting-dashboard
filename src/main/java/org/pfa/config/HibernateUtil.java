@@ -21,7 +21,7 @@ public class HibernateUtil {
                     .addAnnotatedClass(CategorieDocument.class)
                     .addAnnotatedClass(TypeDocument.class)
                     .addAnnotatedClass(DocumentStatus.class)
-                    .addAnnotatedClass(LegalStatus.class)
+                    .addAnnotatedClass(FormeJuridique.class)
                     .addAnnotatedClass(Address.class)
                     .addAnnotatedClass(Account.class)
                     .addAnnotatedClass(RegimeFiscal.class)

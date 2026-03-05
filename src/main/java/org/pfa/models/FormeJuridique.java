@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "forme_juridique")
-public class LegalStatus {
+public class FormeJuridique {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id_forme_juridique;
