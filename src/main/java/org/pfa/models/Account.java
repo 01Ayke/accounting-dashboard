@@ -21,11 +21,11 @@ public class Account {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_dossier")
-    @JsonBackReference
+    @JsonBackReference(value = "file-comptes")
     private File file;
 
     @OneToMany(mappedBy = "compte", fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @JsonManagedReference(value = "compte-ecriture")
     private Set<AccountingEntry> ecrituresComptables;
 
     public Integer getId_compte() {

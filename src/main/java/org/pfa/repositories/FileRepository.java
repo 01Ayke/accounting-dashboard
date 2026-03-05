@@ -2,6 +2,7 @@ package org.pfa.repositories;
 
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.pfa.config.HibernateUtil;
 import org.pfa.models.*;
 
@@ -49,5 +50,13 @@ public class FileRepository {
         
         session.close();
         return file;
+    }
+
+    public void save(File file) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+        session.persist(file);
+        tx.commit();
+        session.close();
     }
 }

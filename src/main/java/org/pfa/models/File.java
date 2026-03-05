@@ -14,28 +14,31 @@ public class File {
 
     private String telephone;
     private String mail;
-    private String denomination_sociale;
+
+    @Column(name = "denomination_sociale")
+    private String denominationSociale;
+
     private Float capital;
 
     @OneToMany(mappedBy = "file", fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @JsonManagedReference(value = "file-journal")
     private Set<Journal> journaux;
 
     @OneToMany(mappedBy = "file", fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @JsonManagedReference(value = "file-documents")
     private Set<Document> documents;
 
     @OneToMany(mappedBy = "file", fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @JsonManagedReference(value = "file-comptes")
     private Set<Account> comptes;
 
     @ManyToOne
     @JoinColumn(name = "id_forme_juridique")
-    private LegalStatus legalStatus;
+    private LegalStatus formeJuridique;
 
     @ManyToOne
     @JoinColumn(name = "id_adresse")
-    private Address address;
+    private Address adresse;
 
     @ManyToMany
     @JoinTable(
@@ -58,7 +61,7 @@ public class File {
     }
 
     public String getDenominationSociale() {
-        return this.denomination_sociale;
+        return this.denominationSociale;
     }
 
     public Float getCapital() { return capital; }
@@ -75,9 +78,13 @@ public class File {
 
     public Set<Account> getComptes() { return comptes; }
 
-    public LegalStatus getLegalStatus() { return legalStatus; }
+    public LegalStatus getFormeJuridique() { return formeJuridique; }
 
-    public Address getAddress() {
-        return address;
+    public Address getAdresse() {
+        return adresse;
+    }
+
+    public void setAdresse(Address adresse) {
+        this.adresse = adresse;
     }
 }

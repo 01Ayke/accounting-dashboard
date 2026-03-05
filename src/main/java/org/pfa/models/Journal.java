@@ -17,11 +17,11 @@ public class Journal {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_dossier")
-    @JsonBackReference
+    @JsonBackReference(value = "file-journal")
     private File file;
 
     @OneToMany(mappedBy = "journal", fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @JsonManagedReference(value = "ecriture-journal")
     Set<AccountingEntry> ecrituresComptables;
 
     public File getFile() {

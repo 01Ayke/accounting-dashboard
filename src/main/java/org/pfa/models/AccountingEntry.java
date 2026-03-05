@@ -38,12 +38,12 @@ public class AccountingEntry {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_compte")
-    @JsonBackReference
+    @JsonBackReference(value = "compte-ecriture")
     private Account compte;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_journal")
-    @JsonBackReference
+    @JsonBackReference(value = "ecriture-journal")
     private Journal journal;
 
     public Integer getId_ecriture_comptable() {

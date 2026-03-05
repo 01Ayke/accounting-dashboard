@@ -36,7 +36,7 @@ public class Document {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_dossier")
-    @JsonBackReference
+    @JsonBackReference(value = "file-documents")
     private File file;
 
     @ManyToOne

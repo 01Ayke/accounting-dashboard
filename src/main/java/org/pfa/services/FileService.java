@@ -10,4 +10,5 @@ public class FileService {
 
     public List<File> getAll() { return repo.findAll(); }
     public File getOne(Long id) { return repo.findById(id); }
+    public void create(File file) { repo.save(file); }
 }
