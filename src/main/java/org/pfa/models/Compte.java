@@ -11,9 +11,11 @@ import java.util.Set;
 public class Compte {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id_compte;
+    @Column(name = "id_compte")
+    private Integer idCompte;
 
-    private String numero_compte;
+    @Column(name = "numero_compte")
+    private String numeroCompte;
     private String libelle;
 
     private Float solde;
@@ -28,12 +30,21 @@ public class Compte {
     @JsonManagedReference(value = "compte-ecriture")
     private Set<EcritureComptable> ecrituresComptables;
 
-    public Integer getId_compte() {
-        return id_compte;
+    public Compte() {}
+
+    public Compte(File file, String numeroCompte, String libelle, Boolean actif) {
+        this.file = file;
+        this.numeroCompte = numeroCompte;
+        this.libelle = libelle;
+        this.actif = actif;
     }
 
-    public String getNumero_compte() {
-        return numero_compte;
+    public Integer getIdCompte() {
+        return idCompte;
+    }
+
+    public String getNumeroCompte() {
+        return numeroCompte;
     }
 
     public String getLibelle() {
@@ -46,6 +57,10 @@ public class Compte {
 
     public Boolean getActif() {
         return actif;
+    }
+
+    public File getFile() {
+        return file;
     }
 
     public Set<EcritureComptable> getEcrituresComptables() {

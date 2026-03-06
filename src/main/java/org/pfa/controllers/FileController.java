@@ -34,7 +34,7 @@ public class FileController extends Controller {
 
     public static void getOne(Context ctx) {
         try {
-            Long id = Long.parseLong(ctx.pathParam("id"));
+            Integer id = Integer.parseInt(ctx.pathParam("id"));
             File file = fileService.getOne(id);
             if (file != null) {
                 ctx.status(200).json(file);

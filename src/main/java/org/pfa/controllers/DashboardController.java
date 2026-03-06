@@ -19,7 +19,7 @@ public class DashboardController extends Controller {
         if (!super.checkToken(ctx)) {
             return;
         }
-        Long id = Long.parseLong(ctx.pathParam("id"));
+        Integer id = Integer.parseInt(ctx.pathParam("id"));
         Dashboard dashboard = dashboardService.getOne(id);
         if (dashboard.getFile() != null) {
             Response response = new Response("token", "success", dashboard, 200);

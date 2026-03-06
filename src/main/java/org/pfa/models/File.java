@@ -10,7 +10,8 @@ import java.util.Set;
 public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id_dossier;
+    @Column(name = "id_dossier")
+    private Integer idDossier;
 
     private String telephone;
     private String mail;
@@ -57,7 +58,7 @@ public class File {
     private Set<Representant> representants;
 
     public Integer getId() {
-        return this.id_dossier;
+        return this.idDossier;
     }
 
     public String getTelephone() {

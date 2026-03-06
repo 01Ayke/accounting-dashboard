@@ -39,7 +39,7 @@ public class FileRepository {
         return files;
     }
 
-    public File findById(Long id) {
+    public File findById(Integer id) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         File file = session.find(File.class, id);
         

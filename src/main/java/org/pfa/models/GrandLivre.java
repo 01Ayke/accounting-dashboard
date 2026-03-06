@@ -20,7 +20,7 @@ public class GrandLivre {
                 }
             }
             lignes.sort(sorter);
-            bilanCompte.put(compte.getNumero_compte(), lignes);
+            bilanCompte.put(compte.getNumeroCompte(), lignes);
         }
     }
 

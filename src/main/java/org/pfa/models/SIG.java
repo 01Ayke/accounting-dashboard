@@ -19,7 +19,7 @@ public class SIG {
     }
 
     private Boolean estComptabilise(Compte compte, String regex) {
-        return (compte.getActif() && compte.getNumero_compte().matches(regex));
+        return (compte.getActif() && compte.getNumeroCompte().matches(regex));
     }
 
     public Double getMargeCommerciale() {
