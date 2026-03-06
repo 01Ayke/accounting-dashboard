@@ -9,10 +9,10 @@ public class GrandLivre {
 
     public GrandLivre(File file, Date debut, Date fin) {
         this.denominationSociale = file.getDenominationSociale();
-        for (Account compte: file.getComptes()) {
+        for (Compte compte: file.getComptes()) {
             List<LigneGrandLivre> lignes = new ArrayList<>();
             Double solde = 0.0;
-            for (AccountingEntry ecriture: compte.getEcrituresComptables()) {
+            for (EcritureComptable ecriture: compte.getEcrituresComptables()) {
                 if (ecriture.getDate_facture().after(debut) && ecriture.getDate_facture().before(fin)) {
                     LigneGrandLivre ligne = new LigneGrandLivre(ecriture, solde);
                     solde = ligne.getSoldeProgressif();

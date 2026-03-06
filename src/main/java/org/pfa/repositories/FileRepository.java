@@ -7,7 +7,6 @@ import org.pfa.config.HibernateUtil;
 import org.pfa.models.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class FileRepository {
     private void initializeFile(File file) {
@@ -17,9 +16,9 @@ public class FileRepository {
         for (Journal journal: file.getJournaux()) {
             Hibernate.initialize(journal.getEcrituresComptables());
         }
-        for (Account compte: file.getComptes()) {
+        for (Compte compte: file.getComptes()) {
             Hibernate.initialize(compte.getEcrituresComptables());
-            for (AccountingEntry ecriture: compte.getEcrituresComptables()) {
+            for (EcritureComptable ecriture: compte.getEcrituresComptables()) {
                 Hibernate.initialize(ecriture.getJournal());
             }
         }

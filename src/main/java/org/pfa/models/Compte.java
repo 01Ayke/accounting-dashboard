@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "compte")
-public class Account {
+public class Compte {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id_compte;
@@ -26,7 +26,7 @@ public class Account {
 
     @OneToMany(mappedBy = "compte", fetch = FetchType.LAZY)
     @JsonManagedReference(value = "compte-ecriture")
-    private Set<AccountingEntry> ecrituresComptables;
+    private Set<EcritureComptable> ecrituresComptables;
 
     public Integer getId_compte() {
         return id_compte;
@@ -48,7 +48,7 @@ public class Account {
         return actif;
     }
 
-    public Set<AccountingEntry> getEcrituresComptables() {
+    public Set<EcritureComptable> getEcrituresComptables() {
         return ecrituresComptables;
     }
 }

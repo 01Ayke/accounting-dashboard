@@ -22,7 +22,7 @@ public class Journal {
 
     @OneToMany(mappedBy = "journal", fetch = FetchType.LAZY)
     @JsonManagedReference(value = "ecriture-journal")
-    Set<AccountingEntry> ecrituresComptables;
+    Set<EcritureComptable> ecrituresComptables;
 
     public File getFile() {
         return file;
@@ -36,7 +36,7 @@ public class Journal {
         return code;
     }
 
-    public Set<AccountingEntry> getEcrituresComptables() {
+    public Set<EcritureComptable> getEcrituresComptables() {
         return ecrituresComptables;
     }
 }

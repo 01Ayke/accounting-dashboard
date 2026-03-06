@@ -30,7 +30,7 @@ public class File {
 
     @OneToMany(mappedBy = "file", fetch = FetchType.LAZY)
     @JsonManagedReference(value = "file-comptes")
-    private Set<Account> comptes;
+    private Set<Compte> comptes;
 
     @ManyToOne
     @JoinColumn(name = "id_forme_juridique")
@@ -84,7 +84,7 @@ public class File {
 
     public Set<Document> getDocuments() { return documents; }
 
-    public Set<Account> getComptes() { return comptes; }
+    public Set<Compte> getComptes() { return comptes; }
 
     public FormeJuridique getFormeJuridique() { return formeJuridique; }
 

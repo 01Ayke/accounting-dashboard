@@ -14,7 +14,7 @@ public class HibernateUtil {
                     .configure("hibernate.cfg.xml") // fichier XML à créer
                     .addAnnotatedClass(File.class)
                     .addAnnotatedClass(Journal.class)
-                    .addAnnotatedClass(AccountingEntry.class)
+                    .addAnnotatedClass(EcritureComptable.class)
                     .addAnnotatedClass(Representant.class)
                     .addAnnotatedClass(User.class)
                     .addAnnotatedClass(Document.class)
@@ -23,7 +23,7 @@ public class HibernateUtil {
                     .addAnnotatedClass(DocumentStatus.class)
                     .addAnnotatedClass(FormeJuridique.class)
                     .addAnnotatedClass(Address.class)
-                    .addAnnotatedClass(Account.class)
+                    .addAnnotatedClass(Compte.class)
                     .addAnnotatedClass(RegimeFiscal.class)
                     .addAnnotatedClass(RegimeTVA.class)
                     .buildSessionFactory();
