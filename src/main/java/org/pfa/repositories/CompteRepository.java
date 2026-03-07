@@ -4,6 +4,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.pfa.config.HibernateUtil;
 import org.pfa.models.Compte;
+import org.pfa.models.File;
 
 public class CompteRepository {
     public void save(Compte compte) {
@@ -12,5 +13,15 @@ public class CompteRepository {
         session.persist(compte);
         tx.commit();
         session.close();
+    }
+
+    public Compte getByIdAndNumero(File dossier, String numero) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Compte compte = session.createSelectionQuery("from Compte WHERE file = :dossier AND numeroCompte = :numero", Compte.class)
+                .setParameter("dossier", dossier)
+                .setParameter("numero", numero)
+                .getSingleResultOrNull();
+        session.close();
+        return compte;
     }
 }

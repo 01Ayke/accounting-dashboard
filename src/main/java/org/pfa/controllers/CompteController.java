@@ -30,9 +30,19 @@ public class CompteController extends Controller {
         File file = fileService.getOne(request.getIdDossier());
 
         Compte compte = new Compte(file, request.getNumeroCompte(), request.getLibelle(), true);
-        compteService.create(compte);
+        if (!request.getNumeroCompte().matches("[0-9]*")) {
+            Response response = new Response("token", "error", "Numéro de compte invalide", 400);
+            response.setContext(ctx);
+            return;
+        }
 
-        Response response = new Response("token", "ok", "Dossier créé", 200);
-        response.setContext(ctx);
+        if (compteService.createIfNotExists(compte)) {
+            Response response = new Response("token", "ok", "Compte créé", 201);
+            response.setContext(ctx);
+        }
+        else {
+            Response response = new Response("token", "error", "Compte déjà existant", 400);
+            response.setContext(ctx);
+        }
     }
 }
