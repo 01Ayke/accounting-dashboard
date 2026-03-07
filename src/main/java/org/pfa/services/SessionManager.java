@@ -23,7 +23,7 @@ public class SessionManager {
         startCleanupTask();
     }
 
-    public String createSession(Integer userId) {
+    public String createSession(Integer userId, boolean isAdmin) {
 
         // Supprime ancienne session si existe
         if (userSessions.containsKey(userId)) {
@@ -32,7 +32,7 @@ public class SessionManager {
         }
 
         String token = UUID.randomUUID().toString();
-        SessionUser session = new SessionUser(token, userId, TTL);
+        SessionUser session = new SessionUser(token, userId, isAdmin, TTL);
 
         sessions.put(token, session);
         userSessions.put(userId, token);
