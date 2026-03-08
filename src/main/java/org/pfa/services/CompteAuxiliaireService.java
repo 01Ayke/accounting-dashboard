@@ -9,7 +9,7 @@ public class CompteAuxiliaireService {
     public void create(CompteAuxiliaire compteAuxiliaire) { repo.save(compteAuxiliaire); }
 
     private Boolean exists(CompteAuxiliaire compteAuxiliaire) {
-        return (repo.getByCompteAndLibelle(compteAuxiliaire.getCompte(), compteAuxiliaire.getLibelle()) != null);
+        return (repo.getByCompteAndLibelle(compteAuxiliaire.getCompte(), compteAuxiliaire.getNumeroCompteAuxiliaire()) != null);
     }
 
     public Boolean createIfNotExists(CompteAuxiliaire compteAuxiliaire) {

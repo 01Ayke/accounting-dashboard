@@ -12,6 +12,10 @@ public class CompteAuxiliaire {
     private Integer idCompteAuxilliaire;
 
     private String libelle;
+
+    @Column(name = "numero_compte_auxiliaire")
+    private String numeroCompteAuxiliaire;
+
     private Float solde;
     private Boolean actif;
 
@@ -24,8 +28,9 @@ public class CompteAuxiliaire {
     @JoinColumn(name = "id_type_compte_auxiliaire")
     private TypeCompteAuxiliaire typeCompteAuxiliaire;
 
-    public CompteAuxiliaire(String libelle, Compte compteRattachement, TypeCompteAuxiliaire typeCompteAuxiliaire) {
+    public CompteAuxiliaire(String libelle, String numeroCompteAuxiliaire, Compte compteRattachement, TypeCompteAuxiliaire typeCompteAuxiliaire) {
         this.libelle = libelle;
+        this.numeroCompteAuxiliaire = numeroCompteAuxiliaire;
         this.compteRattachement = compteRattachement;
         this.typeCompteAuxiliaire = typeCompteAuxiliaire;
         this.actif = true;
@@ -35,6 +40,10 @@ public class CompteAuxiliaire {
 
     public String getLibelle() {
         return libelle;
+    }
+
+    public String getNumeroCompteAuxiliaire() {
+        return numeroCompteAuxiliaire;
     }
 
     public Float getSolde() {

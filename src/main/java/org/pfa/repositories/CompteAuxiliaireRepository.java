@@ -15,11 +15,11 @@ public class CompteAuxiliaireRepository {
         session.close();
     }
 
-    public CompteAuxiliaire getByCompteAndLibelle(Compte compte, String libelle) {
+    public CompteAuxiliaire getByCompteAndLibelle(Compte compte, String numero) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        CompteAuxiliaire compteAuxiliaire = session.createSelectionQuery("FROM CompteAuxiliaire WHERE compte = :compte AND libelle = :libelle", CompteAuxiliaire.class)
+        CompteAuxiliaire compteAuxiliaire = session.createSelectionQuery("FROM CompteAuxiliaire WHERE compte = :compte AND numero = :numero", CompteAuxiliaire.class)
                 .setParameter("compte", compte)
-                .setParameter("numero", libelle)
+                .setParameter("numero", numero)
                 .getSingleResultOrNull();
         session.close();
         return compteAuxiliaire;

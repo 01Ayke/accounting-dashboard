@@ -44,7 +44,7 @@ public class CompteAuxiliaireController extends Controller {
             return;
         }
 
-        CompteAuxiliaire compteAuxiliaire = new CompteAuxiliaire(creationCompteAuxiliaireRequest.getLibelle(), compte, typeCompteAuxiliaire);
+        CompteAuxiliaire compteAuxiliaire = new CompteAuxiliaire( creationCompteAuxiliaireRequest.getLibelle(), creationCompteAuxiliaireRequest.getNumero(), compte, typeCompteAuxiliaire);
         compteAuxiliaireService.create(compteAuxiliaire);
 
         Response response = new Response("token", "ok", "Compte auxiliaire créé", 200);
