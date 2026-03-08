@@ -26,6 +26,8 @@ public class HibernateUtil {
                     .addAnnotatedClass(Compte.class)
                     .addAnnotatedClass(RegimeFiscal.class)
                     .addAnnotatedClass(RegimeTVA.class)
+                    .addAnnotatedClass(CompteAuxiliaire.class)
+                    .addAnnotatedClass(TypeCompteAuxiliaire.class)
                     .buildSessionFactory();
         } catch (Throwable ex) {
             System.err.println("Erreur Hibernate : " + ex);

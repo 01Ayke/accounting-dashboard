@@ -15,12 +15,19 @@ public class CompteRepository {
         session.close();
     }
 
-    public Compte getByIdAndNumero(File dossier, String numero) {
+    public Compte getByFileAndNumero(File dossier, String numero) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Compte compte = session.createSelectionQuery("from Compte WHERE file = :dossier AND numeroCompte = :numero", Compte.class)
                 .setParameter("dossier", dossier)
                 .setParameter("numero", numero)
                 .getSingleResultOrNull();
+        session.close();
+        return compte;
+    }
+
+    public Compte findById(Integer id) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Compte compte = session.find(Compte.class, id);
         session.close();
         return compte;
     }

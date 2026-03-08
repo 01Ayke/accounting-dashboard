@@ -9,7 +9,7 @@ public class CompteService {
     public void create(Compte compte) { repo.save(compte); }
 
      private Boolean exists(Compte compte) {
-        return (repo.getByIdAndNumero(compte.getFile(), compte.getNumeroCompte()) != null);
+        return (repo.getByFileAndNumero(compte.getFile(), compte.getNumeroCompte()) != null);
     }
 
     // revoie true si le compte a été créé, false sinon
@@ -18,4 +18,6 @@ public class CompteService {
         if (!exists) create(compte);
         return !exists;
     }
+
+    public Compte find(Integer id) { return repo.findById(id); }
 }
