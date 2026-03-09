@@ -964,3 +964,12 @@ INSERT INTO statut_document (libelle, code, description) VALUES
 ('Archivé', 'ARCHIVE', 'Document archivé'),
 ('Obsolète', 'OBSOLETE', 'Document remplacé ou périmé'),
 ('Supprimé', 'SUPPRIME', 'Document marqué comme supprimé');
+
+-- -----------------------------------------------------
+-- Données de test
+-- -----------------------------------------------------
+
+-- Utilisateurs
+INSERT INTO utilisateur (nom, email, mot_de_passe, role) VALUES
+('Admin', 'admin@example.com', 'mdp', 'ADMIN'),
+('Comptable', 'comptable@example.com', 'mdp', 'USER');
