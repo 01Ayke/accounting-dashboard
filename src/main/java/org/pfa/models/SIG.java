@@ -16,13 +16,21 @@ public class SIG {
 
     public SIG(Set<Compte> listeComptes) {
         this.comptes = listeComptes;
+        this.margeCommerciale = computeMargeCommerciale();
+        this.productionExercice = computeProductionExercice();
+        this.valeurAjoutee = computeValeurAjoutee();
+        this.excedentBrut = computeExcedentBrut();
+        this.resultatExploitation = computeResultatExploitation();
+        this.resultatFinancier = computeResultatFinancier();
+        this.resultatExceptionnel = computeResultatExceptionnel();
+        this.resultatExercice = computeResultatExercice();
     }
 
     private Boolean estComptabilise(Compte compte, String regex) {
         return (compte.getActif() && compte.getNumeroCompte().matches(regex));
     }
 
-    public Double getMargeCommerciale() {
+    private Double computeMargeCommerciale() {
         for (Compte compte: comptes) {
             if (estComptabilise(compte, "707.*"))
                 margeCommerciale += compte.getSolde();
@@ -32,7 +40,7 @@ public class SIG {
         return margeCommerciale;
     }
 
-    public Double getProductionExercice() {
+    private Double computeProductionExercice() {
         for (Compte compte: comptes) {
             if (estComptabilise(compte, "(70[1-6]|713|72).*"))
                 productionExercice += compte.getSolde();
@@ -40,7 +48,7 @@ public class SIG {
         return productionExercice;
     }
 
-    public Double getValeurAjoutee() {
+    private Double computeValeurAjoutee() {
         valeurAjoutee += (margeCommerciale + productionExercice);
         for (Compte compte: comptes) {
             if (estComptabilise(compte, "(60(1|2)|603(1|2)|60[4-6]|61|62).*")) {
@@ -50,7 +58,7 @@ public class SIG {
         return valeurAjoutee;
     }
 
-    public Double getExcedentBrut() {
+    private Double computeExcedentBrut() {
         excedentBrut += valeurAjoutee;
         for (Compte compte: comptes) {
             if (estComptabilise(compte, "74.*"))
@@ -61,7 +69,7 @@ public class SIG {
         return excedentBrut;
     }
 
-    public Double getResultatExploitation() {
+    private Double computeResultatExploitation() {
         resultatExploitation += excedentBrut;
         for (Compte compte: comptes) {
             if (estComptabilise(compte, "7(5|81|91).*"))
@@ -72,7 +80,7 @@ public class SIG {
         return resultatExploitation;
     }
 
-    public Double getResultatFinancier() {
+    private Double computeResultatFinancier() {
         for (Compte compte: comptes) {
             if (estComptabilise(compte, "76.*"))
                 resultatFinancier += compte.getSolde();
@@ -82,7 +90,7 @@ public class SIG {
         return resultatFinancier;
     }
 
-    public Double getResultatExceptionnel() {
+    private Double computeResultatExceptionnel() {
         for (Compte compte: comptes) {
             if (estComptabilise(compte, "77.*"))
                 resultatExceptionnel += compte.getSolde();
@@ -92,8 +100,40 @@ public class SIG {
         return resultatExceptionnel;
     }
 
-    public Double getResultatExercice() {
+    private Double computeResultatExercice() {
         resultatExercice += (resultatExploitation + resultatFinancier - resultatExceptionnel);
+        return resultatExercice;
+    }
+
+    public Double getMargeCommerciale() {
+        return margeCommerciale;
+    }
+
+    public Double getProductionExercice() {
+        return productionExercice;
+    }
+
+    public Double getValeurAjoutee() {
+        return valeurAjoutee;
+    }
+
+    public Double getExcedentBrut() {
+        return excedentBrut;
+    }
+
+    public Double getResultatExploitation() {
+        return resultatExploitation;
+    }
+
+    public Double getResultatFinancier() {
+        return resultatFinancier;
+    }
+
+    public Double getResultatExceptionnel() {
+        return resultatExceptionnel;
+    }
+
+    public Double getResultatExercice() {
         return resultatExercice;
     }
 }

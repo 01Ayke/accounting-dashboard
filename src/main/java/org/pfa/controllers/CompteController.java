@@ -29,7 +29,7 @@ public class CompteController extends Controller {
 
         File file = fileService.getOne(request.getIdDossier());
 
-        Compte compte = new Compte(file, request.getNumeroCompte(), request.getLibelle(), true);
+        Compte compte = new Compte(file, request.getNumeroCompte(), request.getLibelle(), 0.0F,true);
         if (!request.getNumeroCompte().matches("[0-9]*")) {
             Response response = new Response("token", "error", "Numéro de compte invalide", 400);
             response.setContext(ctx);

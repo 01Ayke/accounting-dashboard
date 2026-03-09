@@ -570,6 +570,6 @@ public class FileController extends Controller {
     }
 
     private void initializeCompte(File file, String numero, String libelle) {
-        compteService.create(new Compte(file, numero, libelle, true));
+        compteService.create(new Compte(file, numero, libelle, 0.0F,true));
     }
 }

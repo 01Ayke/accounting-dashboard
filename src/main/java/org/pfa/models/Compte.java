@@ -32,10 +32,11 @@ public class Compte {
 
     public Compte() {}
 
-    public Compte(File file, String numeroCompte, String libelle, Boolean actif) {
+    public Compte(File file, String numeroCompte, String libelle, Float solde,Boolean actif) {
         this.file = file;
         this.numeroCompte = numeroCompte;
         this.libelle = libelle;
+        this.solde = solde;
         this.actif = actif;
     }
 
