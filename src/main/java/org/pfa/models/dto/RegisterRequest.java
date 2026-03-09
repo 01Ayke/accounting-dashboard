@@ -17,6 +17,13 @@ public class RegisterRequest {
         this.prenom = ctx.formParam("prenom");
     }
 
+    public RegisterRequest(String mail, String password, String nom, String prenom) {
+        this.mail = mail;
+        this.password = password;
+        this.nom = nom;
+        this.prenom = prenom;
+    }
+
     public String getMail() {
         return mail;
     }
