@@ -30,6 +30,7 @@ public class Response {
                 ctx.status(code).json(Map.of("status", status, "message", message, "sID", token));
             }
             catch (Exception e) {
+                e.printStackTrace();
                 System.out.println("problem");
             }
         } else {

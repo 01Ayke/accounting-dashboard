@@ -18,7 +18,7 @@ public class Compte {
     private String numeroCompte;
     private String libelle;
 
-    private Float solde;
+    private Float solde = 0.0F;
     private Boolean actif;
 
     @ManyToOne(fetch = FetchType.LAZY)

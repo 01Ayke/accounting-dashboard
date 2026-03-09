@@ -1,6 +1,7 @@
 package org.pfa.services;
 
 import org.pfa.models.Compte;
+import org.pfa.models.File;
 import org.pfa.repositories.CompteRepository;
 
 public class CompteService {
@@ -20,4 +21,8 @@ public class CompteService {
     }
 
     public Compte find(Integer id) { return repo.findById(id); }
+
+    public Compte findByFileAndNumero(File file, String numero) {
+        return repo.getByFileAndNumero(file, numero);
+    }
 }

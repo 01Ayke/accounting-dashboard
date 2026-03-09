@@ -28,6 +28,8 @@ public class CompteAuxiliaire {
     @JoinColumn(name = "id_type_compte_auxiliaire")
     private TypeCompteAuxiliaire typeCompteAuxiliaire;
 
+    public CompteAuxiliaire() {}
+
     public CompteAuxiliaire(String libelle, String numeroCompteAuxiliaire, Compte compteRattachement, TypeCompteAuxiliaire typeCompteAuxiliaire) {
         this.libelle = libelle;
         this.numeroCompteAuxiliaire = numeroCompteAuxiliaire;
