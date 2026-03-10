@@ -89,6 +89,31 @@ public class DossierService
         return dossiers.Count > 0 ? dossiers : null;
     }
 
+    public async Task<bool> CreateDossierAsync(CreateDossierRequest request)
+    {
+        try
+        {
+            System.Diagnostics.Debug.WriteLine($"DossierService.CreateDossierAsync: Création d'un nouveau dossier");
+            
+            var response = await _httpClient.PostAsJsonAsync("file", request);
+            
+            if (response.IsSuccessStatusCode)
+            {
+                System.Diagnostics.Debug.WriteLine("DossierService.CreateDossierAsync: Dossier créé avec succès");
+                return true;
+            }
+            
+            var errorContent = await response.Content.ReadAsStringAsync();
+            System.Diagnostics.Debug.WriteLine($"DossierService.CreateDossierAsync: Erreur {response.StatusCode} - {errorContent}");
+            return false;
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"DossierService.CreateDossierAsync: Exception = {ex.Message}");
+            return false;
+        }
+    }
+
     public async Task<SIGBackend?> GetSIGAsync(int dossierId)
     {
         try

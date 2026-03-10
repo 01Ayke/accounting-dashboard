@@ -69,4 +69,13 @@ public partial class HomeView : UserControl
             SuggestionsListBox.Visibility = Visibility.Collapsed;
         }
     }
+
+    private void AddButton_Click(object sender, RoutedEventArgs e)
+    {
+        var mainWindow = Window.GetWindow(this) as MainWindow;
+        if (mainWindow != null)
+        {
+            mainWindow.NavigateToCreateDossier();
+        }
+    }
 }

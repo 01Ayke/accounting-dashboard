@@ -37,6 +37,11 @@ namespace App
             MainContent.Content = dashboardView;
         }
 
+        public void NavigateToCreateDossier()
+        {
+            MainContent.Content = new CreateDossierView();
+        }
+
         public void NavigateBack()
         {
             MainContent.Content = new HomeView();
