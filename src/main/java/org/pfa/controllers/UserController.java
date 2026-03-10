@@ -43,6 +43,12 @@ public class UserController extends Controller {
     }
 
     public void handleRegister(Context ctx) {
+        if (!super.checkToken(ctx)) {
+            Response response = new Response("error", "Authentification requise pour créer un compte", 401);
+            response.setContext(ctx);
+            return;
+        }
+
         RegisterRequest registerRequest = new RegisterRequest(ctx);
 
         if (!registerRequest.isValid()) {
