@@ -51,9 +51,9 @@ public class User {
         return id_utilisateur;
     }
 
-    public Boolean getIsAdmin() {
-        return isAdmin;
-    }
+//    public Boolean getIsAdmin() {
+//        return isAdmin;
+//    }
     public String getCode() {
         return code;
     }

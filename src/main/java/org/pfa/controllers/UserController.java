@@ -23,7 +23,7 @@ public class UserController extends Controller {
         LoginRequest login = new LoginRequest(ctx);
         User user = service.getOne(login.getMail(), login.getPassword());
         if (user != null) {
-            String token = sessionManager.createSession(user.getId(), user.getIsAdmin());
+            String token = sessionManager.createSession(user.getId());
             Response response = new Response(token, "success", "Login successful", 200);
             response.setContext(ctx);
         } else {
