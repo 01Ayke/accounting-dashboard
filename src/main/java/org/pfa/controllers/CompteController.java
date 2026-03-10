@@ -31,17 +31,17 @@ public class CompteController extends Controller {
 
         Compte compte = new Compte(file, request.getNumeroCompte(), request.getLibelle(), 0.0F,true);
         if (!request.getNumeroCompte().matches("[0-9]*")) {
-            Response response = new Response("token", "error", "Numéro de compte invalide", 400);
+            Response response = new Response("error", "Numéro de compte invalide", 400);
             response.setContext(ctx);
             return;
         }
 
         if (compteService.createIfNotExists(compte)) {
-            Response response = new Response("token", "ok", "Compte créé", 201);
+            Response response = new Response("ok", "Compte créé", 201);
             response.setContext(ctx);
         }
         else {
-            Response response = new Response("token", "error", "Compte déjà existant", 400);
+            Response response = new Response("error", "Compte déjà existant", 400);
             response.setContext(ctx);
         }
     }

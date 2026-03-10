@@ -61,7 +61,7 @@ public class FileController extends Controller {
             file.setRegimeFiscal(regimeFiscal);
         }
         else {
-            Response response = new Response("token", "error", "Régime fiscal invalide", 400);
+            Response response = new Response("error", "Régime fiscal invalide", 400);
             response.setContext(ctx);
             return;
         }
@@ -71,7 +71,7 @@ public class FileController extends Controller {
             file.setRegimeTVA(regimeTVA);
         }
         else {
-            Response response = new Response("token", "error", "Régime TVA invalide", 400);
+            Response response = new Response("error", "Régime TVA invalide", 400);
             response.setContext(ctx);
             return;
         }
@@ -81,7 +81,7 @@ public class FileController extends Controller {
             file.setFormeJuridique(formeJuridique);
         }
         else {
-            Response response = new Response("token", "error", "Forme juridique invalide    ", 400);
+            Response response = new Response("error", "Forme juridique invalide    ", 400);
             response.setContext(ctx);
             return;
         }
@@ -89,7 +89,7 @@ public class FileController extends Controller {
         fileService.create(file);
 
         initializeComptes(file);
-        Response response = new Response("token", "ok", "Dossier créé", 200);
+        Response response = new Response("ok", "Dossier créé", 200);
         response.setContext(ctx);
     }
 

@@ -26,7 +26,7 @@ public class GrandLivreController extends Controller {
         }
         GrandLivreRequest request = mapper.readValue(ctx.body(), GrandLivreRequest.class);
         GrandLivre grandLivre = service.getOne(request.getIdDossier(), request.getDebut(), request.getFin());
-        Response response = new Response("token","success", grandLivre, 200);
+        Response response = new Response("success", grandLivre, 200);
         response.setContext(ctx);
     }
 }

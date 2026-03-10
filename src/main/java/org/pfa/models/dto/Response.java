@@ -17,7 +17,7 @@ public class Response {
         this.code = code;
     }
 
-    public Response(String status, String message, Integer code) {
+    public Response(String status, Object message, Integer code) {
         this.token = null;
         this.status = status;
         this.message = message;

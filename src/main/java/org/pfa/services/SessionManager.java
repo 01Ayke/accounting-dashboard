@@ -32,7 +32,7 @@ public class SessionManager {
         }
 
         String token = UUID.randomUUID().toString();
-        SessionUser session = new SessionUser(token, userId, true, TTL);
+        SessionUser session = new SessionUser(token, userId, true, TTL); // problème
 
         sessions.put(token, session);
         userSessions.put(userId, token);
