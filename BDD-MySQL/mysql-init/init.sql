@@ -161,7 +161,7 @@ CREATE TABLE utilisateur (
   code VARCHAR(45) NOT NULL,
   mot_de_passe VARCHAR(255) NOT NULL,
   date_creation DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  date_derniere_connexion DATETIME NULL,
+  date_derniere_connexion DATETIME NULL DEFAULT NULL,
   actif BOOLEAN NOT NULL DEFAULT TRUE,
 
   UNIQUE KEY uk_mail (mail),
@@ -971,6 +971,5 @@ INSERT INTO statut_document (libelle, code, description) VALUES
 -- -----------------------------------------------------
 
 -- Utilisateurs
-INSERT INTO utilisateur (nom, email, mot_de_passe, role) VALUES
-('Admin', 'admin@example.com', 'mdp', 'ADMIN'),
-('Comptable', 'comptable@example.com', 'mdp', 'USER');
+INSERT INTO utilisateur (mail, nom, prenom, code, mot_de_passe) VALUES
+('admin@admin.fr', 'admin', 'user','UADMIN','$2a$10$JeXoymFo8IzREdiwKbfgqOMQcifKxREqCHWYYtp8Pz90Pmf0sZxfu');
