@@ -24,10 +24,24 @@ public class Response {
         this.code = code;
     }
 
-    public void setContext(Context ctx) {
+    public void setLoginContext(Context ctx) {
         if (code >= 200 && code < 300) {
             try {
                 ctx.status(code).json(Map.of("status", status, "message", message, "sID", token));
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("problem");
+            }
+        } else {
+            ctx.status(code).json(Map.of("status", status, "message", message));
+        }
+    }
+
+    public void setContext(Context ctx) {
+        if (code >= 200 && code < 300) {
+            try {
+                ctx.status(code).json(Map.of("status", status, "message", message));
             }
             catch (Exception e) {
                 e.printStackTrace();

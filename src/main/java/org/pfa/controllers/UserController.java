@@ -25,7 +25,7 @@ public class UserController extends Controller {
         if (user != null) {
             String token = sessionManager.createSession(user.getId());
             Response response = new Response(token, "success", "Login successful", 200);
-            response.setContext(ctx);
+            response.setLoginContext(ctx);
         } else {
             Response response = new Response("error", "Invalid email or password", 401);
             response.setContext(ctx);
@@ -52,10 +52,11 @@ public class UserController extends Controller {
         }
 
         boolean success = service.register(registerRequest);
-
+        System.out.println("\u001B[32mRegistration attempt for email: " + registerRequest.getMail() + " - Success: " + success + "\u001B[0m");
         if (success) {
             Response response = new Response("success", "Compte créé avec succès", 201);
             response.setContext(ctx);
+            return;
         } else {
             Response response = new Response("error", "Cet email est déjà utilisé", 409);
             response.setContext(ctx);
