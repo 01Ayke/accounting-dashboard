@@ -9,6 +9,7 @@ public class UserRoutes implements RouteInterface {
     public static void register(Javalin app, SessionManager sessionManager) {
         UserController userController = new UserController(sessionManager);
         app.post("/login", userController::handleLogin);
+        app.post("/register", userController::handleRegister);
         app.post("/logout", userController::handleLogout);
     }
 }

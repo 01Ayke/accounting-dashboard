@@ -14,8 +14,13 @@ public class Address {
     private String rue;
     private String numero;
     private String complement;
-    private String code_postal;
 
+    @Column(name = "code_postal")
+    private String codePostal;
+
+    public Integer getId_adresse() {
+        return id_adresse;
+    }
 
     public String getPays() {
         return pays;
@@ -37,7 +42,7 @@ public class Address {
         return complement;
     }
 
-    public void setCode_postal(String code_postal) {
-        this.code_postal = code_postal;
+    public String getCodePostal() {
+        return codePostal;
     }
 }

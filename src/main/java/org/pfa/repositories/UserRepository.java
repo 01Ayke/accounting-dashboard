@@ -5,14 +5,21 @@ import org.pfa.config.HibernateUtil;
 import org.pfa.models.User;
 
 public class UserRepository {
-    public User findByMail(String mail, String password) {
+    public User findByMail(String mail) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        User user = session.createSelectionQuery("FROM User WHERE mail = :mail AND mot_de_passe = :password", User.class)
+        User user = session.createSelectionQuery("FROM User WHERE mail = :mail", User.class)
                 .setParameter("mail", mail)
-                .setParameter("password", password)
                 .getSingleResultOrNull();
         session.close();
         return user;
+    }
+
+    public void save(User user) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        session.beginTransaction();
+        session.persist(user);
+        session.getTransaction().commit();
+        session.close();
     }
     public User findById(Integer id) {
         try (org.hibernate.Session session = org.pfa.config.HibernateUtil.getSessionFactory().openSession()) {

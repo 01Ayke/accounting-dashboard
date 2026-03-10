@@ -436,11 +436,12 @@ CREATE TABLE compte_auxiliaire (
   id_compte_auxiliaire INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
   id_compte_rattachement INT NOT NULL,
   libelle VARCHAR(80) NOT NULL,
+  numero_compte_auxiliaire VARCHAR(20) NOT NULL,
   id_type_compte_auxiliaire INT NOT NULL,
   solde DECIMAL(15,2) NOT NULL DEFAULT 0,
   actif BOOLEAN NOT NULL DEFAULT TRUE,
 
-  UNIQUE KEY uk_compte_libelle (id_compte_rattachement, libelle),
+  UNIQUE KEY uk_compte_numero (id_compte_rattachement, numero_compte_auxiliaire),
   FOREIGN KEY (id_compte_rattachement) REFERENCES compte (id_compte) ON DELETE RESTRICT,
   FOREIGN KEY (id_type_compte_auxiliaire) REFERENCES type_compte_auxiliaire (id_type_compte_auxiliaire),
 

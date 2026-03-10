@@ -3,14 +3,19 @@ package org.pfa.models;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "forme_juridique")
-public class LegalStatus {
+@Table(name = "regime_tva")
+public class RegimeTVA {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id_forme_juridique;
+    @Column(name = "id_regime_tva")
+    private Integer idRegimeTVA;
 
     private String libelle;
     private String code;
+
+    public Integer getIdRegimeTVA() {
+        return idRegimeTVA;
+    }
 
     public String getLibelle() {
         return libelle;

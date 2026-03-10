@@ -5,6 +5,7 @@ import io.javalin.http.Context;
 import org.pfa.models.User;
 import org.pfa.models.dto.LoginRequest;
 import org.pfa.models.dto.LogoutRequest;
+import org.pfa.models.dto.RegisterRequest;
 import org.pfa.services.SessionManager;
 import org.pfa.services.UserService;
 import org.pfa.models.dto.Response;
@@ -22,7 +23,7 @@ public class UserController extends Controller {
         LoginRequest login = new LoginRequest(ctx);
         User user = service.getOne(login.getMail(), login.getPassword());
         if (user != null) {
-            String token = sessionManager.createSession(user.getId());
+            String token = sessionManager.createSession(user.getId(), user.getIsAdmin());
             Response response = new Response(token, "success", "Login successful", 200);
             response.setContext(ctx);
         } else {
@@ -39,6 +40,26 @@ public class UserController extends Controller {
             Response response = new Response("success", "Logout successful", 200);
             response.setContext(ctx);
         } 
+    }
+
+    public void handleRegister(Context ctx) {
+        RegisterRequest registerRequest = new RegisterRequest(ctx);
+
+        if (!registerRequest.isValid()) {
+            Response response = new Response("error", "Veuillez remplir tous les champs", 400);
+            response.setContext(ctx);
+            return;
+        }
+
+        boolean success = service.register(registerRequest);
+
+        if (success) {
+            Response response = new Response("success", "Compte créé avec succès", 201);
+            response.setContext(ctx);
+        } else {
+            Response response = new Response("error", "Cet email est déjà utilisé", 409);
+            response.setContext(ctx);
+        }
     }
 }
 

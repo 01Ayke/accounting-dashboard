@@ -10,32 +10,44 @@ import java.util.Set;
 public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id_dossier;
+    @Column(name = "id_dossier")
+    private Integer idDossier;
 
     private String telephone;
     private String mail;
-    private String denomination_sociale;
+
+    @Column(name = "denomination_sociale")
+    private String denominationSociale;
+
     private Float capital;
 
     @OneToMany(mappedBy = "file", fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @JsonManagedReference(value = "file-journal")
     private Set<Journal> journaux;
 
     @OneToMany(mappedBy = "file", fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @JsonManagedReference(value = "file-documents")
     private Set<Document> documents;
 
     @OneToMany(mappedBy = "file", fetch = FetchType.LAZY)
-    @JsonManagedReference
-    private Set<Account> comptes;
+    @JsonManagedReference(value = "file-comptes")
+    private Set<Compte> comptes;
 
     @ManyToOne
     @JoinColumn(name = "id_forme_juridique")
-    private LegalStatus legalStatus;
+    private FormeJuridique formeJuridique;
+
+    @ManyToOne
+    @JoinColumn(name = "id_regime_fiscal")
+    private RegimeFiscal regimeFiscal;
+
+    @ManyToOne
+    @JoinColumn(name = "id_regime_tva")
+    private RegimeTVA regimeTVA;
 
     @ManyToOne
     @JoinColumn(name = "id_adresse")
-    private Address address;
+    private Address adresse;
 
     @ManyToMany
     @JoinTable(
@@ -46,7 +58,7 @@ public class File {
     private Set<Representant> representants;
 
     public Integer getId() {
-        return this.id_dossier;
+        return this.idDossier;
     }
 
     public String getTelephone() {
@@ -58,7 +70,7 @@ public class File {
     }
 
     public String getDenominationSociale() {
-        return this.denomination_sociale;
+        return this.denominationSociale;
     }
 
     public Float getCapital() { return capital; }
@@ -73,11 +85,35 @@ public class File {
 
     public Set<Document> getDocuments() { return documents; }
 
-    public Set<Account> getComptes() { return comptes; }
+    public Set<Compte> getComptes() { return comptes; }
 
-    public LegalStatus getLegalStatus() { return legalStatus; }
+    public FormeJuridique getFormeJuridique() { return formeJuridique; }
 
-    public Address getAddress() {
-        return address;
+    public void setFormeJuridique(FormeJuridique formeJuridique) {
+        this.formeJuridique = formeJuridique;
+    }
+
+    public RegimeFiscal getRegimeFiscal() {
+        return regimeFiscal;
+    }
+
+    public void setRegimeFiscal(RegimeFiscal regimeFiscal) {
+        this.regimeFiscal = regimeFiscal;
+    }
+
+    public RegimeTVA getRegimeTVA() {
+        return regimeTVA;
+    }
+
+    public void setRegimeTVA(RegimeTVA regimeTVA) {
+        this.regimeTVA = regimeTVA;
+    }
+
+    public Address getAdresse() {
+        return adresse;
+    }
+
+    public void setAdresse(Address adresse) {
+        this.adresse = adresse;
     }
 }

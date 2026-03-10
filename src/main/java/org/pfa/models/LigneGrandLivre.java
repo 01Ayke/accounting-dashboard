@@ -11,7 +11,7 @@ public class LigneGrandLivre {
     private Double credit;
     private Double soldeProgressif;
 
-    public LigneGrandLivre(AccountingEntry ecriture, Double solde) {
+    public LigneGrandLivre(EcritureComptable ecriture, Double solde) {
         this.date = ecriture.getDate_facture();
         this.codeJournal = ecriture.getJournal().getCode();
         this.numeroFacture = ecriture.getNumero_facture();

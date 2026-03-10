@@ -2,11 +2,11 @@ package org.pfa.repositories;
 
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.pfa.config.HibernateUtil;
 import org.pfa.models.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class FileRepository {
     private void initializeFile(File file) {
@@ -16,9 +16,9 @@ public class FileRepository {
         for (Journal journal: file.getJournaux()) {
             Hibernate.initialize(journal.getEcrituresComptables());
         }
-        for (Account compte: file.getComptes()) {
+        for (Compte compte: file.getComptes()) {
             Hibernate.initialize(compte.getEcrituresComptables());
-            for (AccountingEntry ecriture: compte.getEcrituresComptables()) {
+            for (EcritureComptable ecriture: compte.getEcrituresComptables()) {
                 Hibernate.initialize(ecriture.getJournal());
             }
         }
@@ -39,7 +39,7 @@ public class FileRepository {
         return files;
     }
 
-    public File findById(Long id) {
+    public File findById(Integer id) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         File file = session.find(File.class, id);
         
@@ -49,5 +49,13 @@ public class FileRepository {
         
         session.close();
         return file;
+    }
+
+    public void save(File file) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+        session.persist(file);
+        tx.commit();
+        session.close();
     }
 }

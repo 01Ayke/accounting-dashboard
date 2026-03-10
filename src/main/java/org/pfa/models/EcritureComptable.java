@@ -8,7 +8,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "ecriture_comptable")
-public class AccountingEntry {
+public class EcritureComptable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id_ecriture_comptable;
@@ -38,12 +38,12 @@ public class AccountingEntry {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_compte")
-    @JsonBackReference
-    private Account compte;
+    @JsonBackReference(value = "compte-ecriture")
+    private Compte compte;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_journal")
-    @JsonBackReference
+    @JsonBackReference(value = "ecriture-journal")
     private Journal journal;
 
     public Integer getId_ecriture_comptable() {
@@ -74,7 +74,7 @@ public class AccountingEntry {
         return date_facture;
     }
 
-    public Account getCompte() {
+    public Compte getCompte() {
         return compte;
     }
 

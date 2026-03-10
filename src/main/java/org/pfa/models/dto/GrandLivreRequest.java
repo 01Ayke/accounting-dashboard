@@ -8,11 +8,11 @@ import java.util.Date;
 public class GrandLivreRequest {
     private static final ObjectMapper mapper = new ObjectMapper();
 
-    private Long idDossier;
+    private Integer idDossier;
     private Date debut;
     private Date fin;
 
-    public Long getIdDossier() {
+    public Integer getIdDossier() {
         return idDossier;
     }
 
