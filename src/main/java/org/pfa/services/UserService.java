@@ -21,7 +21,7 @@ public class UserService {
             return false; // Email already in use
         }
         String hashedPassword = BCrypt.hashpw(request.getPassword(), BCrypt.gensalt());
-        User newUser = new User(request.getMail(), hashedPassword, request.getNom(), request.getPrenom(), false);
+        User newUser = new User(request.getMail(), hashedPassword, request.getNom(), request.getPrenom(), request.getCode(), false);
         repo.save(newUser);
         return true;
     }

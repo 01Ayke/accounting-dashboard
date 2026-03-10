@@ -14,6 +14,7 @@ public class User {
     private String nom;
     private String prenom;
     private String mot_de_passe;
+    private String code;
     
     @Column(name = "is_admin")
     private Boolean isAdmin = false;
@@ -21,11 +22,12 @@ public class User {
     // Constructeur par défaut requis par Hibernate
     public User() {}
 
-    public User(String mail, String mot_de_passe, String nom, String prenom, Boolean isAdmin) {
+    public User(String mail, String mot_de_passe, String nom, String prenom, String code, Boolean isAdmin) {
         this.mail = mail;
         this.mot_de_passe = mot_de_passe;
         this.nom = nom;
         this.prenom = prenom;
+        this.code = code;
         this.isAdmin = isAdmin != null ? isAdmin : false;
     }
 
@@ -51,5 +53,8 @@ public class User {
 
     public Boolean getIsAdmin() {
         return isAdmin;
+    }
+    public String getCode() {
+        return code;
     }
 }
