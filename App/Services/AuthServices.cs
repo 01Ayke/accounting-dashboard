@@ -1,12 +1,11 @@
-using App.Models;
-
-namespace App.Services;
-
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using System.Collections.Generic;
+using App.Models;
+
+namespace App.Services;
 
 public class AuthService
 {
@@ -24,7 +23,6 @@ public class AuthService
 
     public async Task<LoginResponse?> LoginAsync(string email, string password)
     {
-        // Mode test : retourne une réponse hardcodée sans faire de requête HTTP
         if (_useTestMode)
         {
             return await Task.FromResult(new LoginResponse
@@ -36,7 +34,6 @@ public class AuthService
 
         try
         {
-            // Le backend attend form-urlencoded, pas JSON
             var content = new FormUrlEncodedContent(new[]
             {
                 new KeyValuePair<string, string>("mail", email),
@@ -47,10 +44,10 @@ public class AuthService
             var response = await _httpClient.PostAsync("login", content);
 
             System.Diagnostics.Debug.WriteLine($"AuthService: Status code = {response.StatusCode}");
-            
+
             var rawContent = await response.Content.ReadAsStringAsync();
             System.Diagnostics.Debug.WriteLine($"AuthService: Contenu brut reçu: {rawContent}");
-            
+
             try
             {
                 var loginResponse = await response.Content.ReadFromJsonAsync<LoginResponse>();
