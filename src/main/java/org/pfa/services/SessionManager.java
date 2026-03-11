@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import org.pfa.models.Roles;
 
 public class SessionManager {
 
@@ -23,7 +24,7 @@ public class SessionManager {
         startCleanupTask();
     }
 
-    public String createSession(Integer userId) {
+    public String createSession(Integer userId, Roles role) {
 
         // Supprime ancienne session si existe
         if (userSessions.containsKey(userId)) {
@@ -32,7 +33,7 @@ public class SessionManager {
         }
 
         String token = UUID.randomUUID().toString();
-        SessionUser session = new SessionUser(token, userId, true, TTL); // problème
+        SessionUser session = new SessionUser(token, userId, TTL, role);
 
         sessions.put(token, session);
         userSessions.put(userId, token);

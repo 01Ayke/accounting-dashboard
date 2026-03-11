@@ -1,9 +1,12 @@
 package org.pfa.services;
 
+import java.util.List;
+
 import org.mindrot.jbcrypt.BCrypt;
 import org.pfa.models.User;
 import org.pfa.models.dto.RegisterRequest;
 import org.pfa.repositories.UserRepository;
+import org.pfa.models.Roles;
 
 public class UserService {
     private final UserRepository repo = new UserRepository();
@@ -14,6 +17,19 @@ public class UserService {
             return user;
         }
         return null; // Invalid credentials
+    }
+
+    public Roles getRole(Integer userId) {
+        return repo.findRolebyID(userId);
+    }
+
+    public List<User> getAll() {
+        return repo.findAll();
+    }
+
+    public boolean changeRole(Integer userId, Roles newRole) {
+        return repo.changeRoleByID(userId, newRole);
+        
     }
 
     public boolean register(RegisterRequest request) {
