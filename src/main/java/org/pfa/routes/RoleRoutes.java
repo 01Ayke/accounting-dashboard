@@ -10,7 +10,7 @@ public class RoleRoutes {
     public static void register(Javalin app, SessionManager sessionManager) {
         RoleController roleController = new RoleController(sessionManager);
         app.get("/role-manager", roleController::get_all_users);
-        app.get("/role-manager/{id}", roleController::change_role);
+        app.post("/role-manager/{id}", roleController::change_role);
     }
 
 }

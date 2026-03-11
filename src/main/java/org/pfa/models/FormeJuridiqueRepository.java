@@ -1,6 +1,5 @@
 package org.pfa.models;
 
-import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.pfa.config.HibernateUtil;
 

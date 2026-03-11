@@ -1,7 +1,6 @@
 package org.pfa.routes;
 
 import io.javalin.Javalin;
-import org.hibernate.Session;
 import org.pfa.controllers.FileController;
 import org.pfa.services.SessionManager;
 

@@ -973,3 +973,6 @@ INSERT INTO statut_document (libelle, code, description) VALUES
 -- Utilisateurs
 INSERT INTO utilisateur (mail, nom, prenom, code, mot_de_passe) VALUES
 ('admin@admin.fr', 'admin', 'user','UADMIN','$2a$10$JeXoymFo8IzREdiwKbfgqOMQcifKxREqCHWYYtp8Pz90Pmf0sZxfu');
+
+-- Attribution du rôle admin à l'utilisateur admin
+INSERT INTO utilisateur_role (id_utilisateur, id_role) VALUES (1, 1);

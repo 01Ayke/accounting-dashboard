@@ -4,7 +4,6 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.pfa.config.HibernateUtil;
 import org.pfa.models.Address;
-import org.pfa.models.SessionUser;
 
 public class AdresseRepository {
     public Address find(String pays, String ville, String rue, String numero, String complement, String codePostal) {

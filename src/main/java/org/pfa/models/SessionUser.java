@@ -6,12 +6,10 @@ public class SessionUser {
     private final Integer userId;
     private long expirationTime;
     private final long ttl;
-    private final Roles role;
 
-    public SessionUser(String token, Integer userId, long ttl, Roles role) {
+    public SessionUser(String token, Integer userId, long ttl) {
         this.token = token;
         this.userId = userId;
-        this.role = role;
         this.ttl = ttl;
         refresh();
     }
@@ -30,10 +28,6 @@ public class SessionUser {
 
     public String getToken() {
         return token;
-    }
-
-    public Roles getRole() {
-        return role;
     }
 }
 

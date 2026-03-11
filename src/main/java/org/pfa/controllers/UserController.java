@@ -9,7 +9,6 @@ import org.pfa.models.dto.RegisterRequest;
 import org.pfa.services.SessionManager;
 import org.pfa.services.UserService;
 import org.pfa.models.dto.Response;
-import org.pfa.models.Roles;
 
 public class UserController extends Controller {
     private static final UserService service = new UserService();
@@ -25,8 +24,7 @@ public class UserController extends Controller {
         User user = service.getOne(login.getMail(), login.getPassword());
         
         if (user != null) {
-            Roles role = service.getRole(user.getId());
-            String token = sessionManager.createSession(user.getId(), role);
+            String token = sessionManager.createSession(user.getId());
             Response response = new Response(token, "success", "Login successful", 200);
             response.setLoginContext(ctx);
         } else {

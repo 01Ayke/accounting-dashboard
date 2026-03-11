@@ -28,6 +28,7 @@ public class HibernateUtil {
                     .addAnnotatedClass(RegimeTVA.class)
                     .addAnnotatedClass(CompteAuxiliaire.class)
                     .addAnnotatedClass(TypeCompteAuxiliaire.class)
+                    .addAnnotatedClass(Roles.class)
                     .buildSessionFactory();
         } catch (Throwable ex) {
             System.err.println("Erreur Hibernate : " + ex);

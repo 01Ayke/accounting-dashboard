@@ -5,7 +5,7 @@ import java.util.List;
 import org.hibernate.Session;
 import org.pfa.config.HibernateUtil;
 import org.pfa.models.User;
-import org.pfa.models.Roles;
+import org.pfa.models.Roles_enum;
 
 public class UserRepository {
 
@@ -38,44 +38,43 @@ public class UserRepository {
         }
     }
 
-    public Roles findRolebyID(Integer id) {
+    public List<Roles_enum> findRolesByID(Integer id) {
         try (org.hibernate.Session session = org.pfa.config.HibernateUtil.getSessionFactory().openSession()) {
-            String roleCode = session.createNativeQuery(
+            List<String> roleCodes = session.createNativeQuery(
                     "SELECT r.code FROM utilisateur_role ur " +
                     "JOIN role_utilisateur r ON ur.id_role = r.id_role " +
-                    "WHERE ur.id_utilisateur = :id LIMIT 1", 
+                    "WHERE ur.id_utilisateur = :id", 
                     String.class)
                     .setParameter("id", id)
-                    .getSingleResultOrNull();
+                    .list();
             
-            if (roleCode == null) {
-                return Roles.USER; // Rôle par défaut
-            }
-            
-            try {
-                return Roles.valueOf(roleCode);
-            } catch (IllegalArgumentException e) {
-                return Roles.USER; // Rôle par défaut si le code ne correspond pas
-            }
+            return roleCodes.stream()
+                    .map(code -> {
+                        try {
+                            return Roles_enum.valueOf(code);
+                        } catch (IllegalArgumentException e) {
+                            return null;
+                        }
+                    })
+                    .filter(role -> role != null)
+                    .toList();
         }
     }
 
-    public boolean changeRoleByID(Integer id, Roles newRole) {
-        try (org.hibernate.Session session = org.pfa.config.HibernateUtil.getSessionFactory().openSession()) {
+    public boolean changeRoleByID(Integer id_user, Integer id_role) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
+
             session.createNativeQuery(
-                    "UPDATE utilisateur_role ur " +
-                    "JOIN role_utilisateur r ON ur.id_role = r.id_role " +
-                    "SET ur.id_role = (SELECT id_role FROM role_utilisateur WHERE code = :newRole) " +
-                    "WHERE ur.id_utilisateur = :id")    
-                    .setParameter("newRole", newRole.name())
-                    .setParameter("id", id)
-                    .executeUpdate();
+                    "INSERT INTO utilisateur_role (id_utilisateur, id_role) VALUES (:id_user, :id_role)")
+                .setParameter("id_user", id_user)
+                .setParameter("id_role", id_role)
+                .executeUpdate();
+
             session.getTransaction().commit();
-            session.close();
             return true;
         } catch (Exception e) {
             return false;
-        }   
+        }
     }
 }

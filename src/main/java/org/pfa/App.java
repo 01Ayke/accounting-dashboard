@@ -15,6 +15,7 @@ public class App {
         FileRoutes.register(app, sessionManager);
         GrandLivreRoutes.register(app, sessionManager);
         CompteRoutes.register(app, sessionManager);
+        RoleRoutes.register(app, sessionManager);
         Runtime.getRuntime().addShutdownHook(new Thread(sessionManager::shutdown));
         System.out.println("Serveur démarré sur http://localhost:7070") ;
     }

@@ -1,7 +1,6 @@
 package org.pfa.models;
 
 import java.util.Comparator;
-import java.util.Date;
 
 public class SortByDate implements Comparator<LigneGrandLivre> {
     public int compare(LigneGrandLivre ce1, LigneGrandLivre ce2) {
