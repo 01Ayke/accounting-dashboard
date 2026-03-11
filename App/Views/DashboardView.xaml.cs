@@ -15,7 +15,7 @@ public partial class DashboardView : UserControl
         var mainWindow = Window.GetWindow(this) as MainWindow;
         if (mainWindow != null)
         {
-            mainWindow.NavigateBack();
+            mainWindow.NavigateBackToHome();
         }
     }
 }

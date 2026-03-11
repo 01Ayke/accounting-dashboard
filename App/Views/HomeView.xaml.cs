@@ -1,7 +1,6 @@
 using System.Windows;
 using System.Windows.Controls;
 using App.Models;
-using App.ViewModels;
 
 namespace App.Views;
 
@@ -16,11 +15,10 @@ public partial class HomeView : UserControl
     {
         if (sender is ListBox listBox && listBox.SelectedItem is DossierFactice dossier)
         {
-            // Naviguer vers le dashboard
             var mainWindow = Window.GetWindow(this) as MainWindow;
             if (mainWindow != null)
             {
-                mainWindow.NavigateToDashboard(dossier);
+                mainWindow.NavigateToDossierDetail(dossier);
             }
         }
     }
@@ -76,6 +74,42 @@ public partial class HomeView : UserControl
         if (mainWindow != null)
         {
             mainWindow.NavigateToCreateDossier();
+        }
+    }
+
+    private void AssignDossierButton_Click(object sender, RoutedEventArgs e)
+    {
+        var mainWindow = Window.GetWindow(this) as MainWindow;
+        if (mainWindow != null)
+        {
+            mainWindow.NavigateToAssignDossier();
+        }
+    }
+
+    private void UserManagementButton_Click(object sender, RoutedEventArgs e)
+    {
+        var mainWindow = Window.GetWindow(this) as MainWindow;
+        if (mainWindow != null)
+        {
+            mainWindow.NavigateToUserManagement();
+        }
+    }
+
+    private void CreateCompteButton_Click(object sender, RoutedEventArgs e)
+    {
+        var mainWindow = Window.GetWindow(this) as MainWindow;
+        if (mainWindow != null)
+        {
+            mainWindow.NavigateToCreateCompte();
+        }
+    }
+
+    private void GrandLivreButton_Click(object sender, RoutedEventArgs e)
+    {
+        var mainWindow = Window.GetWindow(this) as MainWindow;
+        if (mainWindow != null)
+        {
+            mainWindow.NavigateToGrandLivre();
         }
     }
 }

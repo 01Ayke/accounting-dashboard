@@ -1,0 +1,96 @@
+﻿<UserControl x:Class="App.Views.CreateDossierView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:App.ViewModels"
+             mc:Ignorable="d"
+             d:DesignHeight="650" d:DesignWidth="900">
+
+    <UserControl.DataContext>
+        <vm:CreateDossierViewModel/>
+    </UserControl.DataContext>
+
+    <Grid Background="#F5F7FA" Margin="20">
+        <Border Background="White" CornerRadius="12" Padding="25" MaxWidth="700" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+
+                    <TextBlock Text="Créer un dossier client"
+                               FontSize="28"
+                               FontWeight="Bold"
+                               Margin="0,0,0,20"
+                               HorizontalAlignment="Center"/>
+
+                    <TextBlock Text="Informations entreprise"
+                               FontSize="18"
+                               FontWeight="SemiBold"
+                               Margin="0,0,0,15"/>
+
+                    <TextBlock Text="Dénomination sociale"/>
+                    <TextBox Text="{Binding DenominationSociale, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0,5,0,12"
+                             Height="35"/>
+
+                    <TextBlock Text="SIRET"/>
+                    <TextBox Text="{Binding Siret, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0,5,0,12"
+                             Height="35"/>
+
+                    <TextBlock Text="Forme juridique"/>
+                    <TextBox Text="{Binding FormeJuridique, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0,5,0,12"
+                             Height="35"/>
+
+                    <TextBlock Text="Régime fiscal"/>
+                    <TextBox Text="{Binding RegimeFiscal, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0,5,0,20"
+                             Height="35"/>
+
+                    <TextBlock Text="Contact principal"
+                               FontSize="18"
+                               FontWeight="SemiBold"
+                               Margin="0,0,0,15"/>
+
+                    <TextBlock Text="Prénom"/>
+                    <TextBox Text="{Binding Prenom, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0,5,0,12"
+                             Height="35"/>
+
+                    <TextBlock Text="Nom"/>
+                    <TextBox Text="{Binding Nom, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0,5,0,12"
+                             Height="35"/>
+
+                    <TextBlock Text="Email"/>
+                    <TextBox Text="{Binding Mail, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0,5,0,20"
+                             Height="35"/>
+
+                    <TextBlock Text="{Binding Message}"
+                               Margin="0,0,0,15"
+                               Foreground="Red"
+                               FontWeight="SemiBold"
+                               TextWrapping="Wrap"/>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button Content="Retour"
+                                Width="120"
+                                Height="40"
+                                Margin="5"
+                                Click="BackButton_Click"/>
+
+                        <Button Content="Créer le dossier"
+                                Width="160"
+                                Height="40"
+                                Margin="5"
+                                Background="#4CAF50"
+                                Foreground="White"
+                                Command="{Binding CreateDossierCommand}"/>
+                    </StackPanel>
+
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+    </Grid>
+</UserControl>

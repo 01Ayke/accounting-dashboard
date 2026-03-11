@@ -1,17 +1,7 @@
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-
-using App.Views;
 using App.Models;
 using App.ViewModels;
+using App.Views;
 
 namespace App
 {
@@ -20,8 +10,6 @@ namespace App
         public MainWindow()
         {
             InitializeComponent();
-
-            // Page affichée au démarrage
             MainContent.Content = new LoginView();
         }
 
@@ -30,11 +18,24 @@ namespace App
             MainContent.Content = new HomeView();
         }
 
-        public void NavigateToDashboard(DossierFactice dossier)
+        public void NavigateToDossierDetail(DossierFactice dossier)
         {
-            var viewModel = new DossierDetailViewModel { Dossier = dossier };
-            var dashboardView = new DashboardView { DataContext = viewModel };
-            MainContent.Content = dashboardView;
+            var vm = new DossierDetailViewModel
+            {
+                Dossier = dossier
+            };
+
+            var view = new DossierDetailView
+            {
+                DataContext = vm
+            };
+
+            MainContent.Content = view;
+        }
+
+        public void NavigateBackToHome()
+        {
+            MainContent.Content = new HomeView();
         }
 
         public void NavigateToCreateDossier()
@@ -42,9 +43,24 @@ namespace App
             MainContent.Content = new CreateDossierView();
         }
 
-        public void NavigateBack()
+        public void NavigateToAssignDossier()
         {
-            MainContent.Content = new HomeView();
+            MainContent.Content = new AssignDossierView();
+        }
+
+        public void NavigateToUserManagement()
+        {
+            MainContent.Content = new UserManagementView();
+        }
+
+        public void NavigateToCreateCompte()
+        {
+            MainContent.Content = new CreateCompteView();
+        }
+
+        public void NavigateToGrandLivre()
+        {
+            MainContent.Content = new GrandLivreView();
         }
     }
 }

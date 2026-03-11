@@ -1,12 +1,15 @@
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Windows.Input;
+using System.Threading.Tasks;
 using App.Helpers;
 using App.Models;
 using App.Services;
 
 namespace App.ViewModels;
+
 public class HomeViewModel : INotifyPropertyChanged
 {
     private DossierFactice? _dossierSelectionne;
@@ -18,7 +21,7 @@ public class HomeViewModel : INotifyPropertyChanged
     private readonly DossierService _dossierService = new DossierService();
 
     public ObservableCollection<DossierFactice> Dossiers { get; }
-    
+
     public ObservableCollection<DossierFactice> DossiersFiltrés
     {
         get => _dossiersFiltrés;
@@ -107,11 +110,11 @@ public class HomeViewModel : INotifyPropertyChanged
     public HomeViewModel()
     {
         System.Diagnostics.Debug.WriteLine("HomeViewModel: Initialisation");
-        
+
         Dossiers = new ObservableCollection<DossierFactice>();
         _dossiersFiltrés = new ObservableCollection<DossierFactice>();
         _suggestionsRecherche = new ObservableCollection<string>();
-        
+
         SupprimerDossierCommand = new RelayCommand<DossierFactice>(dossier =>
         {
             if (dossier != null && Dossiers.Contains(dossier))
@@ -121,7 +124,6 @@ public class HomeViewModel : INotifyPropertyChanged
             }
         });
 
-        // Charger les données au démarrage
         System.Diagnostics.Debug.WriteLine("HomeViewModel: Appel LoadDossiersAsync");
         _ = LoadDossiersAsync();
     }
@@ -129,11 +131,11 @@ public class HomeViewModel : INotifyPropertyChanged
     private async Task LoadDossiersAsync()
     {
         System.Diagnostics.Debug.WriteLine("LoadDossiersAsync: Démarrage");
-        
+
         var dossiers = await _dossierService.GetAllDossiersAsync(new[] { 1, 2 });
-        
+
         System.Diagnostics.Debug.WriteLine($"LoadDossiersAsync: {dossiers?.Count ?? 0} dossiers reçus");
-        
+
         if (dossiers != null)
         {
             foreach (var dossier in dossiers)
@@ -141,7 +143,7 @@ public class HomeViewModel : INotifyPropertyChanged
                 Dossiers.Add(dossier);
                 System.Diagnostics.Debug.WriteLine($"LoadDossiersAsync: Dossier ajouté - {dossier.NomEntreprise}");
             }
-            
+
             FiltrerEtTrier();
         }
         else
@@ -153,7 +155,7 @@ public class HomeViewModel : INotifyPropertyChanged
     private void GénérerSuggestions()
     {
         SuggestionsRecherche.Clear();
-        
+
         if (string.IsNullOrWhiteSpace(SearchText))
         {
             ShowSuggestions = false;
@@ -163,26 +165,25 @@ public class HomeViewModel : INotifyPropertyChanged
         var searchLower = SearchText.ToLower();
         var suggestions = new HashSet<string>();
 
-        // Générer les suggestions à partir de TOUS les dossiers
         foreach (var dossier in Dossiers)
         {
-            if (dossier.NomEntreprise.ToLower().Contains(searchLower))
-                suggestions.Add(dossier.NomEntreprise);
-            
-            if (dossier.Siret.ToLower().Contains(searchLower))
-                suggestions.Add(dossier.Siret);
-            
-            if (dossier.PrenomNomContact.ToLower().Contains(searchLower))
-                suggestions.Add(dossier.PrenomNomContact);
-            
-            if (dossier.EmailContact.ToLower().Contains(searchLower))
-                suggestions.Add(dossier.EmailContact);
-            
-            if (dossier.Secteur.ToLower().Contains(searchLower))
-                suggestions.Add(dossier.Secteur);
+            if ((dossier.NomEntreprise ?? "").ToLower().Contains(searchLower))
+                suggestions.Add(dossier.NomEntreprise ?? "");
+
+            if ((dossier.Siret ?? "").ToLower().Contains(searchLower))
+                suggestions.Add(dossier.Siret ?? "");
+
+            if ((dossier.PrenomNomContact ?? "").ToLower().Contains(searchLower))
+                suggestions.Add(dossier.PrenomNomContact ?? "");
+
+            if ((dossier.EmailContact ?? "").ToLower().Contains(searchLower))
+                suggestions.Add(dossier.EmailContact ?? "");
+
+            if ((dossier.Secteur ?? "").ToLower().Contains(searchLower))
+                suggestions.Add(dossier.Secteur ?? "");
         }
 
-        foreach (var suggestion in suggestions.OrderBy(s => s))
+        foreach (var suggestion in suggestions.Where(s => !string.IsNullOrWhiteSpace(s)).OrderBy(s => s))
         {
             SuggestionsRecherche.Add(suggestion);
         }
@@ -197,12 +198,12 @@ public class HomeViewModel : INotifyPropertyChanged
         if (!string.IsNullOrWhiteSpace(SearchText))
         {
             var searchLower = SearchText.ToLower();
-            résultat = résultat.Where(d => 
-                d.NomEntreprise.ToLower().Contains(searchLower) ||
-                d.Siret.ToLower().Contains(searchLower) ||
-                d.PrenomNomContact.ToLower().Contains(searchLower) ||
-                d.EmailContact.ToLower().Contains(searchLower) ||
-                d.Secteur.ToLower().Contains(searchLower));
+            résultat = résultat.Where(d =>
+                (d.NomEntreprise ?? "").ToLower().Contains(searchLower) ||
+                (d.Siret ?? "").ToLower().Contains(searchLower) ||
+                (d.PrenomNomContact ?? "").ToLower().Contains(searchLower) ||
+                (d.EmailContact ?? "").ToLower().Contains(searchLower) ||
+                (d.Secteur ?? "").ToLower().Contains(searchLower));
         }
 
         résultat = SelectedSortIndex switch

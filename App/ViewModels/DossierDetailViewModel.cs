@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using App.Models;
 using App.Services;
 
@@ -53,11 +54,11 @@ public class DossierDetailViewModel : INotifyPropertyChanged
     private async Task FetchSIGFromBackendAsync()
     {
         if (Dossier == null) return;
-        
+
         System.Diagnostics.Debug.WriteLine($"FetchSIGFromBackendAsync: Démarrage pour dossier ID={Dossier.IdDossier}");
-        
+
         var sigBackend = await _dossierService.GetSIGAsync(Dossier.IdDossier);
-        
+
         if (sigBackend != null)
         {
             System.Diagnostics.Debug.WriteLine("FetchSIGFromBackendAsync: SIG reçus du backend");
@@ -70,9 +71,6 @@ public class DossierDetailViewModel : INotifyPropertyChanged
         }
     }
 
-    /// <summary>
-    /// Affiche directement ce que le backend envoie, sans filtrage ni calcul
-    /// </summary>
     private void RegenererAffichageSIG(SIGBackend sig)
     {
         var affichage = new ObservableCollection<SIGAffichage>
@@ -93,14 +91,14 @@ public class DossierDetailViewModel : INotifyPropertyChanged
     {
         var affichage = new ObservableCollection<SIGAffichage>
         {
-            new SIGAffichage 
-            { 
-                Label = "Erreur", 
+            new SIGAffichage
+            {
+                Label = "Erreur",
                 Valeur = 0m,
                 Description = errorMessage
             }
         };
-        
+
         SIGAffichage = affichage;
     }
 
@@ -110,9 +108,6 @@ public class DossierDetailViewModel : INotifyPropertyChanged
     }
 }
 
-/// <summary>
-/// Classe helper pour l'affichage des SIG dans la vue
-/// </summary>
 public class SIGAffichage
 {
     public string Label { get; set; } = "";
