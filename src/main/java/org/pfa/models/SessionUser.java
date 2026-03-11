@@ -4,14 +4,14 @@ public class SessionUser {
 
     private final String token;
     private final Integer userId;
-    private final boolean isAdmin;
     private long expirationTime;
     private final long ttl;
+    private final Roles role;
 
-    public SessionUser(String token, Integer userId, boolean isAdmin, long ttl) {
+    public SessionUser(String token, Integer userId, long ttl, Roles role) {
         this.token = token;
         this.userId = userId;
-        this.isAdmin = isAdmin;
+        this.role = role;
         this.ttl = ttl;
         refresh();
     }
@@ -28,12 +28,12 @@ public class SessionUser {
         return userId;
     }
 
-    public boolean isAdmin() {
-        return isAdmin;
-    }
-
     public String getToken() {
         return token;
+    }
+
+    public Roles getRole() {
+        return role;
     }
 }
 

@@ -9,6 +9,7 @@ import org.pfa.models.dto.RegisterRequest;
 import org.pfa.services.SessionManager;
 import org.pfa.services.UserService;
 import org.pfa.models.dto.Response;
+import org.pfa.models.Roles;
 
 public class UserController extends Controller {
     private static final UserService service = new UserService();
@@ -22,8 +23,10 @@ public class UserController extends Controller {
     public void handleLogin(Context ctx) throws Exception {
         LoginRequest login = new LoginRequest(ctx);
         User user = service.getOne(login.getMail(), login.getPassword());
+        
         if (user != null) {
-            String token = sessionManager.createSession(user.getId());
+            Roles role = service.getRole(user.getId());
+            String token = sessionManager.createSession(user.getId(), role);
             Response response = new Response(token, "success", "Login successful", 200);
             response.setLoginContext(ctx);
         } else {
