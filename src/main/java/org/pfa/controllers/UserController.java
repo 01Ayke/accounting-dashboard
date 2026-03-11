@@ -46,29 +46,26 @@ public class UserController extends Controller {
     }
 
     public void handleRegister(Context ctx) {
-        if (!super.checkToken(ctx)) {
-            Response response = new Response("error", "Authentification requise pour créer un compte", 401);
-            response.setContext(ctx);
-            return;
-        }
+        if(super.checkToken(ctx))
+        {
+            RegisterRequest registerRequest = new RegisterRequest(ctx);
 
-        RegisterRequest registerRequest = new RegisterRequest(ctx);
+            if (!registerRequest.isValid()) {
+                Response response = new Response("error", "Veuillez remplir tous les champs", 400);
+                response.setContext(ctx);
+                return;
+            }
 
-        if (!registerRequest.isValid()) {
-            Response response = new Response("error", "Veuillez remplir tous les champs", 400);
-            response.setContext(ctx);
-            return;
-        }
-
-        boolean success = service.register(registerRequest);
-        System.out.println("\u001B[32mRegistration attempt for email: " + registerRequest.getMail() + " - Success: " + success + "\u001B[0m");
-        if (success) {
-            Response response = new Response("success", "Compte créé avec succès", 201);
-            response.setContext(ctx);
-            return;
-        } else {
-            Response response = new Response("error", "Cet email est déjà utilisé", 409);
-            response.setContext(ctx);
+            boolean success = service.register(registerRequest);
+            System.out.println("\u001B[32mRegistration attempt for email: " + registerRequest.getMail() + " - Success: " + success + "\u001B[0m");
+            if (success) {
+                Response response = new Response("success", "Compte créé avec succès", 201);
+                response.setContext(ctx);
+                return;
+            } else {
+                Response response = new Response("error", "Cet email est déjà utilisé", 409);
+                response.setContext(ctx);
+            }
         }
     }
 }
