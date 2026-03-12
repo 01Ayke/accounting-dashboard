@@ -7,10 +7,15 @@ import jakarta.persistence.*;
 public class FormeJuridique {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id_forme_juridique;
+    @Column(name = "id_forme_juridique")
+    Integer idFormeJuridique;
 
     private String libelle;
     private String code;
+
+    public Integer getIdFormeJuridique() {
+        return idFormeJuridique;
+    }
 
     public String getLibelle() {
         return libelle;
