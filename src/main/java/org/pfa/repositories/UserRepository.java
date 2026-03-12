@@ -77,4 +77,14 @@ public class UserRepository {
             return false;
         }
     }
+
+    public void deleteByMail(String mail) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            session.createMutationQuery("DELETE FROM User WHERE mail = :mail")
+                    .setParameter("mail", mail)
+                    .executeUpdate();
+            session.getTransaction().commit();
+        }
+    }
 }

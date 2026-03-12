@@ -7,7 +7,6 @@ import org.pfa.models.SessionUser;
 import org.pfa.models.Roles_enum;
 import org.pfa.services.UserService;
 
-
 public class Controller {
     private final SessionManager sessionManager;
     private final UserService userService;
@@ -19,12 +18,15 @@ public class Controller {
 
     public boolean checkRole(Context ctx, Roles_enum requiredRole) {
         String token = ctx.header("Authorization");
-        if (token != null && token.equals("DEBUG")) return true;
+        if (token != null && token.equals("DEBUG"))
+            return true;
 
         if (token != null) {
             SessionUser session = sessionManager.validate(token);
             if (session != null) {
-                return userService.getRoles(session.getUserId()).contains(requiredRole);
+                if (userService.getRoles(session.getUserId()).contains(requiredRole)) {
+                    return true;
+                }
             }
         }
         Response response = new Response("error", "Insufficient privileges", 403);
@@ -34,15 +36,15 @@ public class Controller {
 
     public boolean checkToken(Context ctx) { // certaines actions necessitent un droit admin
         String token = ctx.header("Authorization");
-        if (token != null && token.equals("DEBUG")) return true;
-        
+        if (token != null && token.equals("DEBUG"))
+            return true;
+
         if (token != null) {
             SessionUser session = sessionManager.validate(token);
             System.out.println("Session validation for token: " + token + " - Valid: " + (session != null));
-            if(session != null){
+            if (session != null) {
                 return true;
-            }
-            else{
+            } else {
                 Response response = new Response("error", "Invalid or missing token", 401);
                 response.setContext(ctx);
                 return false;

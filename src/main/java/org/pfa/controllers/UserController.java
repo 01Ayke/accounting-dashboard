@@ -44,7 +44,7 @@ public class UserController extends Controller {
     }
 
     public void handleRegister(Context ctx) {
-        if(super.checkToken(ctx))
+        if(super.checkToken(ctx) && super.checkRole(ctx, org.pfa.models.Roles_enum.ADMIN))
         {
             RegisterRequest registerRequest = new RegisterRequest(ctx);
 
