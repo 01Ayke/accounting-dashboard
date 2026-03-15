@@ -1,6 +1,7 @@
 package org.pfa.controllers;
 
 import io.javalin.http.Context;
+import java.util.List;
 
 import org.pfa.models.User;
 import org.pfa.models.dto.LoginRequest;
@@ -9,6 +10,7 @@ import org.pfa.models.dto.RegisterRequest;
 import org.pfa.services.SessionManager;
 import org.pfa.services.UserService;
 import org.pfa.models.dto.Response;
+import org.pfa.models.Roles_enum;
 
 public class UserController extends Controller {
     private static final UserService service = new UserService();
@@ -44,7 +46,7 @@ public class UserController extends Controller {
     }
 
     public void handleRegister(Context ctx) {
-        if(super.checkToken(ctx))
+        if(super.checkToken(ctx) && super.checkRole(ctx, Roles_enum.ADMIN))
         {
             RegisterRequest registerRequest = new RegisterRequest(ctx);
 
@@ -62,6 +64,24 @@ public class UserController extends Controller {
                 return;
             } else {
                 Response response = new Response("error", "Cet email est déjà utilisé", 409);
+                response.setContext(ctx);
+            }
+        }
+    }
+
+    public void handleGetRole(Context ctx) {
+        if(super.checkToken(ctx) && super.checkRole(ctx, Roles_enum.ADMIN)){
+            String idStr = ctx.pathParam("id");
+            try {
+                int userId = Integer.parseInt(idStr);
+                List<Roles_enum> roles = service.getRoles(userId);
+                List<String> roleNames = roles.stream().map(Enum::name).toList();
+                if (roles != null) {
+                    Response response = new Response("success", "Rôle récupéré avec succès", 200, roleNames);
+                    response.setContextData(ctx);
+                }
+            } catch (NumberFormatException e) {
+                Response response = new Response("error", "ID utilisateur invalide", 400);
                 response.setContext(ctx);
             }
         }
