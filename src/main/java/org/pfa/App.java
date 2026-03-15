@@ -2,6 +2,7 @@ package org.pfa;
 
 import io.javalin.Javalin;
 
+import org.pfa.controllers.RegimeTVAController;
 import org.pfa.routes.*;
 import org.pfa.services.SessionManager;
 
@@ -16,6 +17,9 @@ public class App {
         GrandLivreRoutes.register(app, sessionManager);
         CompteRoutes.register(app, sessionManager);
         RoleRoutes.register(app, sessionManager);
+        FormeJuridiqueRoutes.register(app, sessionManager);
+        RegimeFiscalRoutes.register(app, sessionManager);
+        RegimeTVARoutes.register(app, sessionManager);
         Runtime.getRuntime().addShutdownHook(new Thread(sessionManager::shutdown));
         System.out.println("Serveur démarré sur http://localhost:7070") ;
     }
