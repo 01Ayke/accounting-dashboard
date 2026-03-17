@@ -19,6 +19,8 @@ public class App {
         FormeJuridiqueRoutes.register(app, sessionManager);
         RegimeFiscalRoutes.register(app, sessionManager);
         RegimeTVARoutes.register(app, sessionManager);
+        TypeJournalRoutes.register(app, sessionManager);
+        JournalRoutes.register(app, sessionManager);
         Runtime.getRuntime().addShutdownHook(new Thread(sessionManager::shutdown));
         System.out.println("Serveur démarré sur http://localhost:7070") ;
     }

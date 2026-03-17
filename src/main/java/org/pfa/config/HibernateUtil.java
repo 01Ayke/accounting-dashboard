@@ -29,6 +29,7 @@ public class HibernateUtil {
                     .addAnnotatedClass(CompteAuxiliaire.class)
                     .addAnnotatedClass(TypeCompteAuxiliaire.class)
                     .addAnnotatedClass(Roles.class)
+                    .addAnnotatedClass(TypeJournal.class)
                     .buildSessionFactory();
         } catch (Throwable ex) {
             System.err.println("Erreur Hibernate : " + ex);
