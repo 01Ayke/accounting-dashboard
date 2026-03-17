@@ -317,11 +317,12 @@ Description: cree un dossier puis initialise automatiquement un plan de comptes.
     "complement": "",
     "codePostal": "75001"
   },
-  "formeJuridique": { "code": "SARL" },
-  "regimeFiscal": { "code": "IS" },
-  "regimeTVA": { "code": "NORMAL" }
+  "formeJuridique": { "idFormeJuridique": 1 },
+  "regimeFiscal": { "idRegimeFiscal": 1 },
+  "regimeTVA": { "idRegimeTVA": 1 }
 }
 ```
+- récupérer la liste des valeurs possibles pour la forme juridique, le regime fiscal et le régime TVA avec les routes /formeJuridique, /regimeFiscal et /regimeTVA
 
 Succes `200`:
 
