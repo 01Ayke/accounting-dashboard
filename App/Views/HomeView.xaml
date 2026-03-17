@@ -23,15 +23,53 @@
             <ImageBrush ImageSource="/App;component/Images/fond_login.jpg" Stretch="UniformToFill" Opacity="0.4"/>
         </Grid.Background>
 
-        <!-- Premier Border -->
-        <Border Grid.Row="0" Padding="30" CornerRadius="12" Background="#CCFFFFFF" HorizontalAlignment="Center" MaxWidth="800" Effect="{DynamicResource DropShadowEffect}">
+        <!-- Header -->
+        <Border Grid.Row="0" Padding="30" CornerRadius="12" Background="#CCFFFFFF" HorizontalAlignment="Center" MaxWidth="1100" Effect="{DynamicResource DropShadowEffect}">
             <StackPanel>
                 <TextBlock Text="Portefeuille Contrats" FontSize="28" FontWeight="Bold" Margin="0,0,0,5" HorizontalAlignment="Center"/>
                 <TextBlock Text="Gérez vos dossiers clients et accédez aux informations clés" FontSize="14" Foreground="Gray" HorizontalAlignment="Center"/>
+
+                <!-- Nouveau menu d'actions -->
+                <WrapPanel HorizontalAlignment="Center" Margin="0,20,0,0">
+                    <Button Content="+ Créer dossier"
+                            Margin="5"
+                            Padding="12,6"
+                            Background="#4CAF50"
+                            Foreground="White"
+                            Click="AddButton_Click"/>
+
+                    <Button Content="Attribuer dossier"
+                            Margin="5"
+                            Padding="12,6"
+                            Background="#1976D2"
+                            Foreground="White"
+                            Click="AssignDossierButton_Click"/>
+
+                    <Button Content="Utilisateurs / rôles"
+                            Margin="5"
+                            Padding="12,6"
+                            Background="#7B1FA2"
+                            Foreground="White"
+                            Click="UserManagementButton_Click"/>
+
+                    <Button Content="Créer compte"
+                            Margin="5"
+                            Padding="12,6"
+                            Background="#F57C00"
+                            Foreground="White"
+                            Click="CreateCompteButton_Click"/>
+
+                    <Button Content="Grand Livre"
+                            Margin="5"
+                            Padding="12,6"
+                            Background="#455A64"
+                            Foreground="White"
+                            Click="GrandLivreButton_Click"/>
+                </WrapPanel>
             </StackPanel>
         </Border>
 
-        <!-- Border principal avec la liste -->
+        <!-- Bloc principal -->
         <Border Grid.Row="2" Padding="10" CornerRadius="12" Background="White" HorizontalAlignment="Center" VerticalAlignment="Stretch" Width="1100" Effect="{DynamicResource DropShadowEffect}">
             <Grid>
                 <Grid.RowDefinitions>
@@ -81,7 +119,6 @@
 
                         <TextBlock Text="🔍 Rechercher..." Margin="8,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" Width="300" Foreground="Gray" IsHitTestVisible="False" Visibility="{Binding Text, ElementName=ResearchBox, Converter={StaticResource EmptyStringToVisibilityConverter}}"/>
 
-                        <!-- Popup pour les suggestions -->
                         <Popup x:Name="SuggestionsPopup" PlacementTarget="{Binding ElementName=ResearchBox}" Placement="Bottom" IsOpen="{Binding ShowSuggestions}" AllowsTransparency="True" PopupAnimation="Slide">
                             <Border CornerRadius="0,0,8,8" Background="White" BorderBrush="LightGray" BorderThickness="1,0,1,1" Effect="{DynamicResource DropShadowEffect}">
                                 <ListBox ItemsSource="{Binding SuggestionsRecherche}" MouseDown="SuggestionsListBox_MouseDown" x:Name="SuggestionsListBox" Width="300" MaxHeight="200" Background="White" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Auto">
@@ -122,10 +159,10 @@
                         </TextBlock>
                     </Grid>
 
-                    <Button Grid.Column="3" Content="+ Ajouter" HorizontalAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                    <Button Grid.Column="3" Content="+ Ajouter" HorizontalAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center" Click="AddButton_Click" Cursor="Hand" Background="#4CAF50" Foreground="White" Padding="15,5"/>
                 </Grid>
 
-                <!-- En-têtes de colonnes -->
+                <!-- En-têtes -->
                 <Grid Grid.Row="1" Background="AliceBlue" Height="40" Margin="0,0,0,10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="2*"/>
@@ -141,7 +178,7 @@
                     <TextBlock Text="Statut" Grid.Column="3" FontWeight="SemiBold" FontSize="15" Foreground="DarkSlateGray" VerticalAlignment="Center"/>
                 </Grid>
 
-                <!-- ListBox des dossiers -->
+                <!-- Liste -->
                 <ListBox Grid.Row="2" ItemsSource="{Binding DossiersFiltrés}" SelectedItem="{Binding DossierSelectionne}" BorderThickness="0" BorderBrush="LightGray" Background="Transparent" ScrollViewer.VerticalScrollBarVisibility="Auto" Padding="10" MouseDoubleClick="Dossier_DoubleClick">
                     <ListBox.ItemContainerStyle>
                         <Style TargetType="ListBoxItem">
@@ -172,6 +209,7 @@
                             </Setter>
                         </Style>
                     </ListBox.ItemContainerStyle>
+
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Border Background="Transparent" CornerRadius="10" Margin="0,0,0,0">

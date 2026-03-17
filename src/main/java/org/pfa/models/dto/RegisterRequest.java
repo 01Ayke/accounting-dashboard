@@ -7,6 +7,7 @@ public class RegisterRequest {
     private String password;
     private String nom;
     private String prenom;
+    private String code;
 
     public RegisterRequest() {}
 
@@ -15,6 +16,7 @@ public class RegisterRequest {
         this.password = ctx.formParam("password");
         this.nom = ctx.formParam("nom");
         this.prenom = ctx.formParam("prenom");
+        this.code = ctx.formParam("code");
     }
 
     public RegisterRequest(String mail, String password, String nom, String prenom) {
@@ -38,6 +40,9 @@ public class RegisterRequest {
 
     public String getPrenom() {
         return prenom;
+    }
+    public String getCode() {
+        return code;
     }
 
     public boolean isValid() {

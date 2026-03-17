@@ -51,10 +51,32 @@ public class FileRepository {
         return file;
     }
 
+    public File findByName(String name) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        File file = session.createSelectionQuery("FROM File where denominationSociale = :name", File.class)
+                .setParameter("name", name)
+                .getSingleResultOrNull();
+        if (file != null) {
+            initializeFile(file);
+        }
+        session.close();
+        return file;
+    }
+
     public void save(File file) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = session.beginTransaction();
         session.persist(file);
+        tx.commit();
+        session.close();
+    }
+
+    public void deleteByName(String name) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+        session.createMutationQuery("DELETE FROM File WHERE denominationSociale = :name")
+                .setParameter("name", name)
+                .executeUpdate();
         tx.commit();
         session.close();
     }

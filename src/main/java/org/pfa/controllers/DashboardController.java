@@ -22,11 +22,11 @@ public class DashboardController extends Controller {
         Integer id = Integer.parseInt(ctx.pathParam("id"));
         Dashboard dashboard = dashboardService.getOne(id);
         if (dashboard.getFile() != null) {
-            Response response = new Response("token", "success", dashboard, 200);
+            Response response = new Response("success", dashboard, 200);
             response.setContext(ctx);
         }
         else {
-            Response response = new Response("token", "error", "dossier non trouvé", 401);
+            Response response = new Response("error", "dossier non trouvé", 401);
             response.setContext(ctx);
         }
     }

@@ -11,5 +11,6 @@ public class UserRoutes implements RouteInterface {
         app.post("/login", userController::handleLogin);
         app.post("/register", userController::handleRegister);
         app.post("/logout", userController::handleLogout);
+        app.get("/role/{id}", userController::handleGetRole);
     }
 }

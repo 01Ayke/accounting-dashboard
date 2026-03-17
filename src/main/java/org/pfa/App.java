@@ -2,10 +2,8 @@ package org.pfa;
 
 import io.javalin.Javalin;
 
-import org.pfa.models.dto.RegisterRequest;
 import org.pfa.routes.*;
 import org.pfa.services.SessionManager;
-import org.pfa.services.UserService;
 
 public class App {
     public static void main(String[] args) {
@@ -17,10 +15,11 @@ public class App {
         FileRoutes.register(app, sessionManager);
         GrandLivreRoutes.register(app, sessionManager);
         CompteRoutes.register(app, sessionManager);
+        RoleRoutes.register(app, sessionManager);
+        FormeJuridiqueRoutes.register(app, sessionManager);
+        RegimeFiscalRoutes.register(app, sessionManager);
+        RegimeTVARoutes.register(app, sessionManager);
         Runtime.getRuntime().addShutdownHook(new Thread(sessionManager::shutdown));
         System.out.println("Serveur démarré sur http://localhost:7070") ;
-        UserService userService = new UserService();
-        RegisterRequest registerRequest = new RegisterRequest("admin", "admin", "Admin", "User");
-        userService.register(registerRequest);
     }
 }

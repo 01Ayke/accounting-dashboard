@@ -31,4 +31,12 @@ public class CompteRepository {
         session.close();
         return compte;
     }
+
+    public void delete(Compte compte) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+        session.remove(compte);
+        tx.commit();
+        session.close();
+    }
 }

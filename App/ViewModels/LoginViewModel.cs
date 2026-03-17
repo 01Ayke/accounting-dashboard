@@ -1,16 +1,16 @@
-using App.Helpers;
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
+using System.Threading.Tasks;
+using App.Helpers;
 using App.Services;
 
 namespace App.ViewModels;
+
 public class LoginViewModel : INotifyPropertyChanged
 {
     private readonly AuthService _authService = new AuthService(useTestMode: false);
-    
+
     public event Action? LoginSucceeded;
     public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -66,7 +66,7 @@ public class LoginViewModel : INotifyPropertyChanged
 
     public async Task Login()
     {
-        ErrorMessage = null; // Efface l'erreur précédente
+        ErrorMessage = null;
 
         if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
         {
@@ -77,10 +77,9 @@ public class LoginViewModel : INotifyPropertyChanged
         try
         {
             var response = await _authService.LoginAsync(Email, Password);
-            
+
             if (response?.Status == "success")
             {
-                // Déclenche l'événement pour naviguer
                 LoginSucceeded?.Invoke();
             }
             else

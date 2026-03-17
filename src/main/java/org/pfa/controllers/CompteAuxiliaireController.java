@@ -32,13 +32,13 @@ public class CompteAuxiliaireController extends Controller {
         File dossier = fileService.getOne(request.getIdDossier());
 
         if (!request.getNumero().matches("[0-9]*")) {
-            Response response = new Response("token", "error", "Numéro de compte invalide", 400);
+            Response response = new Response("error", "Numéro de compte invalide", 400);
             response.setContext(ctx);
             return;
         }
 
         if (dossier == null) {
-            Response response = new Response("token", "error", "Dossier invalide", 400);
+            Response response = new Response("error", "Dossier invalide", 400);
             response.setContext(ctx);
             return;
         }
@@ -55,7 +55,7 @@ public class CompteAuxiliaireController extends Controller {
         CompteAuxiliaire compteAuxiliaireFournisseur = new CompteAuxiliaire( request.getLibelle(), "401" + request.getNumero(), compteFournisseur, typeFournisseur);
         compteAuxiliaireService.create(compteAuxiliaireFournisseur);
 
-        Response response = new Response("token", "ok", "Compte auxiliaire créé", 200);
+        Response response = new Response("ok", "Compte auxiliaire créé", 200);
         response.setContext(ctx);
     }
 }

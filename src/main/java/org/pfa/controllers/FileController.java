@@ -56,40 +56,10 @@ public class FileController extends Controller {
         Address fileAdresse = file.getAdresse();
         file.setAdresse(adresseService.createOrGet(fileAdresse));
 
-        RegimeFiscal regimeFiscal = regimeFiscalService.fromCode(file.getRegimeFiscal().getCode());
-        if (regimeFiscal != null) {
-            file.setRegimeFiscal(regimeFiscal);
-        }
-        else {
-            Response response = new Response("token", "error", "Régime fiscal invalide", 400);
-            response.setContext(ctx);
-            return;
-        }
-
-        RegimeTVA regimeTVA = regimeTVAService.fromCode(file.getRegimeTVA().getCode());
-        if (regimeTVA != null) {
-            file.setRegimeTVA(regimeTVA);
-        }
-        else {
-            Response response = new Response("token", "error", "Régime TVA invalide", 400);
-            response.setContext(ctx);
-            return;
-        }
-
-        FormeJuridique formeJuridique = formeJuridiqueService.fromCode(file.getFormeJuridique().getCode());
-        if (formeJuridique != null) {
-            file.setFormeJuridique(formeJuridique);
-        }
-        else {
-            Response response = new Response("token", "error", "Forme juridique invalide    ", 400);
-            response.setContext(ctx);
-            return;
-        }
-
         fileService.create(file);
 
         initializeComptes(file);
-        Response response = new Response("token", "ok", "Dossier créé", 200);
+        Response response = new Response("ok", "Dossier créé", 200);
         response.setContext(ctx);
     }
 

@@ -161,7 +161,7 @@ CREATE TABLE utilisateur (
   code VARCHAR(45) NOT NULL,
   mot_de_passe VARCHAR(255) NOT NULL,
   date_creation DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  date_derniere_connexion DATETIME NULL,
+  date_derniere_connexion DATETIME NULL DEFAULT NULL,
   actif BOOLEAN NOT NULL DEFAULT TRUE,
 
   UNIQUE KEY uk_mail (mail),
@@ -965,3 +965,14 @@ INSERT INTO statut_document (libelle, code, description) VALUES
 ('Archivé', 'ARCHIVE', 'Document archivé'),
 ('Obsolète', 'OBSOLETE', 'Document remplacé ou périmé'),
 ('Supprimé', 'SUPPRIME', 'Document marqué comme supprimé');
+
+-- -----------------------------------------------------
+-- Données de test
+-- -----------------------------------------------------
+
+-- Utilisateurs
+INSERT INTO utilisateur (mail, nom, prenom, code, mot_de_passe) VALUES
+('admin@admin.fr', 'admin', 'user','UADMIN','$2a$10$JeXoymFo8IzREdiwKbfgqOMQcifKxREqCHWYYtp8Pz90Pmf0sZxfu');
+
+-- Attribution du rôle admin à l'utilisateur admin
+INSERT INTO utilisateur_role (id_utilisateur, id_role) VALUES (1, 1);

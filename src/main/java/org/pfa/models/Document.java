@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
@@ -61,7 +60,7 @@ public class Document {
     public LocalDateTime getDateAjout() { return dateAjout; }
     public void setDateAjout(LocalDateTime dateAjout) { this.dateAjout = dateAjout; }
 
-    //public User getUser() { return user; }
+    //public User.getUser() { return user; }
     public void setUser(User user) { this.user = user; }
 
     public DocumentStatus getStatus() {

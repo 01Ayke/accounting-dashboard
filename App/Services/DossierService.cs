@@ -1,9 +1,11 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text.Json;
 using System.Threading.Tasks;
 using App.Models;
-using System.Collections.Generic;
-using System.Text.Json;
 
 namespace App.Services;
 
@@ -24,24 +26,22 @@ public class DossierService
         try
         {
             System.Diagnostics.Debug.WriteLine($"DossierService.GetDossierAsync: Appel /file/{dossierId}");
-            
+
             var response = await _httpClient.GetAsync($"file/{dossierId}");
             if (response.IsSuccessStatusCode)
             {
                 var json = await response.Content.ReadAsStringAsync();
-                System.Diagnostics.Debug.WriteLine($"DossierService: Response reçue");
-                
-                // Parser le JSON
+                System.Diagnostics.Debug.WriteLine("DossierService: Response reçue");
+
                 using (JsonDocument doc = JsonDocument.Parse(json))
                 {
                     var root = doc.RootElement;
                     var fileObj = root.GetProperty("file");
-                    
-                    // Récupérer le premier représentant (principal)
+
                     string prenom = "";
                     string nom = "";
                     string emailRepresentant = "";
-                    
+
                     if (fileObj.TryGetProperty("representants", out var representants) && representants.GetArrayLength() > 0)
                     {
                         var firstRep = representants[0];
@@ -63,6 +63,7 @@ public class DossierService
                     };
                 }
             }
+
             System.Diagnostics.Debug.WriteLine($"DossierService.GetDossierAsync: Erreur {response.StatusCode}");
             return null;
         }
@@ -76,7 +77,7 @@ public class DossierService
     public async Task<List<DossierFactice>?> GetAllDossiersAsync(int[] dossiersIds)
     {
         var dossiers = new List<DossierFactice>();
-        
+
         foreach (var id in dossiersIds)
         {
             var dossier = await GetDossierAsync(id);
@@ -85,8 +86,58 @@ public class DossierService
                 dossiers.Add(dossier);
             }
         }
-        
+
         return dossiers.Count > 0 ? dossiers : null;
+    }
+
+    public async Task<bool> CreateDossierAsync(CreateDossierRequest request)
+    {
+        try
+        {
+            System.Diagnostics.Debug.WriteLine("DossierService.CreateDossierAsync: création dossier");
+
+            var response = await _httpClient.PostAsJsonAsync("file", request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                System.Diagnostics.Debug.WriteLine("DossierService.CreateDossierAsync: succès");
+                return true;
+            }
+
+            var error = await response.Content.ReadAsStringAsync();
+            System.Diagnostics.Debug.WriteLine($"DossierService.CreateDossierAsync: erreur {response.StatusCode} - {error}");
+            return false;
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"DossierService.CreateDossierAsync: Exception = {ex.Message}");
+            return false;
+        }
+    }
+
+    public async Task<bool> AssignDossierAsync(int dossierId, AssignDossierRequest request)
+    {
+        try
+        {
+            System.Diagnostics.Debug.WriteLine($"DossierService.AssignDossierAsync: affectation dossier {dossierId}");
+
+            var response = await _httpClient.PostAsJsonAsync($"file/{dossierId}/assign", request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                System.Diagnostics.Debug.WriteLine("DossierService.AssignDossierAsync: succès");
+                return true;
+            }
+
+            var error = await response.Content.ReadAsStringAsync();
+            System.Diagnostics.Debug.WriteLine($"DossierService.AssignDossierAsync: erreur {response.StatusCode} - {error}");
+            return false;
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"DossierService.AssignDossierAsync: Exception = {ex.Message}");
+            return false;
+        }
     }
 
     public async Task<SIGBackend?> GetSIGAsync(int dossierId)
@@ -94,32 +145,31 @@ public class DossierService
         try
         {
             System.Diagnostics.Debug.WriteLine($"DossierService.GetSIGAsync: Appel /file/{dossierId}");
-            
+
             var response = await _httpClient.GetAsync($"file/{dossierId}");
             if (response.IsSuccessStatusCode)
             {
                 var json = await response.Content.ReadAsStringAsync();
                 System.Diagnostics.Debug.WriteLine($"DossierService.GetSIGAsync: Contenu brut reçu: {json}");
-                System.Diagnostics.Debug.WriteLine($"DossierService.GetSIGAsync: Response reçue");
-                
+                System.Diagnostics.Debug.WriteLine("DossierService.GetSIGAsync: Response reçue");
+
                 using (JsonDocument doc = JsonDocument.Parse(json))
                 {
                     var root = doc.RootElement;
                     System.Diagnostics.Debug.WriteLine($"DossierService.GetSIGAsync: Root properties: {string.Join(", ", root.EnumerateObject().Select(p => p.Name))}");
-                    
-                    // Récupérer l'objet SIG du backend
+
                     if (root.TryGetProperty("sig", out var sigObj))
                     {
-                        System.Diagnostics.Debug.WriteLine($"DossierService.GetSIGAsync: SIG trouvé");
-                        
-                        // Vérifier quels SIG sont présents
+                        System.Diagnostics.Debug.WriteLine("DossierService.GetSIGAsync: SIG trouvé");
+
                         var sigProperties = new HashSet<string>();
                         foreach (var prop in sigObj.EnumerateObject())
                         {
                             sigProperties.Add(prop.Name);
                         }
+
                         System.Diagnostics.Debug.WriteLine($"DossierService.GetSIGAsync: SIG disponibles: {string.Join(", ", sigProperties)}");
-                        
+
                         var sig = new SIGBackend
                         {
                             MargeCommerciale = sigObj.TryGetProperty("margeCommerciale", out var mc) ? mc.GetDouble() : double.NaN,
@@ -131,7 +181,7 @@ public class DossierService
                             ResultatExceptionnel = sigObj.TryGetProperty("resultatExceptionnel", out var rex) ? rex.GetDouble() : double.NaN,
                             ResultatExercice = sigObj.TryGetProperty("resultatExercice", out var rexe) ? rexe.GetDouble() : double.NaN
                         };
-                        
+
                         System.Diagnostics.Debug.WriteLine($"  Marge commerciale: {sig.MargeCommerciale}");
                         System.Diagnostics.Debug.WriteLine($"  Production exercice: {sig.ProductionExercice}");
                         System.Diagnostics.Debug.WriteLine($"  Valeur ajoutée: {sig.ValeurAjoutee}");
@@ -140,13 +190,16 @@ public class DossierService
                         System.Diagnostics.Debug.WriteLine($"  Resultat financier: {sig.ResultatFinancier}");
                         System.Diagnostics.Debug.WriteLine($"  Resultat exceptionnel: {sig.ResultatExceptionnel}");
                         System.Diagnostics.Debug.WriteLine($"  Resultat exercice: {sig.ResultatExercice}");
-                        
+
                         return sig;
                     }
+
                     System.Diagnostics.Debug.WriteLine("DossierService.GetSIGAsync: SIG NOT FOUND dans la réponse");
                 }
+
                 return null;
             }
+
             System.Diagnostics.Debug.WriteLine($"DossierService.GetSIGAsync: Erreur {response.StatusCode}");
             return null;
         }
