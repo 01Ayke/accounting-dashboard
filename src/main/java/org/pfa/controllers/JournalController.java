@@ -29,7 +29,19 @@ public class JournalController extends Controller {
             try {
                 CreationJournalRequest request = mapper.readValue(ctx.body(), CreationJournalRequest.class);
                 File file = fileService.getOne(request.getIdDossier());
+                if (file == null) {
+                    Response response = new Response("error", "Numéro de compte invalide", 400);
+                    response.setContext(ctx);
+                    return;
+                }
+
                 TypeJournal typeJournal = typeJournalService.getOne(request.getIdTypeJournal());
+                if (typeJournal == null) {
+                    Response response = new Response("error", "Type de journal invalide", 400);
+                    response.setContext(ctx);
+                    return;
+                }
+
                 Journal journal = new Journal(request.getCode(), request.getLibelle(), file, typeJournal, request.getCommentaire());
                 journalService.create(journal);
                 Response response = new Response("ok", "Journal créé", 200);
