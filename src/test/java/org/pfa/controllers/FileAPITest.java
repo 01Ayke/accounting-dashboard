@@ -27,6 +27,8 @@ public class FileAPITest {
     private String baseUrl;
     private FileService fileService = new FileService();
 
+    private String token;
+
     private String fileJson = "{\n" +
             "    \"telephone\": \"0707070707\",\n" +
             "    \"mail\": \"mail\",\n" +
@@ -59,15 +61,8 @@ public class FileAPITest {
         client = HttpClient.newHttpClient();
     }
 
-    @AfterEach
-    void tearDown() {
-        fileService.deleteByName("Test Enterprise");
-        app.stop();
-    }
-
-    @Test
-    @DisplayName("Success on File Insertion")
-    void testFileInsertion() throws IOException, InterruptedException {
+    @BeforeEach
+    void login() throws IOException, InterruptedException {
         String body = "mail=admin@admin.fr&password=admin";
 
         HttpRequest loginRequest = HttpRequest.newBuilder()
@@ -76,8 +71,19 @@ public class FileAPITest {
                 .POST(HttpRequest.BodyPublishers.ofString(body))
                 .build();
 
-        String token = (String) objectMapper
+        token = (String) objectMapper
                 .readValue(client.send(loginRequest, HttpResponse.BodyHandlers.ofString()).body(), Map.class).get("sID");
+
+    }
+
+    @AfterAll
+    void tearDown() {
+        app.stop();
+    }
+
+    @Test
+    @DisplayName("Success on File Insertion")
+    void testFileInsertion() throws IOException, InterruptedException {
 
         HttpRequest fileRequest = HttpRequest.newBuilder()
                 .uri(URI.create(baseUrl + "/file"))
@@ -88,6 +94,7 @@ public class FileAPITest {
 
         HttpResponse<String> response = client.send(fileRequest, HttpResponse.BodyHandlers.ofString());
         assertEquals(200, response.statusCode());
+        fileService.deleteByName("Test Enterprise");
     }
 
 }
