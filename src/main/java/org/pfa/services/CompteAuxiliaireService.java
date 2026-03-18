@@ -3,6 +3,8 @@ package org.pfa.services;
 import org.pfa.models.CompteAuxiliaire;
 import org.pfa.repositories.CompteAuxiliaireRepository;
 
+import java.util.List;
+
 public class CompteAuxiliaireService {
     private final CompteAuxiliaireRepository repo = new CompteAuxiliaireRepository();
 

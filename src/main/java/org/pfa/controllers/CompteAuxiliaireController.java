@@ -55,7 +55,7 @@ public class CompteAuxiliaireController extends Controller {
         CompteAuxiliaire compteAuxiliaireFournisseur = new CompteAuxiliaire( request.getLibelle(), "401" + request.getNumero(), compteFournisseur, typeFournisseur);
         compteAuxiliaireService.create(compteAuxiliaireFournisseur);
 
-        Response response = new Response("ok", "Compte auxiliaire créé", 200);
+        Response response = new Response("ok", "Compte auxiliaire créé", 201);
         response.setContext(ctx);
     }
 }

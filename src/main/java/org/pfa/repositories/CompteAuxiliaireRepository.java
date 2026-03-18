@@ -6,6 +6,8 @@ import org.pfa.config.HibernateUtil;
 import org.pfa.models.Compte;
 import org.pfa.models.CompteAuxiliaire;
 
+import java.util.List;
+
 public class CompteAuxiliaireRepository {
     public void save(CompteAuxiliaire compteAuxiliaire) {
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -23,5 +25,24 @@ public class CompteAuxiliaireRepository {
                 .getSingleResultOrNull();
         session.close();
         return compteAuxiliaire;
+    }
+
+    public List<CompteAuxiliaire> getById(Integer id) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List<CompteAuxiliaire> comptesAuxiliaires = session.createSelectionQuery("FROM CompteAuxiliaire WHERE idCompteAuxiliaire = :id", CompteAuxiliaire.class)
+                .setParameter("id", id)
+                .list();
+        session.close();
+        return comptesAuxiliaires;
+    }
+
+    public void delete(Integer id) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+        session.createMutationQuery("DELETE FROM CompteAuxiliaire WHERE idCompteAuxiliaire = :id")
+                .setParameter("id", id)
+                .executeUpdate();
+        tx.commit();
+        session.close();
     }
 }

@@ -59,7 +59,7 @@ public class FileController extends Controller {
         fileService.create(file);
 
         initializeComptes(file);
-        Response response = new Response("ok", "Dossier créé", 200);
+        Response response = new Response("ok", Map.of("idDossier", file.getId()), 200);
         response.setContext(ctx);
     }
 

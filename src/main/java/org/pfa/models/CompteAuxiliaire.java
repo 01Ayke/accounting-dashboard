@@ -9,7 +9,7 @@ public class CompteAuxiliaire {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_compte_auxiliaire")
-    private Integer idCompteAuxilliaire;
+    private Integer idCompteAuxiliaire;
 
     private String libelle;
 
@@ -38,7 +38,7 @@ public class CompteAuxiliaire {
         this.actif = true;
     }
 
-    public Integer getIdCompteAuxilliaire() { return idCompteAuxilliaire; }
+    public Integer getIdCompteAuxiliaire() { return idCompteAuxiliaire; }
 
     public String getLibelle() {
         return libelle;

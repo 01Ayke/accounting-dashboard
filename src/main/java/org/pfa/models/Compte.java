@@ -1,6 +1,7 @@
 package org.pfa.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -29,6 +30,10 @@ public class Compte {
     @OneToMany(mappedBy = "compte", fetch = FetchType.LAZY)
     @JsonManagedReference(value = "compte-ecriture")
     private Set<EcritureComptable> ecrituresComptables;
+
+    @OneToMany(mappedBy = "compteRattachement", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Set<CompteAuxiliaire> comptesAuxiliaires;
 
     public Compte() {}
 
@@ -66,5 +71,9 @@ public class Compte {
 
     public Set<EcritureComptable> getEcrituresComptables() {
         return ecrituresComptables;
+    }
+
+    public Set<CompteAuxiliaire> getComptesAuxiliaires() {
+        return comptesAuxiliaires;
     }
 }

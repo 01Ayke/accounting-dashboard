@@ -52,17 +52,15 @@ public class FileAPITest {
             "}";
 
     @BeforeAll
-    void setUp() {
+    void setUp() throws IOException, InterruptedException {
         app = Javalin.create().start(0); // port 0 => random port
         SessionManager sessionManager = new SessionManager();
         FileRoutes.register(app, sessionManager);
         UserRoutes.register(app, sessionManager);
         baseUrl = "http://localhost:" + app.port();
         client = HttpClient.newHttpClient();
-    }
 
-    @BeforeEach
-    void login() throws IOException, InterruptedException {
+        // login
         String body = "mail=admin@admin.fr&password=admin";
 
         HttpRequest loginRequest = HttpRequest.newBuilder()
