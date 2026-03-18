@@ -1,2 +1,9 @@
 .idea/*
 target/*
+*.dll
+.vs/*
+*.log
+.vscode/*
+*.vsidx
+App/.idea/*
+App/.vs/*
