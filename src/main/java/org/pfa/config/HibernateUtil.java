@@ -17,6 +17,7 @@ public class HibernateUtil {
                     .addAnnotatedClass(EcritureComptable.class)
                     .addAnnotatedClass(Representant.class)
                     .addAnnotatedClass(User.class)
+                    .addAnnotatedClass(AffectationDossier.class)
                     .addAnnotatedClass(Document.class)
                     .addAnnotatedClass(CategorieDocument.class)
                     .addAnnotatedClass(TypeDocument.class)
