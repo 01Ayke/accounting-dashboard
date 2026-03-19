@@ -22,6 +22,7 @@ public class App {
         TypeJournalRoutes.register(app, sessionManager);
         JournalRoutes.register(app, sessionManager);
         EcritureComptableRoutes.register(app, sessionManager);
+        AffectationRoutes.register(app, sessionManager);
         Runtime.getRuntime().addShutdownHook(new Thread(sessionManager::shutdown));
         System.out.println("Serveur démarré sur http://localhost:7070") ;
     }
