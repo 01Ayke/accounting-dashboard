@@ -153,7 +153,7 @@ public class CreateDossierViewModel : INotifyPropertyChanged
         IsSuccess = false;
 
         if (string.IsNullOrWhiteSpace(DenominationSociale) ||
-            string.IsNullOrWhiteSpace(Siret) ||
+            //string.IsNullOrWhiteSpace(Siret) ||
             string.IsNullOrWhiteSpace(FormeJuridique) ||
             string.IsNullOrWhiteSpace(RegimeFiscal) ||
             string.IsNullOrWhiteSpace(Prenom) ||
@@ -167,7 +167,7 @@ public class CreateDossierViewModel : INotifyPropertyChanged
         var request = new CreateDossierRequest
         {
             DenominationSociale = DenominationSociale,
-            Siret = Siret,
+            //Siret = Siret,
             FormeJuridique = FormeJuridique,
             RegimeFiscal = RegimeFiscal,
             Prenom = Prenom,
@@ -183,7 +183,7 @@ public class CreateDossierViewModel : INotifyPropertyChanged
             Message = "Dossier créé avec succès.";
 
             DenominationSociale = "";
-            Siret = "";
+            //Siret = "";
             FormeJuridique = "";
             RegimeFiscal = "";
             Prenom = "";

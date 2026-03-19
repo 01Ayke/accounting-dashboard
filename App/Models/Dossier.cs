@@ -12,8 +12,6 @@ public class Dossier
     public RegimeFiscal RegimeFiscal { get; set; }
 
     public DateTime DateDerniereModification { get; private set; } = DateTime.Now;
-
-    public List<object> Documents { get; set; } = new();
     
 
     public void ModifierFormeJuridique(FormeJuridique nouvelleForme)
