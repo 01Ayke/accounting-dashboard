@@ -4,7 +4,8 @@ using System.Threading.Tasks;
 using App.Helpers;
 using App.Models;
 using App.Services;
-
+//permet d'utiliser les collections (pour les listes)
+using System.Collections.ObjectModel;
 namespace App.ViewModels;
 
 public class CreateDossierViewModel : INotifyPropertyChanged
@@ -20,6 +21,9 @@ public class CreateDossierViewModel : INotifyPropertyChanged
     private string _mail = "";
     private string? _message;
     private bool _isSuccess;
+    
+    public ObservableCollection<string> FormesJuridiques { get; set; }
+    public ObservableCollection<string> RegimesFiscaux { get; set; }
 
     public string DenominationSociale
     {
@@ -141,10 +145,27 @@ public class CreateDossierViewModel : INotifyPropertyChanged
     public RelayCommand<object> CreateDossierCommand { get; }
 
     public event PropertyChangedEventHandler? PropertyChanged;
-
+        
+    //constructeur
     public CreateDossierViewModel()
     {
         CreateDossierCommand = new RelayCommand<object>(_ => _ = CreateDossierAsync());
+        
+        //DATA PROVISOIRE
+        FormesJuridiques = new ObservableCollection<string>
+        {
+            "SARL",
+            "SAS",
+            "SA",
+            "Auto-entrepreneur"
+        };
+
+        RegimesFiscaux = new ObservableCollection<string>
+        {
+            "IS",
+            "IR",
+            "Micro"
+        };
     }
 
     private async Task CreateDossierAsync()

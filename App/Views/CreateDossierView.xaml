@@ -32,20 +32,17 @@
                              Margin="0,5,0,12"
                              Height="35"/>
 
-                    <TextBlock Text="SIRET"/>
-                    <TextBox Text="{Binding Siret, UpdateSourceTrigger=PropertyChanged}"
-                             Margin="0,5,0,12"
-                             Height="35"/>
-
                     <TextBlock Text="Forme juridique"/>
-                    <TextBox Text="{Binding FormeJuridique, UpdateSourceTrigger=PropertyChanged}"
-                             Margin="0,5,0,12"
-                             Height="35"/>
+                    <ComboBox ItemsSource="{Binding FormesJuridiques}"
+                              SelectedItem="{Binding FormeJuridique}"
+                              Margin="0,5,0,12"
+                              Height="35"/>
 
                     <TextBlock Text="Régime fiscal"/>
-                    <TextBox Text="{Binding RegimeFiscal, UpdateSourceTrigger=PropertyChanged}"
-                             Margin="0,5,0,20"
-                             Height="35"/>
+                    <ComboBox ItemsSource="{Binding RegimesFiscaux}"
+                              SelectedItem="{Binding RegimeFiscal}"
+                              Margin="0,5,0,20"
+                              Height="35"/>
 
                     <TextBlock Text="Contact principal"
                                FontSize="18"
