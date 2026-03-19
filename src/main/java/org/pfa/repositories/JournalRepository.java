@@ -13,4 +13,11 @@ public class JournalRepository {
         tx.commit();
         session.close();
     }
+
+    public Journal findById(Integer id) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Journal journal = session.find(Journal.class, id);
+        session.close();
+        return journal;
+    }
 }

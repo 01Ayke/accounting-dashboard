@@ -46,6 +46,20 @@ public class EcritureComptable {
     @JsonBackReference(value = "ecriture-journal")
     private Journal journal;
 
+    public EcritureComptable() {}
+
+    public EcritureComptable(Date date_saisie, Double debit, Double credit, String code_operation, String numero_facture, String libelle, Date date_facture, Compte compte, Journal journal) {
+        this.date_saisie = date_saisie;
+        this.debit = debit;
+        this.credit = credit;
+        this.code_operation = code_operation;
+        this.numero_facture = numero_facture;
+        this.libelle = libelle;
+        this.date_facture = date_facture;
+        this.compte = compte;
+        this.journal = journal;
+    }
+
     public Integer getId_ecriture_comptable() {
         return id_ecriture_comptable;
     }
