@@ -17,6 +17,8 @@ public class GrandLivreService
         {
             BaseAddress = new Uri("http://localhost:7070/")
         };
+		_httpClient.DefaultRequestHeaders.Authorization =
+    new System.Net.Http.Headers.AuthenticationHeaderValue("DEBUG");
     }
 
     public async Task<List<LigneGrandLivre>?> GetGrandLivreAsync(string numeroCompte, string dateDebut, string dateFin)

@@ -20,17 +20,20 @@ namespace App
 
         public void NavigateToDossierDetail(DossierFactice dossier)
         {
-            var vm = new DossierDetailViewModel
-            {
-                Dossier = dossier
-            };
+            // var vm = new DossierDetailViewModel
+            // {
+            //     Dossier = dossier
+            // };
 
-            var view = new DossierDetailView
-            {
-                DataContext = vm
-            };
+            // var view = new DossierDetailView
+            // {
+            //     DataContext = vm
+            // };
 
-            MainContent.Content = view;
+            // MainContent.Content = view;
+			var viewModel = new DossierDetailViewModel { Dossier = dossier };
+            var dashboardView = new DashboardView { DataContext = viewModel };
+            MainContent.Content = dashboardView;
         }
 
         public void NavigateBackToHome()

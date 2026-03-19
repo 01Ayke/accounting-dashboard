@@ -132,7 +132,7 @@ public class HomeViewModel : INotifyPropertyChanged
     {
         System.Diagnostics.Debug.WriteLine("LoadDossiersAsync: Démarrage");
 
-        var dossiers = await _dossierService.GetAllDossiersAsync(new[] { 1, 2 });
+        var dossiers = await _dossierService.GetTousLesDossiersAsync();
 
         System.Diagnostics.Debug.WriteLine($"LoadDossiersAsync: {dossiers?.Count ?? 0} dossiers reçus");
 

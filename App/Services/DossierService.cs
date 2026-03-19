@@ -19,6 +19,8 @@ public class DossierService
         {
             BaseAddress = new Uri("http://localhost:7070/")
         };
+		_httpClient.DefaultRequestHeaders.Authorization =
+    new System.Net.Http.Headers.AuthenticationHeaderValue("DEBUG");
     }
 
     public async Task<DossierFactice?> GetDossierAsync(int dossierId)
@@ -36,7 +38,9 @@ public class DossierService
                 using (JsonDocument doc = JsonDocument.Parse(json))
                 {
                     var root = doc.RootElement;
-                    var fileObj = root.GetProperty("file");
+                    var messageObj = root.GetProperty("message");
+
+					var fileObj = messageObj.GetProperty("file");
 
                     string prenom = "";
                     string nom = "";
@@ -73,6 +77,66 @@ public class DossierService
             return null;
         }
     }
+
+	public async Task<List<DossierFactice>> GetTousLesDossiersAsync()
+{
+    try
+    {
+        System.Diagnostics.Debug.WriteLine("DossierService.GetAllDossiersAsync: Appel /files");
+
+        var response = await _httpClient.GetAsync("files");
+        if (response.IsSuccessStatusCode)
+        {
+            var json = await response.Content.ReadAsStringAsync();
+            System.Diagnostics.Debug.WriteLine("DossierService: Response reçue");
+
+            using (JsonDocument doc = JsonDocument.Parse(json))
+            {
+                var root = doc.RootElement;
+                var filesArray = root.GetProperty("message").EnumerateArray();
+
+                var dossiers = new List<DossierFactice>();
+
+                foreach (var fileObj in filesArray)
+                {
+                    string prenom = "";
+                    string nom = "";
+                    string emailRepresentant = "";
+
+                    if (fileObj.TryGetProperty("representants", out var representants) && representants.GetArrayLength() > 0)
+                    {
+                        var firstRep = representants[0];
+                        prenom = firstRep.GetProperty("prenom").GetString() ?? "";
+                        nom = firstRep.GetProperty("nom").GetString() ?? "";
+                        emailRepresentant = firstRep.GetProperty("mail").GetString() ?? "";
+                    }
+
+                    dossiers.Add(new DossierFactice
+                    {
+                        IdDossier = fileObj.GetProperty("id").GetInt32(),
+                        NomEntreprise = fileObj.GetProperty("denominationSociale").GetString() ?? "",
+                        Siret = fileObj.GetProperty("id").GetInt32().ToString(),
+                        Prenom = prenom,
+                        Nom = nom,
+                        EmailContact = emailRepresentant,
+                        Secteur = "Comptabilité",
+                        Statut = "Actif"
+                    });
+                }
+
+                return dossiers;
+            }
+        }
+
+        System.Diagnostics.Debug.WriteLine($"DossierService.GetAllDossiersAsync: Erreur {response.StatusCode}");
+        return new List<DossierFactice>();
+    }
+    catch (Exception ex)
+    {
+        System.Diagnostics.Debug.WriteLine($"DossierService.GetAllDossiersAsync: Exception = {ex.Message}");
+        return new List<DossierFactice>();
+    }
+}
 
     public async Task<List<DossierFactice>?> GetAllDossiersAsync(int[] dossiersIds)
     {
@@ -156,9 +220,10 @@ public class DossierService
                 using (JsonDocument doc = JsonDocument.Parse(json))
                 {
                     var root = doc.RootElement;
+					var fileJson = root.GetProperty("message");
                     System.Diagnostics.Debug.WriteLine($"DossierService.GetSIGAsync: Root properties: {string.Join(", ", root.EnumerateObject().Select(p => p.Name))}");
 
-                    if (root.TryGetProperty("sig", out var sigObj))
+                    if (fileJson.TryGetProperty("sig", out var sigObj))
                     {
                         System.Diagnostics.Debug.WriteLine("DossierService.GetSIGAsync: SIG trouvé");
 

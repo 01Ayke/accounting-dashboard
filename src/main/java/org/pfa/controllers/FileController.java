@@ -30,7 +30,8 @@ public class FileController extends Controller {
     // Renvoie la liste de tous les dossiers (pour l'écran de sélection des dossiers)
     public static void getAll(Context ctx) {
         List<File> files = fileService.getAll();
-        ctx.status(200).json(files);
+        Response response = new Response("ok", files, 200);
+        response.setContext(ctx);
     }
 
     public static void getOne(Context ctx) {

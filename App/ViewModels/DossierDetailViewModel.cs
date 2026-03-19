@@ -40,6 +40,7 @@ public class DossierDetailViewModel : INotifyPropertyChanged
             {
                 _sigAffichage = value;
                 OnPropertyChanged();
+				System.Diagnostics.Debug.WriteLine("apres onpropertychanged");
             }
         }
     }
@@ -73,6 +74,7 @@ public class DossierDetailViewModel : INotifyPropertyChanged
 
     private void RegenererAffichageSIG(SIGBackend sig)
     {
+		System.Diagnostics.Debug.WriteLine("Dans regenereraffichagesig");
         var affichage = new ObservableCollection<SIGAffichage>
         {
             new SIGAffichage { Label = "Marge Commerciale", Valeur = (decimal)sig.MargeCommerciale },
@@ -100,6 +102,8 @@ public class DossierDetailViewModel : INotifyPropertyChanged
         };
 
         SIGAffichage = affichage;
+
+		
     }
 
     protected void OnPropertyChanged([CallerMemberName] string? name = null)

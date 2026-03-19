@@ -20,6 +20,7 @@ public class DashboardController extends Controller {
             return;
         }
         Integer id = Integer.parseInt(ctx.pathParam("id"));
+        System.out.println("in getOne : " + id);
         Dashboard dashboard = dashboardService.getOne(id);
         if (dashboard.getFile() != null) {
             Response response = new Response("success", dashboard, 200);
