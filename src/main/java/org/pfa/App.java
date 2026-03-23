@@ -4,9 +4,15 @@ import io.javalin.Javalin;
 
 import org.pfa.routes.*;
 import org.pfa.services.SessionManager;
+import org.pfa.models.LOG.Log;
+import org.pfa.models.LOG.Log_Type;
+import org.pfa.models.LOG.LOG_Location;
+
 
 public class App {
     public static void main(String[] args) {
+        Log.clearLogFile();
+        Log.openHtmlLogInBrowser();
         Javalin app = Javalin.create().start(7070);
         SessionManager sessionManager = new SessionManager();
         DashboardRoutes.register(app, sessionManager);
@@ -24,6 +30,6 @@ public class App {
         EcritureComptableRoutes.register(app, sessionManager);
         AffectationRoutes.register(app, sessionManager);
         Runtime.getRuntime().addShutdownHook(new Thread(sessionManager::shutdown));
-        System.out.println("Serveur démarré sur http://localhost:7070") ;
+        Log.log("Server started on http://localhost:7070", Log_Type.INFO, LOG_Location.App);
     }
 }

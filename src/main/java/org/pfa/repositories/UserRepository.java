@@ -5,6 +5,9 @@ import java.util.List;
 import org.hibernate.Session;
 import org.pfa.config.HibernateUtil;
 import org.pfa.models.User;
+import org.pfa.models.LOG.LOG_Location;
+import org.pfa.models.LOG.Log;
+import org.pfa.models.LOG.Log_Type;
 import org.pfa.models.Roles_enum;
 
 public class UserRepository {
@@ -13,6 +16,7 @@ public class UserRepository {
         Session session = HibernateUtil.getSessionFactory().openSession();
         List<User> users = session.createSelectionQuery("FROM User", User.class).list();
         session.close();
+        Log.log("All users retrieved: " + users, Log_Type.INFO, LOG_Location.Repository);
         return users;
     }
 
@@ -22,6 +26,7 @@ public class UserRepository {
                 .setParameter("mail", mail)
                 .getSingleResultOrNull();
         session.close();
+        Log.log("User retrieved for mail " + mail + ": " + user, Log_Type.INFO, LOG_Location.Repository);
         return user;
     }
 
@@ -31,23 +36,34 @@ public class UserRepository {
         session.persist(user);
         session.getTransaction().commit();
         session.close();
+        Log.log("User saved: " + user, Log_Type.INFO, LOG_Location.Repository);
+        return;
     }
+
     public User findById(Integer id) {
         try (org.hibernate.Session session = org.pfa.config.HibernateUtil.getSessionFactory().openSession()) {
-            return session.get(org.pfa.models.User.class, id);
+            User user = session.get(org.pfa.models.User.class, id);
+            Log.log("User retrieved for ID " + id + ": " + user, Log_Type.INFO, LOG_Location.Repository);
+            return user;
+        }
+        catch( Exception e) {
+            Log.log("Error retrieving user for ID " + id + ": " + e.getMessage(), Log_Type.ERROR, LOG_Location.Repository);
+            return null;
         }
     }
 
-    public List<Roles_enum> findRolesByID(Integer id) {
+    public List<Roles_enum> findRolesByID(Integer id_user) {
         try (org.hibernate.Session session = org.pfa.config.HibernateUtil.getSessionFactory().openSession()) {
             List<String> roleCodes = session.createNativeQuery(
                     "SELECT r.code FROM utilisateur_role ur " +
                     "JOIN role_utilisateur r ON ur.id_role = r.id_role " +
                     "WHERE ur.id_utilisateur = :id", 
                     String.class)
-                    .setParameter("id", id)
+                    .setParameter("id", id_user)
                     .list();
-            
+
+            Log.log("Roles retrieved for user " + id_user + ": " + roleCodes, Log_Type.INFO, LOG_Location.Repository);
+
             return roleCodes.stream()
                     .map(code -> {
                         try {
@@ -58,6 +74,10 @@ public class UserRepository {
                     })
                     .filter(role -> role != null)
                     .toList();
+        }
+        catch( Exception e) {
+            Log.log("Error retrieving roles for user " + id_user + ": " + e.getMessage(), Log_Type.ERROR, LOG_Location.Repository);
+            return List.of();
         }
     }
 
@@ -72,8 +92,10 @@ public class UserRepository {
                 .executeUpdate();
 
             session.getTransaction().commit();
+            Log.log("Role " + id_role + " changed for user " + id_user, Log_Type.INFO, LOG_Location.Repository);
             return true;
         } catch (Exception e) {
+            Log.log("Failed to change role for user " + id_user + ": " + e.getMessage(), Log_Type.ERROR, LOG_Location.Repository);
             return false;
         }
     }
@@ -85,6 +107,10 @@ public class UserRepository {
                     .setParameter("mail", mail)
                     .executeUpdate();
             session.getTransaction().commit();
+            Log.log("User with mail " + mail + " deleted", Log_Type.INFO, LOG_Location.Repository);
+        }
+        catch( Exception e) {
+            Log.log("Error deleting user with mail " + mail + ": " + e.getMessage(), Log_Type.ERROR, LOG_Location.Repository);
         }
     }
 }

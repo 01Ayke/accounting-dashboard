@@ -1,5 +1,9 @@
 package org.pfa.models;
 
+import org.pfa.models.LOG.Log;
+import org.pfa.models.LOG.Log_Type;
+import org.pfa.models.LOG.LOG_Location;
+
 public class SessionUser {
 
     private final String token;
@@ -15,11 +19,13 @@ public class SessionUser {
     }
 
     public boolean isExpired() {
+        Log.log("Checking if session is expired for user " + userId, Log_Type.INFO, LOG_Location.Service);
         return System.currentTimeMillis() > expirationTime;
     }
 
     public void refresh() {
         this.expirationTime = System.currentTimeMillis() + ttl;
+        Log.log("Session refreshed for user " + userId + ", new expiration time: " + expirationTime, Log_Type.INFO, LOG_Location.Service);
     }
 
     public Integer getUserId() {
