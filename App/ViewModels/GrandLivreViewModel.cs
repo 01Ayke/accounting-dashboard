@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -12,61 +13,47 @@ public class GrandLivreViewModel : INotifyPropertyChanged
 {
     private readonly GrandLivreService _grandLivreService = new GrandLivreService();
 
-    private string _numeroCompte = "";
+    private string _idDossier = "";
     private string _dateDebut = "";
     private string _dateFin = "";
     private string? _message;
+    private string _denominationSociale = "";
+    private bool _isLoading;
 
-    public string NumeroCompte
+    public string IdDossier
     {
-        get => _numeroCompte;
-        set
-        {
-            if (_numeroCompte != value)
-            {
-                _numeroCompte = value;
-                OnPropertyChanged();
-            }
-        }
+        get => _idDossier;
+        set { if (_idDossier != value) { _idDossier = value; OnPropertyChanged(); } }
     }
 
     public string DateDebut
     {
         get => _dateDebut;
-        set
-        {
-            if (_dateDebut != value)
-            {
-                _dateDebut = value;
-                OnPropertyChanged();
-            }
-        }
+        set { if (_dateDebut != value) { _dateDebut = value; OnPropertyChanged(); } }
     }
 
     public string DateFin
     {
         get => _dateFin;
-        set
-        {
-            if (_dateFin != value)
-            {
-                _dateFin = value;
-                OnPropertyChanged();
-            }
-        }
+        set { if (_dateFin != value) { _dateFin = value; OnPropertyChanged(); } }
     }
 
     public string? Message
     {
         get => _message;
-        set
-        {
-            if (_message != value)
-            {
-                _message = value;
-                OnPropertyChanged();
-            }
-        }
+        set { if (_message != value) { _message = value; OnPropertyChanged(); } }
+    }
+
+    public string DenominationSociale
+    {
+        get => _denominationSociale;
+        set { if (_denominationSociale != value) { _denominationSociale = value; OnPropertyChanged(); } }
+    }
+
+    public bool IsLoading
+    {
+        get => _isLoading;
+        set { if (_isLoading != value) { _isLoading = value; OnPropertyChanged(); } }
     }
 
     public ObservableCollection<LigneGrandLivre> Lignes { get; } = new();
@@ -84,29 +71,49 @@ public class GrandLivreViewModel : INotifyPropertyChanged
     {
         Message = null;
         Lignes.Clear();
+        DenominationSociale = "";
 
-        if (string.IsNullOrWhiteSpace(NumeroCompte))
+        if (!int.TryParse(IdDossier, out int idDossier))
         {
-            Message = "Veuillez saisir un numéro de compte.";
+            Message = "Veuillez saisir un identifiant de dossier valide.";
             return;
         }
 
-        var lignes = await _grandLivreService.GetGrandLivreAsync(NumeroCompte, DateDebut, DateFin);
-
-        if (lignes == null || lignes.Count == 0)
+        if (string.IsNullOrWhiteSpace(DateDebut) || string.IsNullOrWhiteSpace(DateFin))
         {
-            Message = "Aucune donnée trouvée.";
+            Message = "Veuillez saisir les dates de début et de fin.";
             return;
         }
 
-        foreach (var ligne in lignes)
+        IsLoading = true;
+        try
         {
-            Lignes.Add(ligne);
+            var (lignes, denomination, error) =
+                await _grandLivreService.GetGrandLivreAsync(idDossier, DateDebut, DateFin);
+
+            if (!string.IsNullOrEmpty(error))
+            {
+                Message = error;
+                return;
+            }
+
+            DenominationSociale = denomination;
+
+            if (lignes.Count == 0)
+            {
+                Message = "Aucune écriture trouvée pour cette période.";
+                return;
+            }
+
+            foreach (var ligne in lignes)
+                Lignes.Add(ligne);
+        }
+        finally
+        {
+            IsLoading = false;
         }
     }
 
     protected void OnPropertyChanged([CallerMemberName] string? name = null)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-    }
+        => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 }

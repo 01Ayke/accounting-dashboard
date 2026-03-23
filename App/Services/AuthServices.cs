@@ -21,6 +21,30 @@ public class AuthService
         };
     }
 
+    public async Task<bool> LogoutAsync()
+    {
+        var token = SessionManager.Token;
+        if (string.IsNullOrEmpty(token))
+            return false;
+
+        try
+        {
+            _httpClient.DefaultRequestHeaders.Authorization =
+                new System.Net.Http.Headers.AuthenticationHeaderValue(token);
+            var response = await _httpClient.PostAsync("logout", null);
+            return response.IsSuccessStatusCode;
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"AuthService.LogoutAsync: {ex.Message}");
+            return false;
+        }
+        finally
+        {
+            SessionManager.Clear();
+        }
+    }
+
     public async Task<LoginResponse?> LoginAsync(string email, string password)
     {
         if (_useTestMode)
@@ -51,7 +75,7 @@ public class AuthService
             try
             {
                 var loginResponse = await response.Content.ReadFromJsonAsync<LoginResponse>();
-                System.Diagnostics.Debug.WriteLine($"AuthService: LoginResponse parsée - Status: {loginResponse?.Status}, Message: {loginResponse?.Message}, Code: {loginResponse?.Code}");
+                System.Diagnostics.Debug.WriteLine($"AuthService: LoginResponse parsée - Status: {loginResponse?.Status}, Message: {loginResponse?.Message}, Token: {loginResponse?.Token}");
                 return loginResponse;
             }
             catch (System.Text.Json.JsonException ex)

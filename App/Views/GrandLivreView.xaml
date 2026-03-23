@@ -1,11 +1,11 @@
-﻿<UserControl x:Class="App.Views.GrandLivreView"
+<UserControl x:Class="App.Views.GrandLivreView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:App.ViewModels"
              mc:Ignorable="d"
-             d:DesignHeight="650" d:DesignWidth="1000">
+             d:DesignHeight="700" d:DesignWidth="1100">
 
     <UserControl.DataContext>
         <vm:GrandLivreViewModel/>
@@ -14,86 +14,152 @@
     <Grid Background="#F5F7FA" Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Border Background="White"
-                CornerRadius="12"
-                Padding="20"
-                Margin="0,0,0,15">
+        <!-- En-tête / formulaire de filtres -->
+        <Border Grid.Row="0" Background="White" CornerRadius="12" Padding="25" Margin="0,0,0,12"
+                Effect="{DynamicResource DropShadowEffect}">
             <StackPanel>
                 <TextBlock Text="Grand Livre"
-                           FontSize="28"
-                           FontWeight="Bold"
-                           Margin="0,0,0,20"
-                           HorizontalAlignment="Center"/>
+                           FontSize="26" FontWeight="Bold"
+                           HorizontalAlignment="Center" Margin="0,0,0,4"/>
+                <TextBlock Text="{Binding DenominationSociale}"
+                           FontSize="14" Foreground="#6B7280"
+                           HorizontalAlignment="Center" Margin="0,0,0,20"/>
 
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <StackPanel Margin="10,0">
-                        <TextBlock Text="Numéro de compte"/>
-                        <TextBox Text="{Binding NumeroCompte, UpdateSourceTrigger=PropertyChanged}"
-                                 Width="180"
-                                 Height="35"
-                                 Margin="0,5,0,0"/>
+                <WrapPanel HorizontalAlignment="Center">
+                    <!-- ID Dossier -->
+                    <StackPanel Margin="8,0">
+                        <TextBlock Text="ID Dossier *" FontSize="12" Foreground="#374151"/>
+                        <TextBox Text="{Binding IdDossier, UpdateSourceTrigger=PropertyChanged}"
+                                 Width="110" Height="36" Padding="8,0" Margin="0,4,0,0"/>
                     </StackPanel>
 
-                    <StackPanel Margin="10,0">
-                        <TextBlock Text="Date début"/>
+                    <!-- Date début -->
+                    <StackPanel Margin="8,0">
+                        <TextBlock Text="Date début (AAAA-MM-JJ)" FontSize="12" Foreground="#374151"/>
                         <TextBox Text="{Binding DateDebut, UpdateSourceTrigger=PropertyChanged}"
-                                 Width="140"
-                                 Height="35"
-                                 Margin="0,5,0,0"/>
+                                 Width="160" Height="36" Padding="8,0" Margin="0,4,0,0"/>
                     </StackPanel>
 
-                    <StackPanel Margin="10,0">
-                        <TextBlock Text="Date fin"/>
+                    <!-- Date fin -->
+                    <StackPanel Margin="8,0">
+                        <TextBlock Text="Date fin (AAAA-MM-JJ)" FontSize="12" Foreground="#374151"/>
                         <TextBox Text="{Binding DateFin, UpdateSourceTrigger=PropertyChanged}"
-                                 Width="140"
-                                 Height="35"
-                                 Margin="0,5,0,0"/>
+                                 Width="160" Height="36" Padding="8,0" Margin="0,4,0,0"/>
                     </StackPanel>
 
-                    <StackPanel Margin="10,20,0,0" Orientation="Horizontal">
-                        <Button Content="Charger"
-                                Width="120"
-                                Height="35"
-                                Margin="5,0"
-                                Background="#455A64"
-                                Foreground="White"
-                                Command="{Binding LoadGrandLivreCommand}"/>
+                    <!-- Boutons -->
+                    <StackPanel Margin="12,20,0,0" Orientation="Horizontal">
+                        <Button Content="🔍 Charger" Width="130" Height="36" Margin="5,0"
+                                Command="{Binding LoadGrandLivreCommand}">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value="#1D4ED8"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                    <Setter Property="Cursor" Value="Hand"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="8">
+                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter TargetName="bd" Property="Background" Value="#1E40AF"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+                        </Button>
 
-                        <Button Content="Retour"
-                                Width="120"
-                                Height="35"
-                                Margin="5,0"
-                                Click="BackButton_Click"/>
+                        <Button Content="← Retour" Width="100" Height="36" Margin="5,0"
+                                Click="BackButton_Click">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value="White"/>
+                                    <Setter Property="Foreground" Value="#374151"/>
+                                    <Setter Property="BorderBrush" Value="#D1D5DB"/>
+                                    <Setter Property="BorderThickness" Value="1"/>
+                                    <Setter Property="Cursor" Value="Hand"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                                        CornerRadius="8">
+                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+                        </Button>
                     </StackPanel>
-                </StackPanel>
-
-                <TextBlock Text="{Binding Message}"
-                           Margin="0,15,0,0"
-                           Foreground="Red"
-                           FontWeight="SemiBold"
-                           TextWrapping="Wrap"
-                           HorizontalAlignment="Center"/>
+                </WrapPanel>
             </StackPanel>
         </Border>
 
-        <Border Grid.Row="1"
-                Background="White"
-                CornerRadius="12"
-                Padding="15">
+        <!-- Chargement / message -->
+        <Border Grid.Row="1" Margin="0,0,0,12" CornerRadius="8" Padding="12"
+                Visibility="{Binding Message, Converter={StaticResource StringToVisibilityConverter}}">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="Background" Value="#FEF2F2"/>
+                </Style>
+            </Border.Style>
+            <TextBlock Text="{Binding Message}" Foreground="#DC2626"
+                       FontWeight="SemiBold" TextWrapping="Wrap" HorizontalAlignment="Center"/>
+        </Border>
+
+        <!-- Indicateur de chargement -->
+        <Border Grid.Row="1" Margin="0,0,0,12" CornerRadius="8" Padding="12"
+                Background="#EFF6FF"
+                Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
+            <TextBlock Text="⏳ Chargement du grand livre..."
+                       Foreground="#1D4ED8" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+        </Border>
+
+        <!-- Tableau -->
+        <Border Grid.Row="2" Background="White" CornerRadius="12" Padding="15"
+                Effect="{DynamicResource DropShadowEffect}">
             <DataGrid ItemsSource="{Binding Lignes}"
                       AutoGenerateColumns="False"
                       IsReadOnly="True"
                       HeadersVisibility="Column"
-                      RowHeight="35">
+                      RowHeight="36"
+                      GridLinesVisibility="Horizontal"
+                      HorizontalGridLinesBrush="#F3F4F6"
+                      BorderThickness="0"
+                      Background="White">
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="Background" Value="#F9FAFB"/>
+                        <Setter Property="Foreground" Value="#374151"/>
+                        <Setter Property="FontWeight" Value="SemiBold"/>
+                        <Setter Property="Padding" Value="10,8"/>
+                        <Setter Property="BorderBrush" Value="#E5E7EB"/>
+                        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Date" Binding="{Binding Date}" Width="140"/>
-                    <DataGridTextColumn Header="Libellé" Binding="{Binding Libelle}" Width="*"/>
-                    <DataGridTextColumn Header="Débit" Binding="{Binding Debit}" Width="120"/>
-                    <DataGridTextColumn Header="Crédit" Binding="{Binding Credit}" Width="120"/>
-                    <DataGridTextColumn Header="Solde progressif" Binding="{Binding SoldeProgressif}" Width="160"/>
+                    <DataGridTextColumn Header="Compte" Binding="{Binding NumeroCompte}" Width="90"/>
+                    <DataGridTextColumn Header="Date"    Binding="{Binding Date}"          Width="120"/>
+                    <DataGridTextColumn Header="Libellé" Binding="{Binding Libelle}"       Width="*"/>
+                    <DataGridTextColumn Header="Débit"   Binding="{Binding Debit, StringFormat={}{0:N2}}"   Width="110"/>
+                    <DataGridTextColumn Header="Crédit"  Binding="{Binding Credit, StringFormat={}{0:N2}}"  Width="110"/>
+                    <DataGridTextColumn Header="Solde progressif"
+                                        Binding="{Binding SoldeProgressif, StringFormat={}{0:N2}}"
+                                        Width="140"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Border>

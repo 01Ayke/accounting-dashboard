@@ -1,100 +1,248 @@
-﻿<UserControl x:Class="App.Views.UserManagementView"
+<UserControl x:Class="App.Views.UserManagementView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:App.ViewModels"
              mc:Ignorable="d"
-             d:DesignHeight="650" d:DesignWidth="1000">
+             d:DesignHeight="700" d:DesignWidth="1100">
 
     <UserControl.DataContext>
         <vm:UserManagementViewModel/>
     </UserControl.DataContext>
 
     <Grid Background="#F5F7FA" Margin="20">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="3*"/>
-        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-        <!-- Création utilisateur -->
-        <Border Grid.Column="0"
-                Background="White"
-                CornerRadius="12"
-                Padding="20"
-                Margin="0,0,10,0">
-            <StackPanel>
-                <TextBlock Text="Créer un utilisateur"
-                           FontSize="24"
-                           FontWeight="Bold"
-                           Margin="0,0,0,20"/>
+        <!-- Titre page -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,20">
+            <TextBlock Text="Gestion des utilisateurs"
+                       FontSize="26" FontWeight="Bold"
+                       HorizontalAlignment="Center"/>
+            <TextBlock Text="Créez des comptes et attribuez des rôles (rôle ADMIN requis)"
+                       FontSize="13" Foreground="Gray" HorizontalAlignment="Center"/>
+        </StackPanel>
 
-                <TextBlock Text="Email"/>
-                <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"
-                         Margin="0,5,0,12"
-                         Height="35"/>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="15"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-                <TextBlock Text="Mot de passe"/>
-                <TextBox Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
-                         Margin="0,5,0,12"
-                         Height="35"/>
+            <!-- ── Panneau Création utilisateur ── -->
+            <Border Grid.Column="0" Background="White" CornerRadius="12" Padding="25"
+                    Effect="{DynamicResource DropShadowEffect}">
+                <StackPanel>
+                    <TextBlock Text="Créer un compte" FontSize="20" FontWeight="Bold"
+                               Margin="0,0,0,20" Foreground="#0D1B2A"/>
 
-                <TextBlock Text="Confirmation mot de passe"/>
-                <TextBox Text="{Binding ConfirmPassword, UpdateSourceTrigger=PropertyChanged}"
-                         Margin="0,5,0,20"
-                         Height="35"/>
+                    <TextBlock Text="Prénom *" FontSize="12" Foreground="#374151"/>
+                    <TextBox Text="{Binding Prenom, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0,4,0,12" Height="36" Padding="8,0"/>
 
-                <Button Content="Créer l'utilisateur"
-                        Height="40"
-                        Background="#4CAF50"
-                        Foreground="White"
-                        Command="{Binding CreateUserCommand}"/>
+                    <TextBlock Text="Nom *" FontSize="12" Foreground="#374151"/>
+                    <TextBox Text="{Binding Nom, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0,4,0,12" Height="36" Padding="8,0"/>
 
-                <TextBlock Text="{Binding Message}"
-                           Margin="0,15,0,0"
-                           Foreground="Red"
-                           FontWeight="SemiBold"
-                           TextWrapping="Wrap"/>
+                    <TextBlock Text="Email *" FontSize="12" Foreground="#374151"/>
+                    <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0,4,0,12" Height="36" Padding="8,0"/>
 
-                <Button Content="Retour"
-                        Width="120"
-                        Height="40"
-                        Margin="0,20,0,0"
-                        Click="BackButton_Click"/>
-            </StackPanel>
-        </Border>
+                    <TextBlock Text="Mot de passe *" FontSize="12" Foreground="#374151"/>
+                    <TextBox Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0,4,0,12" Height="36" Padding="8,0"/>
 
-        <!-- Attribution rôle -->
-        <Border Grid.Column="1"
-                Background="White"
-                CornerRadius="12"
-                Padding="20"
-                Margin="10,0,0,0">
-            <StackPanel>
-                <TextBlock Text="Attribuer un rôle"
-                           FontSize="24"
-                           FontWeight="Bold"
-                           Margin="0,0,0,20"/>
+                    <TextBlock Text="Confirmer le mot de passe *" FontSize="12" Foreground="#374151"/>
+                    <TextBox Text="{Binding ConfirmPassword, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0,4,0,20" Height="36" Padding="8,0"/>
 
-                <TextBlock Text="ID utilisateur"/>
-                <TextBox Text="{Binding UserId, UpdateSourceTrigger=PropertyChanged}"
-                         Margin="0,5,0,12"
-                         Height="35"/>
+                    <Button Content="✓ Créer le compte" Height="42"
+                            Command="{Binding CreateUserCommand}">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="#16A34A"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                                <Setter Property="Cursor" Value="Hand"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="8">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="bd" Property="Background" Value="#15803D"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Button.Style>
+                    </Button>
 
-                <TextBlock Text="Rôle"/>
-                <ComboBox SelectedItem="{Binding SelectedRole}"
-                          Margin="0,5,0,20"
-                          Height="35">
-                    <ComboBoxItem Content="Admin"/>
-                    <ComboBoxItem Content="Expert"/>
-                </ComboBox>
+                    <!-- Message création -->
+                    <Border Margin="0,12,0,0" CornerRadius="8" Padding="10"
+                            Visibility="{Binding CreateUserMessage, Converter={StaticResource StringToVisibilityConverter}}">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Background" Value="#FEF2F2"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding CreateUserSuccess}" Value="True">
+                                        <Setter Property="Background" Value="#F0FDF4"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <TextBlock Text="{Binding CreateUserMessage}" FontWeight="SemiBold" TextWrapping="Wrap">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="#DC2626"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding CreateUserSuccess}" Value="True">
+                                            <Setter Property="Foreground" Value="#16A34A"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Border>
 
-                <Button Content="Attribuer le rôle"
-                        Height="40"
-                        Background="#1976D2"
-                        Foreground="White"
-                        Command="{Binding AssignRoleCommand}"/>
-            </StackPanel>
-        </Border>
+                    <Button Content="← Retour" Width="120" Height="38" Margin="0,15,0,0"
+                            HorizontalAlignment="Left" Click="BackButton_Click">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="White"/>
+                                <Setter Property="Foreground" Value="#374151"/>
+                                <Setter Property="BorderBrush" Value="#D1D5DB"/>
+                                <Setter Property="BorderThickness" Value="1"/>
+                                <Setter Property="Cursor" Value="Hand"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}"
+                                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                                    CornerRadius="8">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </StackPanel>
+            </Border>
+
+            <!-- ── Panneau Attribution de rôle ── -->
+            <Border Grid.Column="2" Background="White" CornerRadius="12" Padding="25"
+                    Effect="{DynamicResource DropShadowEffect}">
+                <StackPanel>
+                    <TextBlock Text="Attribuer un rôle" FontSize="20" FontWeight="Bold"
+                               Margin="0,0,0,20" Foreground="#0D1B2A"/>
+
+                    <Border Background="#EFF6FF" CornerRadius="8" Padding="10" Margin="0,0,0,20">
+                        <TextBlock TextWrapping="Wrap" FontSize="12" Foreground="#1E40AF">
+                            Le rôle remplacera tous les rôles actuels de l'utilisateur.
+                            Plusieurs rôles peuvent être cumulés en séparant par une virgule
+                            (ex: <Bold>EXPERT,COMPTA_JR</Bold>).
+                        </TextBlock>
+                    </Border>
+
+                    <TextBlock Text="ID de l'utilisateur *" FontSize="12" Foreground="#374151"/>
+                    <TextBox Text="{Binding UserId, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0,4,0,12" Height="36" Padding="8,0"/>
+
+                    <TextBlock Text="Rôle *" FontSize="12" Foreground="#374151"/>
+                    <ComboBox ItemsSource="{Binding AvailableRoles}"
+                              SelectedItem="{Binding SelectedRole}"
+                              Margin="0,4,0,8" Height="36"/>
+
+                    <TextBlock Text="— ou saisir un rôle personnalisé / combiné —"
+                               FontSize="11" Foreground="Gray" Margin="0,0,0,4"/>
+                    <TextBox Text="{Binding SelectedRole, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0,0,0,20" Height="36" Padding="8,0"/>
+
+                    <Button Content="✓ Attribuer le rôle" Height="42"
+                            Command="{Binding AssignRoleCommand}">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="#7C3AED"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                                <Setter Property="Cursor" Value="Hand"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="8">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="bd" Property="Background" Value="#6D28D9"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <!-- Message attribution -->
+                    <Border Margin="0,12,0,0" CornerRadius="8" Padding="10"
+                            Visibility="{Binding AssignRoleMessage, Converter={StaticResource StringToVisibilityConverter}}">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Background" Value="#FEF2F2"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding AssignRoleSuccess}" Value="True">
+                                        <Setter Property="Background" Value="#F0FDF4"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <TextBlock Text="{Binding AssignRoleMessage}" FontWeight="SemiBold" TextWrapping="Wrap">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="#DC2626"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding AssignRoleSuccess}" Value="True">
+                                            <Setter Property="Foreground" Value="#16A34A"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Border>
+
+                    <!-- Rappel des rôles disponibles -->
+                    <Border Background="#F8FAFC" CornerRadius="8" Padding="12" Margin="0,15,0,0">
+                        <StackPanel>
+                            <TextBlock Text="Rôles disponibles" FontSize="13" FontWeight="SemiBold"
+                                       Foreground="#374151" Margin="0,0,0,8"/>
+                            <UniformGrid Columns="2">
+                                <TextBlock Text="• USER" FontSize="11" Foreground="#6B7280" Margin="0,2"/>
+                                <TextBlock Text="• ADMIN" FontSize="11" Foreground="#6B7280" Margin="0,2"/>
+                                <TextBlock Text="• EXPERT" FontSize="11" Foreground="#6B7280" Margin="0,2"/>
+                                <TextBlock Text="• COMPTA_CONF" FontSize="11" Foreground="#6B7280" Margin="0,2"/>
+                                <TextBlock Text="• COMPTA_JR" FontSize="11" Foreground="#6B7280" Margin="0,2"/>
+                                <TextBlock Text="• ASSISTANT" FontSize="11" Foreground="#6B7280" Margin="0,2"/>
+                                <TextBlock Text="• STAGIAIRE" FontSize="11" Foreground="#6B7280" Margin="0,2"/>
+                                <TextBlock Text="• CLIENT" FontSize="11" Foreground="#6B7280" Margin="0,2"/>
+                            </UniformGrid>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Border>
+        </Grid>
     </Grid>
 </UserControl>
