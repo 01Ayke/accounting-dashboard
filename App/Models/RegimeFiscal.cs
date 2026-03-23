@@ -1,7 +1,17 @@
-﻿namespace App.Models;
+using System.Text.Json.Serialization;
 
-public enum RegimeFiscal
+namespace App.Models;
+
+/// <summary>
+/// DTO retourné par GET /regimeFiscal
+/// </summary>
+public class RegimeFiscal
 {
-    ImpotSurLeRevenu,
-    ImpotSurLesSocietes
+    [JsonPropertyName("idRegimeFiscal")]
+    public int IdRegimeFiscal { get; set; }
+
+    [JsonPropertyName("libelle")]
+    public string Libelle { get; set; } = "";
+
+    public override string ToString() => Libelle;
 }

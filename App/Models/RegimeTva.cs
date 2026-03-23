@@ -1,8 +1,17 @@
-﻿namespace App.Models;
+using System.Text.Json.Serialization;
 
-public enum RegimeTva
+namespace App.Models;
+
+/// <summary>
+/// DTO retourné par GET /regimeTVA
+/// </summary>
+public class RegimeTva
 {
-    FranchiseEnBase,
-    ReelleSimplifiee,
-    ReelleNormale
+    [JsonPropertyName("idRegimeTVA")]
+    public int IdRegimeTVA { get; set; }
+
+    [JsonPropertyName("libelle")]
+    public string Libelle { get; set; } = "";
+
+    public override string ToString() => Libelle;
 }
