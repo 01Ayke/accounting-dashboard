@@ -15,6 +15,8 @@ import java.util.Map;
 import java.util.Set;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.pfa.repositories.UserRepository;
+import org.pfa.models.User;
+import org.mindrot.jbcrypt.BCrypt;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -135,6 +137,13 @@ public class UserAPITest {
 
         HttpResponse<String> response = client.send(regReq, HttpResponse.BodyHandlers.ofString());
         assertEquals(201, response.statusCode());
+
+        User createdUser = userRepository.findByMail(email);
+        assertNotNull(createdUser, "User should be persistent in the database");
+        assertEquals("Test", createdUser.getNom());
+        assertEquals("User", createdUser.getPrenom());
+        assertNotNull(createdUser.getCode());
+        assertTrue(BCrypt.checkpw("password", createdUser.getMot_de_passe()), "Password should match the BCrypt hash stored in DB");
     }
 
     @Test
@@ -165,6 +174,13 @@ public class UserAPITest {
         HttpResponse<String> registerRes = client.send(registerReq, HttpResponse.BodyHandlers.ofString());
         assertEquals(201, registerRes.statusCode(), "Admin should be able to register User B");
 
+        User userB = userRepository.findByMail(userBMail);
+        assertNotNull(userB, "User B should be persistent in the database");
+        assertEquals("User", userB.getNom());
+        assertEquals("B", userB.getPrenom());
+        assertNotNull(userB.getCode());
+        assertTrue(BCrypt.checkpw(userBPass, userB.getMot_de_passe()), "User B password should match DB BCrypt hash");
+
         // login en tant qu'user B
         String userBLoginBody = "mail=" + userBMail + "&password=" + userBPass;
         HttpRequest userBLoginReq = HttpRequest.newBuilder()
@@ -188,6 +204,8 @@ public class UserAPITest {
                 .build();
         HttpResponse<String> registerCRes = client.send(registerCReq, HttpResponse.BodyHandlers.ofString());
         assertEquals(403, registerCRes.statusCode(), "Non-admin User B should NOT be able to register User C");
+
+        assertNull(userRepository.findByMail(userCMail), "User C should not be in the database");
 
         // logout en tant qu'user B
         HttpRequest logoutReq = HttpRequest.newBuilder()
@@ -220,5 +238,7 @@ public class UserAPITest {
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         assertEquals(401, response.statusCode());
+
+        assertNull(userRepository.findByMail("toto@pfa.fr"), "Unauthorized registration should not persist in DB");
     }
 }
