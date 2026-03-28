@@ -4,6 +4,9 @@ import org.pfa.services.SessionManager;
 import io.javalin.http.Context;
 import org.pfa.models.dto.Response;
 import org.pfa.models.SessionUser;
+import org.pfa.models.LOG.LOG_Location;
+import org.pfa.models.LOG.Log;
+import org.pfa.models.LOG.Log_Type;
 import org.pfa.models.Roles_enum;
 import org.pfa.services.UserService;
 
@@ -41,7 +44,7 @@ public class Controller {
 
         if (token != null) {
             SessionUser session = sessionManager.validate(token);
-            System.out.println("Session validation for token: " + token + " - Valid: " + (session != null));
+            Log.log("Validating token: " + token + " for user: " + (session != null ? session.getUserId() : "null"), Log_Type.INFO, LOG_Location.Controller);
             if (session != null) {
                 return true;
             } else {

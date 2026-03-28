@@ -4,11 +4,17 @@ import org.pfa.models.LOG.LOG_Location;
 import org.pfa.models.LOG.Log;
 import org.pfa.models.LOG.Log_Type;
 import org.pfa.repositories.RoleRepository;
+import java.util.List;
 
 public class RoleService {
     private RoleRepository repo = new RoleRepository();
     public Integer getRoleIdByCode(Roles_enum role) {
         Log.log("Getting role ID for role " + role, Log_Type.INFO, LOG_Location.Service);
         return repo.getIDbyCode(role.toString());
+    }
+
+    public List<String> getAllRoles() {
+        Log.log("Getting all roles", Log_Type.INFO, LOG_Location.Service);
+        return repo.getAllRoles();
     }
 }

@@ -34,4 +34,8 @@ public class Roles {
         return id_role;
     }
 
+    public String getCode() {
+        return code;
+    }
+
 }

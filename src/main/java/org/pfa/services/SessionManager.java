@@ -84,6 +84,15 @@ public class SessionManager {
         }, CLEAN_INTERVAL, CLEAN_INTERVAL, TimeUnit.MILLISECONDS);
     }
 
+    public String getUserToken(Integer userId) {
+        return userSessions.get(userId);
+    }
+
+    public Integer getUserIdFromToken(String token) {
+        SessionUser session = sessions.get(token);
+        return session != null ? session.getUserId() : null;
+    }
+
     public void shutdown() {
         scheduler.shutdown();
     }

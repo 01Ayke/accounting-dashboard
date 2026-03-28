@@ -11,13 +11,18 @@ import org.pfa.models.LOG.Log;
 import org.pfa.models.LOG.Log_Type;
 import org.pfa.models.dto.Response;
 import org.pfa.services.UserService;
+import org.pfa.services.RoleService;
 
 public class RoleController extends Controller {
     private final UserService userService;
+    private final RoleService roleService;
+    private final SessionManager sessionManager;
 
     public RoleController(SessionManager sessionManager) {
         super(sessionManager);
         this.userService = new UserService();
+        this.roleService = new RoleService();
+        this.sessionManager = sessionManager;
     }
     
     public void get_all_users(Context ctx){
@@ -51,5 +56,36 @@ public class RoleController extends Controller {
             return;
         }
         Log.log("Permission denied for changing role", Log_Type.ERROR, LOG_Location.Controller);
+    }
+
+    public void is_Admin(Context ctx) {
+
+        if(super.checkToken(ctx)) {
+            Integer userId = sessionManager.getUserIdFromToken(ctx.header("Authorization"));
+            if(userService.getRoles(userId).contains(Roles_enum.ADMIN)) {
+                Response response = new Response("success", "L'utilisateur est un admin", 200);
+                Log.log("User is an admin", Log_Type.INFO, LOG_Location.Controller);
+                response.setContext(ctx);
+                return;
+            }
+            else{
+                Response response = new Response("error", "L'utilisateur n'est pas un admin", 500);
+                Log.log("User is not an admin", Log_Type.INFO, LOG_Location.Controller);
+                response.setContext(ctx);
+                return;
+            }
+
+        }
+    }
+
+    public void get_all_roles(Context ctx) {
+        if(super.checkToken(ctx) && super.checkRole(ctx, Roles_enum.ADMIN)) {
+            List<String> roles = roleService.getAllRoles();
+            Response response = new Response("success", "Voici la liste de tous les rôles", 200, roles);
+            Log.log("Retrieving all roles : " + roles, Log_Type.INFO, LOG_Location.Controller);
+            response.setContextData(ctx);
+            return;
+        }
+        Log.log("Permission denied for retrieving all roles", Log_Type.ERROR, LOG_Location.Controller);
     }
 }

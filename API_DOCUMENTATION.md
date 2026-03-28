@@ -210,6 +210,29 @@ Erreur `500` (si echec de mise a jour role):
 }
 ```
 
+### POST `/is-admin`
+
+Description: Vérifie que le user soit ADMIN.
+
+- Auth requise: oui
+
+Succes `200`:
+
+```json
+{
+  "status": "success",
+  "message": "L'utilisateur est un admin"
+}
+```
+
+Erreur `500` (si l'utilisateur n'est pas ADMIN) :
+
+```json
+{
+  "status": "error",
+  "message": "L'utilisateur n'est pas un admin"
+}
+```
 ---
 
 ## 3) `DocumentRoutes.java`

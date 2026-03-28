@@ -60,6 +60,23 @@ public class UserService {
         String hashedPassword = BCrypt.hashpw(request.getPassword(), BCrypt.gensalt());
         User newUser = new User(request.getMail(), hashedPassword, request.getNom(), request.getPrenom(), request.getCode(), false);
         repo.save(newUser);
+        for (String roleCode : request.getRoles()) {
+            Roles_enum roleEnum;
+            try {
+                roleEnum = Roles_enum.valueOf(roleCode.trim());
+            } catch (IllegalArgumentException e) {
+                Log.log("Invalid role code: " + roleCode, Log_Type.ERROR, LOG_Location.Service);
+                continue; // Skip invalid roles
+            }
+            RoleService roleService = new RoleService();
+            Integer roleId = roleService.getRoleIdByCode(roleEnum);
+            if (roleId != null) {
+                repo.changeRoleByID(newUser.getId(), roleId);
+                Log.log("Role " + roleEnum + " assigned to user " + newUser.getId(), Log_Type.INFO, LOG_Location.Service);
+            } else {
+                Log.log("Role not found for code: " + roleCode, Log_Type.ERROR, LOG_Location.Service);
+            }
+        }
         Log.log("User registered successfully", Log_Type.INFO, LOG_Location.Service);
         return true;
     }
