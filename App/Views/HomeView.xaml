@@ -50,6 +50,7 @@
                             Padding="12,6"
                             Background="#7B1FA2"
                             Foreground="White"
+                            Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}"
                             Click="UserManagementButton_Click"/>
 
                     <Button Content="Créer compte"
@@ -65,6 +66,13 @@
                             Background="#455A64"
                             Foreground="White"
                             Click="GrandLivreButton_Click"/>
+
+                    <Button Content="Documents"
+                            Margin="5"
+                            Padding="12,6"
+                            Background="#0891B2"
+                            Foreground="White"
+                            Click="DocumentsButton_Click"/>
                 </WrapPanel>
             </StackPanel>
         </Border>

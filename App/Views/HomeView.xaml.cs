@@ -112,4 +112,13 @@ public partial class HomeView : UserControl
             mainWindow.NavigateToGrandLivre();
         }
     }
+
+    private void DocumentsButton_Click(object sender, RoutedEventArgs e)
+    {
+        var mainWindow = Window.GetWindow(this) as MainWindow;
+        if (mainWindow != null)
+        {
+            mainWindow.NavigateToDocuments();
+        }
+    }
 }

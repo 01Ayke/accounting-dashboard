@@ -1,13 +1,17 @@
-﻿namespace App.Models;
+using System.Text.Json.Serialization;
 
-public enum FormeJuridique
+namespace App.Models;
+
+/// <summary>
+/// DTO retourné par GET /formeJuridique
+/// </summary>
+public class FormeJuridique
 {
-    AutoEntrepreneur,
-    EI,
-    EURL,
-    SARL,
-    SAS,
-    SASU,
-    SA,
-    Association
+    [JsonPropertyName("idFormeJuridique")]
+    public int IdFormeJuridique { get; set; }
+
+    [JsonPropertyName("libelle")]
+    public string Libelle { get; set; } = "";
+
+    public override string ToString() => Libelle;
 }

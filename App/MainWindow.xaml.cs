@@ -7,6 +7,8 @@ namespace App
 {
     public partial class MainWindow : Window
     {
+        private HomeView? _homeView;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -15,7 +17,8 @@ namespace App
 
         public void NavigateToHome()
         {
-            MainContent.Content = new HomeView();
+            _homeView ??= new HomeView();
+            MainContent.Content = _homeView;
         }
 
         public void NavigateToDossierDetail(DossierFactice dossier)
@@ -38,7 +41,10 @@ namespace App
 
         public void NavigateBackToHome()
         {
-            MainContent.Content = new HomeView();
+            _homeView ??= new HomeView();
+            MainContent.Content = _homeView;
+            if (_homeView.DataContext is HomeViewModel vm)
+                _ = vm.RefreshAsync();
         }
 
         public void NavigateToCreateDossier()
@@ -64,6 +70,11 @@ namespace App
         public void NavigateToGrandLivre()
         {
             MainContent.Content = new GrandLivreView();
+        }
+
+        public void NavigateToDocuments()
+        {
+            MainContent.Content = new DocumentView();
         }
     }
 }
