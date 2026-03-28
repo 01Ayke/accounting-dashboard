@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using App.Helpers;
 using App.Models;
@@ -35,6 +36,9 @@ public class CreateDossierViewModel : INotifyPropertyChanged
     private bool _isLoading;
     private bool _isLoadingDropdowns;
 
+    private string? _emailError;
+    private string? _telephoneError;
+
     // ─── Collections pour les ComboBox ───────────────────────────────────────
 
     public ObservableCollection<FormeJuridique> FormesJuridiques { get; } = new();
@@ -52,13 +56,33 @@ public class CreateDossierViewModel : INotifyPropertyChanged
     public string Telephone
     {
         get => _telephone;
-        set { if (_telephone != value) { _telephone = value; OnPropertyChanged(); } }
+        set
+        {
+            if (_telephone != value)
+            {
+                _telephone = value;
+                OnPropertyChanged();
+                TelephoneError = (!string.IsNullOrEmpty(value) && !Regex.IsMatch(value, @"^\+33[0-9]{9}$"))
+                    ? "Format invalide (ex: +33612345678)"
+                    : null;
+            }
+        }
     }
 
     public string Mail
     {
         get => _mail;
-        set { if (_mail != value) { _mail = value; OnPropertyChanged(); } }
+        set
+        {
+            if (_mail != value)
+            {
+                _mail = value;
+                OnPropertyChanged();
+                EmailError = (!string.IsNullOrEmpty(value) && !value.Contains('@'))
+                    ? "Email invalide (@ manquant)"
+                    : null;
+            }
+        }
     }
 
     public string Capital
@@ -94,7 +118,16 @@ public class CreateDossierViewModel : INotifyPropertyChanged
     public string CodePostal
     {
         get => _codePostal;
-        set { if (_codePostal != value) { _codePostal = value; OnPropertyChanged(); } }
+        set
+        {
+            if (_codePostal != value)
+            {
+                _codePostal = value;
+                OnPropertyChanged();
+                if (value?.Length == 5)
+                    _ = LookupCityAsync(value);
+            }
+        }
     }
 
     public string Rue
@@ -131,6 +164,18 @@ public class CreateDossierViewModel : INotifyPropertyChanged
     {
         get => _isLoadingDropdowns;
         set { if (_isLoadingDropdowns != value) { _isLoadingDropdowns = value; OnPropertyChanged(); } }
+    }
+
+    public string? EmailError
+    {
+        get => _emailError;
+        set { if (_emailError != value) { _emailError = value; OnPropertyChanged(); } }
+    }
+
+    public string? TelephoneError
+    {
+        get => _telephoneError;
+        set { if (_telephoneError != value) { _telephoneError = value; OnPropertyChanged(); } }
     }
 
     // ─── Commandes ────────────────────────────────────────────────────────────
@@ -201,6 +246,12 @@ public class CreateDossierViewModel : INotifyPropertyChanged
             out double capitalValue))
         { Message = "Le capital doit être un nombre valide."; return; }
 
+        if (!string.IsNullOrEmpty(Mail) && !Mail.Contains('@'))
+        { Message = "Email professionnel invalide (@ manquant)."; return; }
+
+        if (!string.IsNullOrEmpty(Telephone) && !Regex.IsMatch(Telephone, @"^\+33[0-9]{9}$"))
+        { Message = "Format téléphone invalide (ex: +33612345678)."; return; }
+
         var request = new CreateDossierRequest
         {
             DenominationSociale = DenominationSociale,
@@ -248,6 +299,13 @@ public class CreateDossierViewModel : INotifyPropertyChanged
         {
             IsLoading = false;
         }
+    }
+
+    private async Task LookupCityAsync(string cp)
+    {
+        var cities = await _refService.GetCityByPostalCodeAsync(cp);
+        if (cities.Count > 0)
+            Ville = cities[0];
     }
 
     protected void OnPropertyChanged([CallerMemberName] string? name = null)

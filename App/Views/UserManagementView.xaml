@@ -54,12 +54,34 @@
                                  Margin="0,4,0,12" Height="36" Padding="8,0"/>
 
                         <TextBlock Text="Mot de passe *" FontSize="12" Foreground="#374151"/>
-                        <PasswordBox x:Name="PwdBox" Height="36" Padding="8,0" Margin="0,4,0,12"
-                                     PasswordChanged="PwdBox_PasswordChanged"/>
+                        <Grid Margin="0,4,0,12" Height="36">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="40"/>
+                            </Grid.ColumnDefinitions>
+                            <PasswordBox x:Name="PwdBox" Grid.Column="0" Height="36" Padding="8,0"
+                                         PasswordChanged="PwdBox_PasswordChanged"/>
+                            <TextBox x:Name="PwdClear" Grid.Column="0" Height="36" Padding="8,0"
+                                     Visibility="Collapsed" TextChanged="PwdClear_TextChanged"/>
+                            <Button x:Name="TogglePwdBtn" Grid.Column="1" Content="👁" Height="36"
+                                    Background="Transparent" BorderThickness="0" Cursor="Hand"
+                                    FontSize="16" Click="TogglePwd_Click"/>
+                        </Grid>
 
                         <TextBlock Text="Confirmer le mot de passe *" FontSize="12" Foreground="#374151"/>
-                        <PasswordBox x:Name="ConfirmPwdBox" Height="36" Padding="8,0" Margin="0,4,0,20"
-                                     PasswordChanged="ConfirmPwdBox_PasswordChanged"/>
+                        <Grid Margin="0,4,0,20" Height="36">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="40"/>
+                            </Grid.ColumnDefinitions>
+                            <PasswordBox x:Name="ConfirmPwdBox" Grid.Column="0" Height="36" Padding="8,0"
+                                         PasswordChanged="ConfirmPwdBox_PasswordChanged"/>
+                            <TextBox x:Name="ConfirmPwdClear" Grid.Column="0" Height="36" Padding="8,0"
+                                     Visibility="Collapsed" TextChanged="ConfirmPwdClear_TextChanged"/>
+                            <Button x:Name="ToggleConfirmPwdBtn" Grid.Column="1" Content="👁" Height="36"
+                                    Background="Transparent" BorderThickness="0" Cursor="Hand"
+                                    FontSize="16" Click="ToggleConfirmPwd_Click"/>
+                        </Grid>
 
                         <!-- Sélection des rôles initiaux -->
                         <TextBlock Text="Rôles initiaux" FontSize="14" FontWeight="SemiBold"

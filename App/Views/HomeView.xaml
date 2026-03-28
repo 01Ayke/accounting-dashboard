@@ -25,56 +25,85 @@
 
         <!-- Header -->
         <Border Grid.Row="0" Padding="30" CornerRadius="12" Background="#CCFFFFFF" HorizontalAlignment="Center" MaxWidth="1100" Effect="{DynamicResource DropShadowEffect}">
-            <StackPanel>
-                <TextBlock Text="Portefeuille Contrats" FontSize="28" FontWeight="Bold" Margin="0,0,0,5" HorizontalAlignment="Center"/>
-                <TextBlock Text="Gérez vos dossiers clients et accédez aux informations clés" FontSize="14" Foreground="Gray" HorizontalAlignment="Center"/>
+            <Grid>
+                <StackPanel HorizontalAlignment="Center">
+                    <TextBlock Text="Portefeuille Contrats" FontSize="28" FontWeight="Bold" Margin="0,0,0,5" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Gérez vos dossiers clients et accédez aux informations clés" FontSize="14" Foreground="Gray" HorizontalAlignment="Center"/>
 
-                <!-- Nouveau menu d'actions -->
-                <WrapPanel HorizontalAlignment="Center" Margin="0,20,0,0">
-                    <Button Content="+ Créer dossier"
-                            Margin="5"
-                            Padding="12,6"
-                            Background="#4CAF50"
-                            Foreground="White"
-                            Click="AddButton_Click"/>
+                    <!-- Nouveau menu d'actions -->
+                    <WrapPanel HorizontalAlignment="Center" Margin="0,20,0,0">
+                        <Button Content="+ Créer dossier"
+                                Margin="5"
+                                Padding="12,6"
+                                Background="#4CAF50"
+                                Foreground="White"
+                                Click="AddButton_Click"/>
 
-                    <Button Content="Attribuer dossier"
-                            Margin="5"
-                            Padding="12,6"
-                            Background="#1976D2"
-                            Foreground="White"
-                            Click="AssignDossierButton_Click"/>
+                        <Button Content="Attribuer dossier"
+                                Margin="5"
+                                Padding="12,6"
+                                Background="#1976D2"
+                                Foreground="White"
+                                Click="AssignDossierButton_Click"/>
 
-                    <Button Content="Utilisateurs / rôles"
-                            Margin="5"
-                            Padding="12,6"
-                            Background="#7B1FA2"
-                            Foreground="White"
-                            Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}"
-                            Click="UserManagementButton_Click"/>
+                        <Button Content="Utilisateurs / rôles"
+                                Margin="5"
+                                Padding="12,6"
+                                Background="#7B1FA2"
+                                Foreground="White"
+                                Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}"
+                                Click="UserManagementButton_Click"/>
 
-                    <Button Content="Créer compte"
-                            Margin="5"
-                            Padding="12,6"
-                            Background="#F57C00"
-                            Foreground="White"
-                            Click="CreateCompteButton_Click"/>
+                        <Button Content="Créer compte"
+                                Margin="5"
+                                Padding="12,6"
+                                Background="#F57C00"
+                                Foreground="White"
+                                Click="CreateCompteButton_Click"/>
 
-                    <Button Content="Grand Livre"
-                            Margin="5"
-                            Padding="12,6"
-                            Background="#455A64"
-                            Foreground="White"
-                            Click="GrandLivreButton_Click"/>
+                        <Button Content="Grand Livre"
+                                Margin="5"
+                                Padding="12,6"
+                                Background="#455A64"
+                                Foreground="White"
+                                Click="GrandLivreButton_Click"/>
 
-                    <Button Content="Documents"
-                            Margin="5"
-                            Padding="12,6"
-                            Background="#0891B2"
-                            Foreground="White"
-                            Click="DocumentsButton_Click"/>
-                </WrapPanel>
-            </StackPanel>
+                        <Button Content="Documents"
+                                Margin="5"
+                                Padding="12,6"
+                                Background="#0891B2"
+                                Foreground="White"
+                                Click="DocumentsButton_Click"/>
+                    </WrapPanel>
+                </StackPanel>
+                <Button Content="⏻ Déconnexion"
+                        HorizontalAlignment="Right" VerticalAlignment="Top"
+                        Padding="12,6" Background="#DC2626" Foreground="White"
+                        Click="LogoutButton_Click">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#DC2626"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Cursor" Value="Hand"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="8" Padding="12,6">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="bd" Property="Background" Value="#B91C1C"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </Grid>
         </Border>
 
         <!-- Bloc principal -->

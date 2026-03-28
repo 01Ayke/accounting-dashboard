@@ -53,11 +53,28 @@ public class UserManagementViewModel : INotifyPropertyChanged
     private string _confirmPassword = "";
     private string _nom = "";
     private string _prenom = "";
+    private string? _emailError;
 
     public string Email
     {
         get => _email;
-        set { if (_email != value) { _email = value; OnPropertyChanged(); } }
+        set
+        {
+            if (_email != value)
+            {
+                _email = value;
+                OnPropertyChanged();
+                EmailError = (!string.IsNullOrEmpty(value) && !value.Contains('@'))
+                    ? "Email invalide (@ manquant)"
+                    : null;
+            }
+        }
+    }
+
+    public string? EmailError
+    {
+        get => _emailError;
+        set { if (_emailError != value) { _emailError = value; OnPropertyChanged(); } }
     }
 
     public string Password

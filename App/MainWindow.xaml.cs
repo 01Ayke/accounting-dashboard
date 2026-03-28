@@ -76,5 +76,11 @@ namespace App
         {
             MainContent.Content = new DocumentView();
         }
+
+        public void NavigateToLogin()
+        {
+            _homeView = null;
+            MainContent.Content = new LoginView();
+        }
     }
 }

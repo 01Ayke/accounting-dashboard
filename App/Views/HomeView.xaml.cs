@@ -1,6 +1,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using App.Models;
+using App.Services;
 
 namespace App.Views;
 
@@ -120,5 +121,13 @@ public partial class HomeView : UserControl
         {
             mainWindow.NavigateToDocuments();
         }
+    }
+
+    private async void LogoutButton_Click(object sender, RoutedEventArgs e)
+    {
+        var authService = new AuthService();
+        await authService.LogoutAsync();
+        var mainWindow = Window.GetWindow(this) as MainWindow;
+        mainWindow?.NavigateToLogin();
     }
 }
