@@ -43,6 +43,8 @@ namespace App
         {
             _homeView ??= new HomeView();
             MainContent.Content = _homeView;
+            if (_homeView.DataContext is HomeViewModel vm)
+                _ = vm.RefreshAsync();
         }
 
         public void NavigateToCreateDossier()
@@ -73,6 +75,12 @@ namespace App
         public void NavigateToDocuments()
         {
             MainContent.Content = new DocumentView();
+        }
+
+        public void NavigateToLogin()
+        {
+            _homeView = null;
+            MainContent.Content = new LoginView();
         }
     }
 }

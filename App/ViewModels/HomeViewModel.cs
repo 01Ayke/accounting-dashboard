@@ -103,6 +103,8 @@ public class HomeViewModel : INotifyPropertyChanged
         }
     }
 
+    public bool IsAdmin => SessionManager.IsAdmin;
+
     public RelayCommand<DossierFactice> SupprimerDossierCommand { get; }
 
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -124,31 +126,32 @@ public class HomeViewModel : INotifyPropertyChanged
             }
         });
 
-        System.Diagnostics.Debug.WriteLine("HomeViewModel: Appel LoadDossiersAsync");
-        _ = LoadDossiersAsync();
+        System.Diagnostics.Debug.WriteLine("HomeViewModel: Appel RefreshAsync");
+        _ = RefreshAsync();
     }
 
-    private async Task LoadDossiersAsync()
+    public async Task RefreshAsync()
     {
-        System.Diagnostics.Debug.WriteLine("LoadDossiersAsync: Démarrage");
+        System.Diagnostics.Debug.WriteLine("RefreshAsync: Démarrage");
 
         var dossiers = await _dossierService.GetTousLesDossiersAsync();
 
-        System.Diagnostics.Debug.WriteLine($"LoadDossiersAsync: {dossiers?.Count ?? 0} dossiers reçus");
+        System.Diagnostics.Debug.WriteLine($"RefreshAsync: {dossiers?.Count ?? 0} dossiers reçus");
 
         if (dossiers != null)
         {
+            Dossiers.Clear();
             foreach (var dossier in dossiers)
             {
                 Dossiers.Add(dossier);
-                System.Diagnostics.Debug.WriteLine($"LoadDossiersAsync: Dossier ajouté - {dossier.NomEntreprise}");
+                System.Diagnostics.Debug.WriteLine($"RefreshAsync: Dossier ajouté - {dossier.NomEntreprise}");
             }
 
             FiltrerEtTrier();
         }
         else
         {
-            System.Diagnostics.Debug.WriteLine("LoadDossiersAsync: Aucun dossier reçu");
+            System.Diagnostics.Debug.WriteLine("RefreshAsync: Aucun dossier reçu");
         }
     }
 

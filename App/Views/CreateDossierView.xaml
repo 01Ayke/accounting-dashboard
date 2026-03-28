@@ -56,12 +56,16 @@
                                     <TextBlock Text="Téléphone" FontSize="12" Foreground="#374151"/>
                                     <TextBox Text="{Binding Telephone, UpdateSourceTrigger=PropertyChanged}"
                                              Height="36" Padding="8,0" Margin="0,4,0,0"/>
+                                    <TextBlock Text="{Binding TelephoneError}" Foreground="#DC2626" FontSize="11" Margin="0,2,0,0"
+                                               Visibility="{Binding TelephoneError, Converter={StaticResource StringToVisibilityConverter}}"/>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="2">
                                     <TextBlock Text="Email professionnel" FontSize="12" Foreground="#374151"/>
                                     <TextBox Text="{Binding Mail, UpdateSourceTrigger=PropertyChanged}"
                                              Height="36" Padding="8,0" Margin="0,4,0,0"/>
+                                    <TextBlock Text="{Binding EmailError}" Foreground="#DC2626" FontSize="11" Margin="0,2,0,0"
+                                               Visibility="{Binding EmailError, Converter={StaticResource StringToVisibilityConverter}}"/>
                                 </StackPanel>
                             </Grid>
 
@@ -123,20 +127,20 @@
 
                             <Grid Margin="0,0,0,12">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="10"/>
                                     <ColumnDefinition Width="120"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
 
                                 <StackPanel Grid.Column="0">
-                                    <TextBlock Text="Ville" FontSize="12" Foreground="#374151"/>
-                                    <TextBox Text="{Binding Ville, UpdateSourceTrigger=PropertyChanged}"
-                                             Height="36" Padding="8,0" Margin="0,4,0,0"/>
+                                    <TextBlock Text="Code postal" FontSize="12" Foreground="#374151"/>
+                                    <TextBox Text="{Binding CodePostal, UpdateSourceTrigger=PropertyChanged}"
+                                             Height="36" Padding="8,0" Margin="0,4,0,0" MaxLength="5"/>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="2">
-                                    <TextBlock Text="Code postal" FontSize="12" Foreground="#374151"/>
-                                    <TextBox Text="{Binding CodePostal, UpdateSourceTrigger=PropertyChanged}"
+                                    <TextBlock Text="Ville" FontSize="12" Foreground="#374151"/>
+                                    <TextBox Text="{Binding Ville, UpdateSourceTrigger=PropertyChanged}"
                                              Height="36" Padding="8,0" Margin="0,4,0,0"/>
                                 </StackPanel>
                             </Grid>

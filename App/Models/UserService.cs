@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Threading.Tasks;
 using App.Models;
@@ -142,6 +144,25 @@ public class UserService
     }
 
     /// <summary>
+    /// Vérifie si l'utilisateur courant est admin en appelant un endpoint admin-only.
+    /// Retourne true si la réponse est 200 OK.
+    /// </summary>
+    public async Task<bool> CheckIsAdminAsync()
+    {
+        try
+        {
+            SetAuthHeader();
+            var response = await _httpClient.GetAsync("role-manager");
+            return response.IsSuccessStatusCode;
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"UserService.CheckIsAdmin: Exception — {ex.Message}");
+            return false;
+        }
+    }
+
+    /// <summary>
     /// Récupère la liste des utilisateurs via GET /role-manager.
     /// </summary>
     public async Task<List<UserItem>> GetUsersAsync()
@@ -175,5 +196,21 @@ public class UserItem
 {
     public int Id { get; set; }
     public string Mail { get; set; } = "";
-    public override string ToString() => $"[{Id}] {Mail}";
+    public override string ToString() => Mail;
+}
+
+public class RoleCheckItem : INotifyPropertyChanged
+{
+    public string Name { get; set; } = "";
+
+    private bool _isChecked;
+    public bool IsChecked
+    {
+        get => _isChecked;
+        set { if (_isChecked != value) { _isChecked = value; OnPropertyChanged(); } }
+    }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+    protected void OnPropertyChanged([CallerMemberName] string? name = null)
+        => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 }

@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using App.Helpers;
@@ -12,6 +13,39 @@ public class UserManagementViewModel : INotifyPropertyChanged
 {
     private readonly UserService _userService = new UserService();
 
+    // ─── Liste des utilisateurs ───────────────────────────────────────────────
+
+    public ObservableCollection<UserItem> Users { get; } = new();
+
+    private UserItem? _selectedUser;
+    public UserItem? SelectedUser
+    {
+        get => _selectedUser;
+        set
+        {
+            if (_selectedUser != value)
+            {
+                _selectedUser = value;
+                OnPropertyChanged();
+                AssignRoleMessage = null;
+                _ = LoadUserRolesAsync();
+            }
+        }
+    }
+
+    // ─── Rôles de l'utilisateur sélectionné ──────────────────────────────────
+
+    public ObservableCollection<RoleCheckItem> UserRoles { get; } = new();
+
+    public int ActiveRoleCount => UserRoles.Count(r => r.IsChecked);
+
+    private bool _rolesLoading;
+    public bool RolesLoading
+    {
+        get => _rolesLoading;
+        set { if (_rolesLoading != value) { _rolesLoading = value; OnPropertyChanged(); } }
+    }
+
     // ─── Création utilisateur ─────────────────────────────────────────────────
 
     private string _email = "";
@@ -19,11 +53,28 @@ public class UserManagementViewModel : INotifyPropertyChanged
     private string _confirmPassword = "";
     private string _nom = "";
     private string _prenom = "";
+    private string? _emailError;
 
     public string Email
     {
         get => _email;
-        set { if (_email != value) { _email = value; OnPropertyChanged(); } }
+        set
+        {
+            if (_email != value)
+            {
+                _email = value;
+                OnPropertyChanged();
+                EmailError = (!string.IsNullOrEmpty(value) && !value.Contains('@'))
+                    ? "Email invalide (@ manquant)"
+                    : null;
+            }
+        }
+    }
+
+    public string? EmailError
+    {
+        get => _emailError;
+        set { if (_emailError != value) { _emailError = value; OnPropertyChanged(); } }
     }
 
     public string Password
@@ -50,29 +101,8 @@ public class UserManagementViewModel : INotifyPropertyChanged
         set { if (_prenom != value) { _prenom = value; OnPropertyChanged(); } }
     }
 
-    // ─── Attribution de rôle ─────────────────────────────────────────────────
-
-    private string _userId = "";
-    private string _selectedRole = "";
-
-    public string UserId
-    {
-        get => _userId;
-        set { if (_userId != value) { _userId = value; OnPropertyChanged(); } }
-    }
-
-    public string SelectedRole
-    {
-        get => _selectedRole;
-        set { if (_selectedRole != value) { _selectedRole = value; OnPropertyChanged(); } }
-    }
-
-    // Rôles disponibles dans le backend
-    public ObservableCollection<string> AvailableRoles { get; } = new()
-    {
-        "USER", "ADMIN", "EXPERT", "COMPTA_CONF", "COMPTA_JR",
-        "ASSISTANT", "STAGIAIRE", "CLIENT"
-    };
+    // Rôles à attribuer à la création
+    public ObservableCollection<RoleCheckItem> NewUserRoles { get; } = new();
 
     // ─── Messages ─────────────────────────────────────────────────────────────
 
@@ -112,10 +142,76 @@ public class UserManagementViewModel : INotifyPropertyChanged
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
+    private static readonly string[] AvailableRoleNames =
+        { "USER", "ADMIN", "EXPERT", "COMPTA_CONF", "COMPTA_JR", "ASSISTANT", "STAGIAIRE", "CLIENT" };
+
     public UserManagementViewModel()
     {
         CreateUserCommand = new RelayCommand<object>(_ => _ = CreateUserAsync());
-        AssignRoleCommand = new RelayCommand<object>(_ => _ = AssignRoleAsync());
+        AssignRoleCommand = new RelayCommand<object>(_ => _ = ApplyRolesAsync());
+
+        // Initialiser les collections de rôles
+        foreach (var role in AvailableRoleNames)
+        {
+            var userRole = new RoleCheckItem { Name = role };
+            userRole.PropertyChanged += (_, _) => OnPropertyChanged(nameof(ActiveRoleCount));
+            UserRoles.Add(userRole);
+
+            NewUserRoles.Add(new RoleCheckItem { Name = role });
+        }
+
+        _ = LoadUsersAsync();
+    }
+
+    private async Task LoadUsersAsync()
+    {
+        var users = await _userService.GetUsersAsync();
+        Users.Clear();
+        foreach (var u in users)
+            Users.Add(u);
+    }
+
+    private async Task LoadUserRolesAsync()
+    {
+        if (SelectedUser == null)
+        {
+            foreach (var r in UserRoles) r.IsChecked = false;
+            return;
+        }
+
+        RolesLoading = true;
+        try
+        {
+            var currentRoles = await _userService.GetUserRolesAsync(SelectedUser.Id);
+            foreach (var item in UserRoles)
+                item.IsChecked = currentRoles.Contains(item.Name);
+            OnPropertyChanged(nameof(ActiveRoleCount));
+        }
+        finally
+        {
+            RolesLoading = false;
+        }
+    }
+
+    private async Task ApplyRolesAsync()
+    {
+        AssignRoleMessage = null;
+        AssignRoleSuccess = false;
+
+        if (SelectedUser == null)
+        {
+            AssignRoleMessage = "Veuillez sélectionner un utilisateur.";
+            return;
+        }
+
+        var roles = string.Join(",", UserRoles.Where(r => r.IsChecked).Select(r => r.Name));
+
+        var (success, msg) = await _userService.AssignRoleAsync(SelectedUser.Id, roles);
+        AssignRoleSuccess = success;
+        AssignRoleMessage = msg;
+
+        if (success)
+            await LoadUserRolesAsync();
     }
 
     private async Task CreateUserAsync()
@@ -153,30 +249,35 @@ public class UserManagementViewModel : INotifyPropertyChanged
 
         if (success)
         {
+            var selectedRoles = NewUserRoles.Where(r => r.IsChecked).ToList();
+
+            if (selectedRoles.Any())
+            {
+                // Rafraîchir la liste pour obtenir l'ID du nouvel utilisateur
+                await LoadUsersAsync();
+                var createdEmail = Email;
+                var newUser = Users.FirstOrDefault(u =>
+                    u.Mail.Equals(createdEmail, System.StringComparison.OrdinalIgnoreCase));
+
+                if (newUser != null)
+                {
+                    var rolesStr = string.Join(",", selectedRoles.Select(r => r.Name));
+                    var (roleSuccess, roleMsg) = await _userService.AssignRoleAsync(newUser.Id, rolesStr);
+                    CreateUserMessage = roleSuccess
+                        ? $"Compte créé et rôles attribués."
+                        : $"Compte créé mais erreur rôles : {roleMsg}";
+                }
+                else
+                {
+                    CreateUserMessage = "Compte créé. Impossible d'attribuer les rôles automatiquement.";
+                }
+            }
+
             Email = ""; Password = ""; ConfirmPassword = ""; Nom = ""; Prenom = "";
+            foreach (var r in NewUserRoles) r.IsChecked = false;
+
+            await LoadUsersAsync();
         }
-    }
-
-    private async Task AssignRoleAsync()
-    {
-        AssignRoleMessage = null;
-        AssignRoleSuccess = false;
-
-        if (!int.TryParse(UserId, out var userId))
-        {
-            AssignRoleMessage = "ID utilisateur invalide (entier requis).";
-            return;
-        }
-
-        if (string.IsNullOrWhiteSpace(SelectedRole))
-        {
-            AssignRoleMessage = "Veuillez sélectionner un rôle.";
-            return;
-        }
-
-        var (success, msg) = await _userService.AssignRoleAsync(userId, SelectedRole);
-        AssignRoleSuccess = success;
-        AssignRoleMessage = msg;
     }
 
     protected void OnPropertyChanged([CallerMemberName] string? name = null)

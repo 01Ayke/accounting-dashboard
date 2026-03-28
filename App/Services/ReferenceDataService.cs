@@ -16,12 +16,38 @@ public class ReferenceDataService
 {
     private readonly HttpClient _httpClient;
 
+    private static readonly HttpClient _geoHttpClient = new HttpClient
+    {
+        BaseAddress = new Uri("https://geo.api.gouv.fr/")
+    };
+
     public ReferenceDataService()
     {
         _httpClient = new HttpClient
         {
             BaseAddress = new Uri("http://localhost:7070/")
         };
+    }
+
+    public async Task<List<string>> GetCityByPostalCodeAsync(string postalCode)
+    {
+        try
+        {
+            var json = await _geoHttpClient.GetStringAsync($"communes?codePostal={postalCode}&fields=nom");
+            using var doc = JsonDocument.Parse(json);
+            var list = new List<string>();
+            foreach (var item in doc.RootElement.EnumerateArray())
+            {
+                if (item.TryGetProperty("nom", out var nom))
+                    list.Add(nom.GetString() ?? "");
+            }
+            return list;
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"ReferenceDataService.GetCityByPostalCodeAsync: {ex.Message}");
+            return new List<string>();
+        }
     }
 
     public async Task<List<FormeJuridique>> GetFormesJuridiquesAsync()
