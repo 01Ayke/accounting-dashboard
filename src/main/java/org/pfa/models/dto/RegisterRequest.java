@@ -3,6 +3,7 @@ package org.pfa.models.dto;
 import java.util.List;
 
 import io.javalin.http.Context;
+import org.pfa.models.Roles_enum;
 
 public class RegisterRequest {
     private String mail;
@@ -20,7 +21,12 @@ public class RegisterRequest {
         this.nom = ctx.formParam("nom");
         this.prenom = ctx.formParam("prenom");
         this.code = ctx.formParam("code");
-        this.roles = List.of(ctx.formParam("roles").split(","));
+        String rolesParam = ctx.formParam("roles");
+        if (rolesParam == null || rolesParam.isBlank()) {
+            this.roles = List.of(Roles_enum.USER.name());
+        } else {
+            this.roles = List.of(rolesParam.split(","));
+        }
     }
 
     public RegisterRequest(String mail, String password, String nom, String prenom, String code, List<String> roles) {

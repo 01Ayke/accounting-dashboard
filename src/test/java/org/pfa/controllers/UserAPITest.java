@@ -123,8 +123,8 @@ public class UserAPITest {
 
         String email = "user" + System.currentTimeMillis() + "@pfa.fr";
         createdEmails.add(email);
-        String registerBody = "mail=" + email + "&password=password&nom=Test&prenom=User&code=C"
-                + System.currentTimeMillis();
+        String registerBody = "mail=" + email + "&password=password&nom=Test&prenom=User&code=C"+System.currentTimeMillis()+"&roles=EXPERT";
+                
 
         HttpRequest regReq = HttpRequest.newBuilder()
                 .uri(URI.create(baseUrl + "/register"))
