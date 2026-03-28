@@ -7,3 +7,4 @@ target/*
 *.vsidx
 App/.idea/*
 App/.vs/*
+App/obj/*
