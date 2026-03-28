@@ -52,7 +52,7 @@ public class Log {
         return parent.resolve("LOG.html").toString();
     }
 
-    static public synchronized void log(String message, Log_Type type, LOG_Location location) {
+    static public synchronized void log(String message, Log_Type type, Log_Location location) {
         if (!logPathDisplayed) {
             System.out.println(ANSI_CYAN + "[LOG] Using file: " + logFilePath + ANSI_RESET);
             System.out.println(ANSI_CYAN + "[LOG] Using html: " + htmlLogFilePath + ANSI_RESET);

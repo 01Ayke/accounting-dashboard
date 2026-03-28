@@ -1,6 +1,6 @@
 package org.pfa.models;
 
-import org.pfa.models.LOG.LOG_Location;
+import org.pfa.models.LOG.Log_Location;
 import org.pfa.models.LOG.Log;
 import org.pfa.models.LOG.Log_Type;
 
@@ -30,7 +30,7 @@ public class Roles {
     }
 
     public Integer getIdRole(){
-        Log.log("Getting ID for role " + this.code, Log_Type.INFO, LOG_Location.Model);
+        Log.log("Getting ID for role " + this.code, Log_Type.INFO, Log_Location.Model);
         return id_role;
     }
 

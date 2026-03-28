@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 
 import org.pfa.models.Roles_enum;
-import org.pfa.models.LOG.LOG_Location;
+import org.pfa.models.LOG.Log_Location;
 import org.pfa.models.LOG.Log;
 import org.pfa.models.LOG.Log_Type;
 import org.pfa.models.dto.Response;
@@ -28,17 +28,17 @@ public class RoleController extends Controller {
     public void get_all_users(Context ctx){
         if(super.checkToken(ctx) && super.checkRole(ctx, Roles_enum.ADMIN)){
             Response response = new Response("success", "Voici la liste de tous les utilisateurs", 200, userService.getAll());
-            Log.log("Retrieving all users : " + userService.getAll(), Log_Type.INFO, LOG_Location.Controller);
+            Log.log("Retrieving all users : " + userService.getAll(), Log_Type.INFO, Log_Location.Controller);
             response.setContextData(ctx);
         }
-        Log.log("Permission denied for retrieving all users", Log_Type.ERROR, LOG_Location.Controller);
+        Log.log("Permission denied for retrieving all users", Log_Type.ERROR, Log_Location.Controller);
     }
 
     public void change_role(Context ctx){
         if(super.checkToken(ctx) && super.checkRole(ctx, Roles_enum.ADMIN)){
             
             String idStr = ctx.pathParam("id");
-            Log.log("Changing role for user" + idStr, Log_Type.INFO, LOG_Location.Controller);
+            Log.log("Changing role for user" + idStr, Log_Type.INFO, Log_Location.Controller);
             List<Roles_enum> newRoles = new ArrayList<>();
             for (String roleStr : ctx.formParam("roles").split(",")) {
                 newRoles.add(Roles_enum.valueOf(roleStr.trim()));
@@ -46,16 +46,16 @@ public class RoleController extends Controller {
             boolean success = userService.changeRole(Integer.parseInt(idStr), newRoles);
             if(!success) {
                 Response response = new Response("error", "Failed to change role for user " + idStr, 500);
-                Log.log("Failed to change role for user " + idStr, Log_Type.ERROR, LOG_Location.Controller);
+                Log.log("Failed to change role for user " + idStr, Log_Type.ERROR, Log_Location.Controller);
                 response.setContext(ctx);
                 return;
             }
             Response response = new Response("success", "Rôle de l'utilisateur " + idStr + " changé en " + newRoles, 200);
-            Log.log("Role changed for user " + idStr, Log_Type.INFO, LOG_Location.Controller);
+            Log.log("Role changed for user " + idStr, Log_Type.INFO, Log_Location.Controller);
             response.setContext(ctx);
             return;
         }
-        Log.log("Permission denied for changing role", Log_Type.ERROR, LOG_Location.Controller);
+        Log.log("Permission denied for changing role", Log_Type.ERROR, Log_Location.Controller);
     }
 
     public void is_Admin(Context ctx) {
@@ -64,13 +64,13 @@ public class RoleController extends Controller {
             Integer userId = sessionManager.getUserIdFromToken(ctx.header("Authorization"));
             if(userService.getRoles(userId).contains(Roles_enum.ADMIN)) {
                 Response response = new Response("success", "L'utilisateur est un admin", 200);
-                Log.log("User is an admin", Log_Type.INFO, LOG_Location.Controller);
+                Log.log("User is an admin", Log_Type.INFO, Log_Location.Controller);
                 response.setContext(ctx);
                 return;
             }
             else{
                 Response response = new Response("error", "L'utilisateur n'est pas un admin", 500);
-                Log.log("User is not an admin", Log_Type.INFO, LOG_Location.Controller);
+                Log.log("User is not an admin", Log_Type.INFO, Log_Location.Controller);
                 response.setContext(ctx);
                 return;
             }
@@ -82,10 +82,10 @@ public class RoleController extends Controller {
         if(super.checkToken(ctx) && super.checkRole(ctx, Roles_enum.ADMIN)) {
             List<String> roles = roleService.getAllRoles();
             Response response = new Response("success", "Voici la liste de tous les rôles", 200, roles);
-            Log.log("Retrieving all roles : " + roles, Log_Type.INFO, LOG_Location.Controller);
+            Log.log("Retrieving all roles : " + roles, Log_Type.INFO, Log_Location.Controller);
             response.setContextData(ctx);
             return;
         }
-        Log.log("Permission denied for retrieving all roles", Log_Type.ERROR, LOG_Location.Controller);
+        Log.log("Permission denied for retrieving all roles", Log_Type.ERROR, Log_Location.Controller);
     }
 }

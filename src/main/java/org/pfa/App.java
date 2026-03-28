@@ -6,7 +6,7 @@ import org.pfa.routes.*;
 import org.pfa.services.SessionManager;
 import org.pfa.models.LOG.Log;
 import org.pfa.models.LOG.Log_Type;
-import org.pfa.models.LOG.LOG_Location;
+import org.pfa.models.LOG.Log_Location;
 
 
 public class App {
@@ -30,6 +30,6 @@ public class App {
         EcritureComptableRoutes.register(app, sessionManager);
         AffectationRoutes.register(app, sessionManager);
         Runtime.getRuntime().addShutdownHook(new Thread(sessionManager::shutdown));
-        Log.log("Server started on http://localhost:7070", Log_Type.INFO, LOG_Location.App);
+        Log.log("Server started on http://localhost:7070", Log_Type.INFO, Log_Location.App);
     }
 }

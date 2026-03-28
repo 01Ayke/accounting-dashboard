@@ -1,7 +1,7 @@
 package org.pfa.services;
 
 import org.pfa.models.SessionUser;
-import org.pfa.models.LOG.LOG_Location;
+import org.pfa.models.LOG.Log_Location;
 import org.pfa.models.LOG.Log;
 import org.pfa.models.LOG.Log_Type;
 
@@ -34,13 +34,13 @@ public class SessionManager {
             String oldToken = userSessions.get(userId);
             sessions.remove(oldToken);
         }
-        Log.log("Creating session for user " + userId, Log_Type.INFO, LOG_Location.Service);
+        Log.log("Creating session for user " + userId, Log_Type.INFO, Log_Location.Service);
         String token = UUID.randomUUID().toString();
         SessionUser session = new SessionUser(token, userId, TTL);
 
         sessions.put(token, session);
         userSessions.put(userId, token);
-        Log.log("Session created for user " + userId + " with token " + token, Log_Type.INFO, LOG_Location.Service);
+        Log.log("Session created for user " + userId + " with token " + token, Log_Type.INFO, Log_Location.Service);
         return token;
     }
 
@@ -48,18 +48,18 @@ public class SessionManager {
         SessionUser session = sessions.get(token);
 
         if (session == null) {
-            Log.log("Invalid session token: " + token, Log_Type.ERROR, LOG_Location.Service);
+            Log.log("Invalid session token: " + token, Log_Type.ERROR, Log_Location.Service);
             return null;
         }
         if (session.isExpired()) {
             invalidate(token);
-            Log.log("Expired session for user: " + session.getUserId(), Log_Type.ERROR, LOG_Location.Service);
+            Log.log("Expired session for user: " + session.getUserId(), Log_Type.ERROR, Log_Location.Service);
             return null;
         }
 
         // Sliding session
         session.refresh();
-        Log.log("Session validated and refreshed for user: " + session.getUserId(), Log_Type.INFO, LOG_Location.Service);
+        Log.log("Session validated and refreshed for user: " + session.getUserId(), Log_Type.INFO, Log_Location.Service);
         return session;
     }
 
@@ -67,7 +67,7 @@ public class SessionManager {
         SessionUser session = sessions.remove(token);
         if (session != null) {
             userSessions.remove(session.getUserId());
-            Log.log("Session invalidated for user " + session.getUserId(), Log_Type.INFO, LOG_Location.Service);
+            Log.log("Session invalidated for user " + session.getUserId(), Log_Type.INFO, Log_Location.Service);
         }
     }
 
@@ -76,7 +76,7 @@ public class SessionManager {
             sessions.entrySet().removeIf(entry -> {
                 if (entry.getValue().isExpired()) {
                     userSessions.remove(entry.getValue().getUserId());
-                    Log.log("Cleaning up expired session for user " + entry.getValue().getUserId(), Log_Type.INFO, LOG_Location.Service);
+                    Log.log("Cleaning up expired session for user " + entry.getValue().getUserId(), Log_Type.INFO, Log_Location.Service);
                     return true;
                 }
                 return false;

@@ -1,6 +1,6 @@
 package org.pfa.models.LOG;
 
-public enum LOG_Location {
+public enum Log_Location {
     Controller,
     Service,
     Model,

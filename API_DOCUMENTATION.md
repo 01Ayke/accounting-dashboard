@@ -99,6 +99,7 @@ Description: cree un utilisateur.
 - `nom` (obligatoire)
 - `prenom` (obligatoire)
 - `code` (optionnel dans la validation mais lu par le backend)
+- `roles` List des roles séparé par une virgule
 
 Succes `201`:
 
