@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
 import org.pfa.models.*;
+import org.pfa.models.dto.FileLight;
 import org.pfa.models.dto.Response;
 import org.pfa.services.*;
 
@@ -30,6 +31,12 @@ public class FileController extends Controller {
     // Renvoie la liste de tous les dossiers (pour l'écran de sélection des dossiers)
     public static void getAll(Context ctx) {
         List<File> files = fileService.getAll();
+        Response response = new Response("ok", files, 200);
+        response.setContext(ctx);
+    }
+
+    public static void getAllLight(Context ctx) {
+        List<FileLight> files = fileService.getAllLight();
         Response response = new Response("ok", files, 200);
         response.setContext(ctx);
     }

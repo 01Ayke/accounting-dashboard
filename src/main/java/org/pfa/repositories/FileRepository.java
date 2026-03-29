@@ -5,7 +5,9 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.pfa.config.HibernateUtil;
 import org.pfa.models.*;
+import org.pfa.models.dto.FileLight;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FileRepository {
@@ -38,6 +40,18 @@ public class FileRepository {
         }
         session.close();
         return files;
+    }
+
+    public List<FileLight> findAllLight() {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List<File> files = session.createQuery("from File", File.class).list();
+        List<FileLight> filesLight = new ArrayList<>();
+        for (File file: files) {
+            Hibernate.initialize(file.getRepresentants());
+            filesLight.add(new FileLight(file));
+        }
+        session.close();
+        return filesLight;
     }
 
     public File findById(Integer id) {
