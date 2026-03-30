@@ -33,6 +33,7 @@ public class HibernateUtil {
                     .addAnnotatedClass(TypeJournal.class)
                     .addAnnotatedClass(Immobilisation.class)
                     .addAnnotatedClass(ModeAmortissement.class)
+                    .addAnnotatedClass(Financement.class)
                     .buildSessionFactory();
         } catch (Throwable ex) {
             System.err.println("Erreur Hibernate : " + ex);

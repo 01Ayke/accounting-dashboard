@@ -1,5 +1,6 @@
 package org.pfa.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -30,7 +31,7 @@ public class Immobilisation {
     @Column(name = "base_amortissement_fiscal")
     private Float baseAmortissementFiscal;
 
-    private String commentaire;
+    private String commentaires;
 
     private String intitule;
 
@@ -43,6 +44,15 @@ public class Immobilisation {
     @ManyToOne
     @JoinColumn(name = "id_mode_amortissement_fiscal")
     private ModeAmortissement modeAmortissementFiscal;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_compte_immobilisation")
+    @JsonBackReference(value = "compte-immobilisation")
+    private Compte compte;
+
+    @ManyToOne
+    @JoinColumn(name = "id_financement")
+    private Financement financement;
 
     public Integer getIdImmobilisation() {
         return idImmobilisation;
@@ -76,11 +86,15 @@ public class Immobilisation {
         return intitule;
     }
 
-    public String getCommentaire() {
-        return commentaire;
+    public String getCommentaires() {
+        return commentaires;
     }
 
     public Boolean getActif() {
         return actif;
+    }
+
+    public Financement getFinancement() {
+        return financement;
     }
 }
