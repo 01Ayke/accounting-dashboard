@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -10,11 +12,30 @@ namespace App.ViewModels;
 public class AssignDossierViewModel : INotifyPropertyChanged
 {
     private readonly DossierService _dossierService = new DossierService();
+    private readonly UserService _userService = new UserService();
 
     private string _dossierId = "";
     private string _userId = "";
     private string? _message;
     private bool _isSuccess;
+    private UserItem? _selectedUser;
+
+    public ObservableCollection<UserItem> Users { get; } = new();
+
+    public UserItem? SelectedUser
+    {
+        get => _selectedUser;
+        set
+        {
+            if (_selectedUser != value)
+            {
+                _selectedUser = value;
+                OnPropertyChanged();
+                // mise à jour automatique de l'ID
+                UserId = value?.Id.ToString() ?? "";
+            }
+        }
+    }
 
     public string DossierId
     {
@@ -49,6 +70,15 @@ public class AssignDossierViewModel : INotifyPropertyChanged
     {
         AssignCommand  = new RelayCommand<object>(_ => _ = AssignAsync());
         RevokeCommand  = new RelayCommand<object>(_ => _ = RevokeAsync());
+        _ = LoadUsersAsync();
+    }
+
+    private async Task LoadUsersAsync()
+    {
+        var users = await _userService.GetUsersAsync();
+        Users.Clear();
+        foreach (var u in users)
+            Users.Add(u);
     }
 
     private async Task AssignAsync()
@@ -60,7 +90,7 @@ public class AssignDossierViewModel : INotifyPropertyChanged
         { Message = "ID dossier invalide (entier requis)."; return; }
 
         if (!int.TryParse(UserId, out var userId))
-        { Message = "ID utilisateur invalide (entier requis)."; return; }
+        { Message = "Veuillez sélectionner un utilisateur."; return; }
 
         var request = new AssignDossierRequest
         {
@@ -82,7 +112,7 @@ public class AssignDossierViewModel : INotifyPropertyChanged
         { Message = "ID dossier invalide."; return; }
 
         if (!int.TryParse(UserId, out var userId))
-        { Message = "ID utilisateur invalide."; return; }
+        { Message = "Veuillez sélectionner un utilisateur."; return; }
 
         var request = new AssignDossierRequest
         {

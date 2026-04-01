@@ -204,7 +204,7 @@
                         <TextBlock FontSize="13" Foreground="#1E40AF" FontWeight="SemiBold">
                             <Run Text="Rôles actifs : "/>
                             <Run Text="{Binding ActiveRoleCount, Mode=OneWay}"/>
-                            <Run Text=" / 8"/>
+                            <Run Text=" / 7"/>
                         </TextBlock>
                     </Border>
 
