@@ -20,7 +20,13 @@ public class RegisterRequest {
         this.password = ctx.formParam("password");
         this.nom = ctx.formParam("nom");
         this.prenom = ctx.formParam("prenom");
-        this.code = ctx.formParam("code");
+        try {
+            String code = ctx.formParam("code");
+            this.code = this.prenom + this.nom;
+        }
+        catch (Exception e) {
+            this.code = code;
+        }
         String rolesParam = ctx.formParam("roles");
         if (rolesParam == null || rolesParam.isBlank()) {
             this.roles = List.of(Roles_enum.USER.name());
@@ -34,7 +40,12 @@ public class RegisterRequest {
         this.password = password;
         this.nom = nom;
         this.prenom = prenom;
-        this.code = code;
+        if (code == null) {
+            this.code = this.prenom + this.nom;
+        }
+        else {
+            this.code = code;
+        }
         this.roles = roles;
     }
 
@@ -66,7 +77,7 @@ public class RegisterRequest {
                password != null && !password.isEmpty() &&
                nom != null && !nom.isEmpty() &&
                prenom != null && !prenom.isEmpty() &&
-               code != null && !code.isEmpty() &&
+//               code != null && !code.isEmpty() &&
                roles != null && !roles.isEmpty();
     }
 }
