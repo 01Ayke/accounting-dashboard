@@ -234,8 +234,23 @@ Erreur `500` (si l'utilisateur n'est pas ADMIN) :
   "message": "L'utilisateur n'est pas un admin"
 }
 ```
----
+### GET `/get-all-roles`
 
+Description: Récupérer la listes de tous les roles.
+
+- Auth requise: oui
+- Role requis: `ADMIN`
+
+Succes `200`:
+
+```json
+{
+  "status": "success",
+  "message": "Voici la liste de tous les rôles",
+  "data": ["ADMIN", "EXPERT", ... ]
+}
+```
+---
 ## 3) `DocumentRoutes.java`
 
 Ces routes ne font pas de `checkToken` dans le code actuel.

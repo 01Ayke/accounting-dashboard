@@ -30,6 +30,7 @@ public class RoleController extends Controller {
             Response response = new Response("success", "Voici la liste de tous les utilisateurs", 200, userService.getAll());
             Log.log("Retrieving all users : " + userService.getAll(), Log_Type.INFO, Log_Location.Controller);
             response.setContextData(ctx);
+            return;
         }
         Log.log("Permission denied for retrieving all users", Log_Type.ERROR, Log_Location.Controller);
     }
