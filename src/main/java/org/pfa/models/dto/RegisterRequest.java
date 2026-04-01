@@ -21,11 +21,10 @@ public class RegisterRequest {
         this.nom = ctx.formParam("nom");
         this.prenom = ctx.formParam("prenom");
         try {
-            String code = ctx.formParam("code");
-            this.code = this.prenom + this.nom;
+            this.code = ctx.formParam("code");
         }
         catch (Exception e) {
-            this.code = code;
+            this.code = this.prenom + this.nom;
         }
         String rolesParam = ctx.formParam("roles");
         if (rolesParam == null || rolesParam.isBlank()) {
