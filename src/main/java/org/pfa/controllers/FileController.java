@@ -64,7 +64,14 @@ public class FileController extends Controller {
         Address fileAdresse = file.getAdresse();
         file.setAdresse(adresseService.createOrGet(fileAdresse));
 
-        fileService.create(file);
+        try {
+            fileService.create(file);
+        }
+        catch (Exception e) {
+            Response response = new Response("error", "Dossier déjà existant", 400);
+            response.setContext(ctx);
+            return;
+        }
 
         initializeComptes(file);
         Response response = new Response("ok", Map.of("idDossier", file.getId()), 200);
