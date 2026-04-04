@@ -102,6 +102,12 @@ public class GrandLivreViewModel : INotifyPropertyChanged
             return;
         }
 
+        if (DateDebut.Value > DateFin.Value)
+        {
+            Message = "La date de début ne peut pas être supérieure à la date de fin.";
+            return;
+        }
+
         IsLoading = true;
         try
         {

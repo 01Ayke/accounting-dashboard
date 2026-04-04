@@ -5,6 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:App.ViewModels"
              mc:Ignorable="d"
+             Language="fr-FR"
              d:DesignHeight="700" d:DesignWidth="1100">
 
     <UserControl.DataContext>
@@ -42,14 +43,14 @@
                     <!-- Date début (DatePicker) -->
                     <StackPanel Margin="8,0">
                         <TextBlock Text="Date début *" FontSize="12" Foreground="#374151"/>
-                        <DatePicker SelectedDate="{Binding DateDebut, UpdateSourceTrigger=PropertyChanged}"
+                        <DatePicker SelectedDate="{Binding DateDebut}"
                                     Width="140" Height="36" Margin="0,4,0,0"/>
                     </StackPanel>
 
                     <!-- Date fin (DatePicker) -->
                     <StackPanel Margin="8,0">
                         <TextBlock Text="Date fin *" FontSize="12" Foreground="#374151"/>
-                        <DatePicker SelectedDate="{Binding DateFin, UpdateSourceTrigger=PropertyChanged}"
+                        <DatePicker SelectedDate="{Binding DateFin}"
                                     Width="140" Height="36" Margin="0,4,0,0"/>
                     </StackPanel>
 
