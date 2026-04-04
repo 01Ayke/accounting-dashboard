@@ -30,9 +30,11 @@
                     <StackPanel>
                         <TextBlock Text="Dossier concerné" FontSize="14" FontWeight="SemiBold"
                                    Foreground="#1D4ED8" Margin="0,0,0,8"/>
-                        <TextBlock Text="ID du dossier *" FontSize="12" Foreground="#374151"/>
-                        <TextBox Text="{Binding IdDossier, UpdateSourceTrigger=PropertyChanged}"
-                                 Margin="0,4,0,0" Height="36" Padding="8,0"/>
+                        <TextBlock Text="Sélectionner un dossier *" FontSize="12" Foreground="#374151"/>
+                        <ComboBox ItemsSource="{Binding Dossiers}"
+                                  SelectedItem="{Binding SelectedDossier, UpdateSourceTrigger=PropertyChanged}"
+                                  DisplayMemberPath="DenominationSociale"
+                                  Margin="0,4,0,0" Height="36" Padding="8,4"/>
                     </StackPanel>
                 </Border>
 

@@ -8,3 +8,4 @@ target/*
 App/.idea/*
 App/.vs/*
 App/obj/*
+App/bin/*

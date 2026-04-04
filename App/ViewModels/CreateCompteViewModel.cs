@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -10,17 +11,20 @@ namespace App.ViewModels;
 public class CreateCompteViewModel : INotifyPropertyChanged
 {
     private readonly CompteComptableService _compteService = new CompteComptableService();
+    private readonly DossierService _dossierService = new DossierService();
 
-    private string _idDossier = "";
+    private DossierFactice? _selectedDossier;
     private string _numeroCompte = "";
     private string _libelle = "";
     private string? _message;
     private bool _isSuccess;
 
-    public string IdDossier
+    public ObservableCollection<DossierFactice> Dossiers { get; } = new();
+
+    public DossierFactice? SelectedDossier
     {
-        get => _idDossier;
-        set { if (_idDossier != value) { _idDossier = value; OnPropertyChanged(); } }
+        get => _selectedDossier;
+        set { if (_selectedDossier != value) { _selectedDossier = value; OnPropertyChanged(); } }
     }
 
     public string NumeroCompte
@@ -54,6 +58,20 @@ public class CreateCompteViewModel : INotifyPropertyChanged
     public CreateCompteViewModel()
     {
         CreateCompteCommand = new RelayCommand<object>(_ => _ = CreateCompteAsync());
+        _ = LoadDossiersAsync();
+    }
+
+    private async Task LoadDossiersAsync()
+    {
+        var dossiers = await _dossierService.GetTousLesDossiersAsync();
+        if (dossiers != null)
+        {
+            Dossiers.Clear();
+            foreach (var d in dossiers)
+            {
+                Dossiers.Add(d);
+            }
+        }
     }
 
     private async Task CreateCompteAsync()
@@ -61,8 +79,8 @@ public class CreateCompteViewModel : INotifyPropertyChanged
         Message = null;
         IsSuccess = false;
 
-        if (!int.TryParse(IdDossier, out int idDossier))
-        { Message = "ID dossier invalide (entier requis)."; return; }
+        if (SelectedDossier == null)
+        { Message = "Veuillez sélectionner un dossier."; return; }
 
         if (string.IsNullOrWhiteSpace(NumeroCompte))
         { Message = "Le numéro de compte est obligatoire."; return; }
@@ -72,7 +90,7 @@ public class CreateCompteViewModel : INotifyPropertyChanged
 
         var request = new CreateCompteRequest
         {
-            IdDossier = idDossier,
+            IdDossier = SelectedDossier.IdDossier,
             Numero    = NumeroCompte,
             Libelle   = Libelle
         };

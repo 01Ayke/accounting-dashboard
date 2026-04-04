@@ -75,7 +75,7 @@
                             
                             <StackPanel Margin="0,0,0,20">
                                 <TextBlock Text="Raison Sociale" FontSize="11" Foreground="Gray" FontWeight="Bold" Margin="0,0,0,5"/>
-                                <TextBlock Text="{Binding Dossier.NomEntreprise}" FontSize="14" FontWeight="Bold" TextWrapping="Wrap"/>
+                                <TextBlock Text="{Binding Dossier.DenominationSociale}" FontSize="14" FontWeight="Bold" TextWrapping="Wrap"/>
                             </StackPanel>
 
                             <StackPanel Margin="0,0,0,20">

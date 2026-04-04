@@ -19,8 +19,24 @@ public class AssignDossierViewModel : INotifyPropertyChanged
     private string? _message;
     private bool _isSuccess;
     private UserItem? _selectedUser;
+    private DossierFactice? _selectedDossier;
 
+    public ObservableCollection<DossierFactice> Dossiers { get; } = new();
     public ObservableCollection<UserItem> Users { get; } = new();
+
+    public DossierFactice? SelectedDossier
+    {
+        get => _selectedDossier;
+        set
+        {
+            if (_selectedDossier != value)
+            {
+                _selectedDossier = value;
+                OnPropertyChanged();
+                DossierId = value?.IdDossier.ToString() ?? "";
+            }
+        }
+    }
 
     public UserItem? SelectedUser
     {
@@ -31,7 +47,6 @@ public class AssignDossierViewModel : INotifyPropertyChanged
             {
                 _selectedUser = value;
                 OnPropertyChanged();
-                // mise à jour automatique de l'ID
                 UserId = value?.Id.ToString() ?? "";
             }
         }
@@ -71,6 +86,15 @@ public class AssignDossierViewModel : INotifyPropertyChanged
         AssignCommand  = new RelayCommand<object>(_ => _ = AssignAsync());
         RevokeCommand  = new RelayCommand<object>(_ => _ = RevokeAsync());
         _ = LoadUsersAsync();
+        _ = LoadDossiersAsync();
+    }
+
+    private async Task LoadDossiersAsync()
+    {
+        var dossiers = await _dossierService.GetTousLesDossiersAsync();
+        Dossiers.Clear();
+        foreach (var d in dossiers)
+            Dossiers.Add(d);
     }
 
     private async Task LoadUsersAsync()

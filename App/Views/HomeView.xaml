@@ -260,7 +260,7 @@
                                     </Grid.ColumnDefinitions>
 
                                     <StackPanel Grid.Column="0">
-                                        <TextBlock Text="{Binding NomEntreprise}" FontWeight="SemiBold" FontSize="16" Margin="15,0,0,0"/>
+                                        <TextBlock Text="{Binding DenominationSociale}" FontWeight="SemiBold" FontSize="16" Margin="15,0,0,0"/>
                                         <TextBlock Text="{Binding Siret}" FontSize="11" Foreground="Gray" Margin="15,0,0,0"/>
                                     </StackPanel>
 

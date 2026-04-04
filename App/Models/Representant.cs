@@ -1,14 +1,27 @@
-﻿using System;
+using System.Text.Json.Serialization;
 
 namespace App.Models;
 
+/// <summary>
+/// Représentant tel que retourné par l'API backend (table representant).
+/// </summary>
 public class Representant
 {
-    public string NomEntreprise { get; set; } = string.Empty;
-    public string Siret { get; set; } = string.Empty;
+    [JsonPropertyName("id_representant")]
+    public int Id { get; set; }
 
-    public string Adresse { get; set; } = string.Empty;
-    public string EmailContact { get; set; } = string.Empty;
+    [JsonPropertyName("nom")]
+    public string Nom { get; set; } = "";
 
-    public DateTime DateDebutClient { get; set; } = DateTime.Now;
+    [JsonPropertyName("prenom")]
+    public string Prenom { get; set; } = "";
+
+    [JsonPropertyName("mail")]
+    public string Mail { get; set; } = "";
+
+    [JsonPropertyName("telephone")]
+    public string Telephone { get; set; } = "";
+
+    [JsonPropertyName("qualite")]
+    public string Qualite { get; set; } = "";
 }
