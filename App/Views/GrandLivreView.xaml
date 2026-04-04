@@ -30,25 +30,27 @@
                            HorizontalAlignment="Center" Margin="0,0,0,20"/>
 
                 <WrapPanel HorizontalAlignment="Center">
-                    <!-- ID Dossier -->
+                    <!-- Dossier (ComboBox) -->
                     <StackPanel Margin="8,0">
-                        <TextBlock Text="ID Dossier *" FontSize="12" Foreground="#374151"/>
-                        <TextBox Text="{Binding IdDossier, UpdateSourceTrigger=PropertyChanged}"
-                                 Width="110" Height="36" Padding="8,0" Margin="0,4,0,0"/>
+                        <TextBlock Text="Sélectionner un dossier *" FontSize="12" Foreground="#374151"/>
+                        <ComboBox ItemsSource="{Binding Dossiers}"
+                                  SelectedItem="{Binding SelectedDossier, UpdateSourceTrigger=PropertyChanged}"
+                                  DisplayMemberPath="DenominationSociale"
+                                  Width="180" Height="36" Padding="8,4" Margin="0,4,0,0"/>
                     </StackPanel>
 
-                    <!-- Date début -->
+                    <!-- Date début (DatePicker) -->
                     <StackPanel Margin="8,0">
-                        <TextBlock Text="Date début (AAAA-MM-JJ)" FontSize="12" Foreground="#374151"/>
-                        <TextBox Text="{Binding DateDebut, UpdateSourceTrigger=PropertyChanged}"
-                                 Width="160" Height="36" Padding="8,0" Margin="0,4,0,0"/>
+                        <TextBlock Text="Date début *" FontSize="12" Foreground="#374151"/>
+                        <DatePicker SelectedDate="{Binding DateDebut, UpdateSourceTrigger=PropertyChanged}"
+                                    Width="140" Height="36" Margin="0,4,0,0"/>
                     </StackPanel>
 
-                    <!-- Date fin -->
+                    <!-- Date fin (DatePicker) -->
                     <StackPanel Margin="8,0">
-                        <TextBlock Text="Date fin (AAAA-MM-JJ)" FontSize="12" Foreground="#374151"/>
-                        <TextBox Text="{Binding DateFin, UpdateSourceTrigger=PropertyChanged}"
-                                 Width="160" Height="36" Padding="8,0" Margin="0,4,0,0"/>
+                        <TextBlock Text="Date fin *" FontSize="12" Foreground="#374151"/>
+                        <DatePicker SelectedDate="{Binding DateFin, UpdateSourceTrigger=PropertyChanged}"
+                                    Width="140" Height="36" Margin="0,4,0,0"/>
                     </StackPanel>
 
                     <!-- Boutons -->
