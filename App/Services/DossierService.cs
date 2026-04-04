@@ -63,7 +63,11 @@ public class DossierService
         {
             System.Diagnostics.Debug.WriteLine($"DossierService.GetDossierFileAsync: GET /files/{dossierId}");
             var response = await _httpClient.GetAsync($"files/{dossierId}");
-            if (!response.IsSuccessStatusCode) return null;
+            if (!response.IsSuccessStatusCode)
+            {
+                System.Diagnostics.Debug.WriteLine($"DossierService.GetDossierFileAsync: Erreur {response.StatusCode}");
+                return null;
+            }
 
             var json = await response.Content.ReadAsStringAsync();
             var dossier = System.Text.Json.JsonSerializer.Deserialize<DossierFactice>(
@@ -238,6 +242,36 @@ public class DossierService
         catch (Exception ex)
         {
             return (false, $"Erreur de connexion : {ex.Message}");
+        }
+    }
+
+    // ─── GET /affectations ────────────────────────────────────────────────────
+    // Authentification requise.
+    // Réponse : { "status": "ok", "message": [ ... historique ... ] }
+    public async Task<List<AffectationHistory>> GetHistoriqueAffectationsAsync()
+    {
+        try
+        {
+            SetAuthHeader();
+            var response = await _httpClient.GetAsync("affectations");
+            if (!response.IsSuccessStatusCode) return new List<AffectationHistory>();
+
+            var json = await response.Content.ReadAsStringAsync();
+            using var doc = JsonDocument.Parse(json);
+            var root = doc.RootElement;
+            var array = root.GetProperty("message");
+
+            var historique = System.Text.Json.JsonSerializer.Deserialize<List<AffectationHistory>>(
+                array.GetRawText(),
+                new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+            ) ?? new List<AffectationHistory>();
+
+            return historique;
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"DossierService.GetHistoriqueAffectationsAsync: Exception = {ex.Message}");
+            return new List<AffectationHistory>();
         }
     }
 }

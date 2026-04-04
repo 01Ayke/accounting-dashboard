@@ -23,6 +23,7 @@ public class AssignDossierViewModel : INotifyPropertyChanged
 
     public ObservableCollection<DossierFactice> Dossiers { get; } = new();
     public ObservableCollection<UserItem> Users { get; } = new();
+    public ObservableCollection<AffectationHistory> Histories { get; } = new();
 
     public DossierFactice? SelectedDossier
     {
@@ -87,6 +88,15 @@ public class AssignDossierViewModel : INotifyPropertyChanged
         RevokeCommand  = new RelayCommand<object>(_ => _ = RevokeAsync());
         _ = LoadUsersAsync();
         _ = LoadDossiersAsync();
+        _ = LoadHistoriqueAsync();
+    }
+
+    private async Task LoadHistoriqueAsync()
+    {
+        var historique = await _dossierService.GetHistoriqueAffectationsAsync();
+        Histories.Clear();
+        foreach (var h in historique)
+            Histories.Add(h);
     }
 
     private async Task LoadDossiersAsync()
@@ -125,6 +135,9 @@ public class AssignDossierViewModel : INotifyPropertyChanged
         var (success, msg) = await _dossierService.AssignDossierAsync(request);
         IsSuccess = success;
         Message = msg;
+
+        if (success)
+            await LoadHistoriqueAsync();
     }
 
     private async Task RevokeAsync()
@@ -147,6 +160,9 @@ public class AssignDossierViewModel : INotifyPropertyChanged
         var (success, msg) = await _dossierService.RevokeDossierAsync(request);
         IsSuccess = success;
         Message = msg;
+
+        if (success)
+            await LoadHistoriqueAsync();
     }
 
     protected void OnPropertyChanged([CallerMemberName] string? name = null)
