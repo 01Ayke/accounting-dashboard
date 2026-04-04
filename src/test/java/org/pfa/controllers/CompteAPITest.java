@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.Javalin;
 import org.junit.jupiter.api.*;
 import org.pfa.models.dto.FileAPIResponse;
-import org.pfa.routes.CompteRoutes;
+import org.pfa.routes.CompteAuxiliaireRoutes;
 import org.pfa.routes.FileRoutes;
 import org.pfa.routes.UserRoutes;
 import org.pfa.services.FileService;
@@ -59,7 +59,7 @@ public class CompteAPITest {
         SessionManager sessionManager = new SessionManager();
         FileRoutes.register(app, sessionManager);
         UserRoutes.register(app, sessionManager);
-        CompteRoutes.register(app, sessionManager);
+        CompteAuxiliaireRoutes.register(app, sessionManager);
         baseUrl = "http://localhost:" + app.port();
         client = HttpClient.newHttpClient();
 

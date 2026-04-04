@@ -20,7 +20,7 @@ public class App {
         DocumentRoutes.register(app);
         FileRoutes.register(app, sessionManager);
         GrandLivreRoutes.register(app, sessionManager);
-        CompteRoutes.register(app, sessionManager);
+        CompteAuxiliaireRoutes.register(app, sessionManager);
         RoleRoutes.register(app, sessionManager);
         FormeJuridiqueRoutes.register(app, sessionManager);
         RegimeFiscalRoutes.register(app, sessionManager);
@@ -30,6 +30,7 @@ public class App {
         EcritureComptableRoutes.register(app, sessionManager);
         AffectationRoutes.register(app, sessionManager);
         ModeAmortissementRoutes.register(app, sessionManager);
+        CompteRoutes.register(app, sessionManager);
         Runtime.getRuntime().addShutdownHook(new Thread(sessionManager::shutdown));
         Log.log("Server started on http://localhost:7070", Log_Type.INFO, Log_Location.App);
     }

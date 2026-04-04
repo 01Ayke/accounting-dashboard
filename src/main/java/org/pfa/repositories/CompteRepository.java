@@ -1,10 +1,13 @@
 package org.pfa.repositories;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.pfa.config.HibernateUtil;
 import org.pfa.models.Compte;
 import org.pfa.models.File;
+
+import java.util.List;
 
 public class CompteRepository {
     public void save(Compte compte) {
@@ -23,6 +26,19 @@ public class CompteRepository {
                 .getSingleResultOrNull();
         session.close();
         return compte;
+    }
+
+    public List<Compte> getByFile(File dossier) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List<Compte> comptes = session.createSelectionQuery("from Compte WHERE file = :dossier", Compte.class)
+                .setParameter("dossier", dossier)
+                .getResultList();
+        for (Compte compte: comptes) {
+            Hibernate.initialize(compte.getEcrituresComptables());
+            Hibernate.initialize(compte.getImmobilisations());
+        }
+        session.close();
+        return comptes;
     }
 
     public Compte findById(Integer id) {
