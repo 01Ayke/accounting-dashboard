@@ -114,15 +114,6 @@ public partial class HomeView : UserControl
         }
     }
 
-    private void DocumentsButton_Click(object sender, RoutedEventArgs e)
-    {
-        var mainWindow = Window.GetWindow(this) as MainWindow;
-        if (mainWindow != null)
-        {
-            mainWindow.NavigateToDocuments();
-        }
-    }
-
     private async void LogoutButton_Click(object sender, RoutedEventArgs e)
     {
         var authService = new AuthService();
