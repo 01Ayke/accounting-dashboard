@@ -28,7 +28,7 @@ public class RegisterRequest {
         }
         String rolesParam = ctx.formParam("roles");
         if (rolesParam == null || rolesParam.isBlank()) {
-            this.roles = List.of(Roles_enum.USER.name());
+            this.roles = List.of(Roles_enum.COMPTA_JR.name());
         } else {
             this.roles = List.of(rolesParam.split(","));
         }
