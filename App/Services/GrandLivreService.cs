@@ -112,8 +112,8 @@ public class GrandLivreService
 
                 foreach (var ecriture in compteEntry.Value.EnumerateArray())
                 {
-                    decimal debit  = ecriture.TryGetProperty("debit",  out var d) ? (decimal)d.GetDouble() : 0m;
-                    decimal credit = ecriture.TryGetProperty("credit", out var c) ? (decimal)c.GetDouble() : 0m;
+                    decimal debit  = ecriture.TryGetProperty("debit",  out var d) && d.ValueKind != JsonValueKind.Null ? (decimal)d.GetDouble() : 0m;
+                    decimal credit = ecriture.TryGetProperty("credit", out var c) && c.ValueKind != JsonValueKind.Null ? (decimal)c.GetDouble() : 0m;
                     solde += debit - credit;
 
                     // Date — peut être un objet Java LocalDate sérialisé en tableau ou en string
