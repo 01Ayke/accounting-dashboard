@@ -34,6 +34,7 @@ public class DossierService
     {
         try
         {
+			SetAuthHeader();
             System.Diagnostics.Debug.WriteLine("DossierService.GetTousLesDossiersAsync: Appel GET /files");
             var json = await _httpClient.GetStringAsync("files");
 

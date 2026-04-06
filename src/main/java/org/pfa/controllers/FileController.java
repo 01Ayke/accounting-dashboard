@@ -19,6 +19,7 @@ public class FileController extends Controller {
     private static final RegimeFiscalService regimeFiscalService = new RegimeFiscalService();
     private static final RegimeTVAService regimeTVAService = new RegimeTVAService();
     private static final FormeJuridiqueService formeJuridiqueService = new FormeJuridiqueService();
+    private static final UserService userService = new UserService();
 
     private static final ObjectMapper mapper = new ObjectMapper();
     private final SessionManager sessionManager;
@@ -35,10 +36,24 @@ public class FileController extends Controller {
         response.setContext(ctx);
     }
 
-    public static void getAllLight(Context ctx) {
-        List<FileLight> files = fileService.getAllLight();
-        Response response = new Response("ok", files, 200);
-        response.setContext(ctx);
+    public void getAllLight(Context ctx) {
+        if (super.checkToken(ctx)) {
+            if (super.checkRole(ctx, Roles_enum.EXPERT)) {
+                List<FileLight> files = fileService.getAllLight();
+                Response response = new Response("ok", files, 200);
+                response.setContext(ctx);
+            }
+            else {
+                Integer userId = super.getUserId(ctx);
+                User user = userService.getById(userId);
+                for (Roles role: user.getRoles()) {
+                    System.out.println(role.getCode());
+                }
+                List<FileLight> files = fileService.getAllUserFilesLight(user);
+                Response response = new Response("ok", files, 200);
+                response.setContext(ctx);
+            }
+        }
     }
 
     public static void getOne(Context ctx) {

@@ -29,7 +29,7 @@ public class AffectationDossierService {
         File file = fileRepo.findById(idDossier);
         if (file == null) throw new Exception("Dossier introuvable");
 
-        AffectationDossier affectation = new AffectationDossier(user, file, new Date(), true);
+        AffectationDossier affectation = new AffectationDossier(user, file, new Date(), true, true);
         affectationRepo.save(affectation);
     }
 

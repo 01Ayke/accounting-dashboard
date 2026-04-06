@@ -1,5 +1,6 @@
 package org.pfa.controllers;
 
+import org.pfa.models.User;
 import org.pfa.services.SessionManager;
 import io.javalin.http.Context;
 import org.pfa.models.dto.Response;
@@ -56,5 +57,14 @@ public class Controller {
         Response response = new Response("error", "Invalid or missing token", 401);
         response.setContext(ctx);
         return false;
+    }
+
+    public Integer getUserId(Context ctx) {
+        String token = ctx.header("Authorization");
+        if (token != null) {
+            Integer userId = sessionManager.getUserIdFromToken(token);
+            return userId;
+        }
+        return null;
     }
 }
