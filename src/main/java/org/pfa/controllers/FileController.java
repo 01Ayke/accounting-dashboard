@@ -16,10 +16,8 @@ public class FileController extends Controller {
     private static final FileService fileService = new FileService();
     private static final AdresseService adresseService = new AdresseService();
     private static final CompteService compteService = new CompteService();
-    private static final RegimeFiscalService regimeFiscalService = new RegimeFiscalService();
-    private static final RegimeTVAService regimeTVAService = new RegimeTVAService();
-    private static final FormeJuridiqueService formeJuridiqueService = new FormeJuridiqueService();
     private static final UserService userService = new UserService();
+    private static final AffectationDossierService affectationService = new AffectationDossierService();
 
     private static final ObjectMapper mapper = new ObjectMapper();
     private final SessionManager sessionManager;
@@ -75,12 +73,14 @@ public class FileController extends Controller {
             return;
         }
         File file = mapper.readValue(ctx.body(), File.class);
+        Integer userId = super.getUserId(ctx);
 
         Address fileAdresse = file.getAdresse();
         file.setAdresse(adresseService.createOrGet(fileAdresse));
 
         try {
-            fileService.create(file);
+            File createdFile = fileService.create(file);
+            affectationService.attribuer(userId, createdFile.getId());
         }
         catch (Exception e) {
             Response response = new Response("error", "Dossier déjà existant", 400);

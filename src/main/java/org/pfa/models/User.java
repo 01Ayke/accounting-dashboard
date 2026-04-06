@@ -39,7 +39,12 @@ public class User {
         this.mot_de_passe = mot_de_passe;
         this.nom = nom;
         this.prenom = prenom;
-        this.code = code;
+        if (code.isEmpty()) {
+            this.code = prenom + nom;
+        }
+        else {
+            this.code = code;
+        }
     }
 
     public String getMail() {
