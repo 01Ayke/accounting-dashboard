@@ -7,4 +7,5 @@ public class TypeCompteAuxiliaireService {
     private static final TypeCompteAuxiliaireRepository repo = new TypeCompteAuxiliaireRepository();
 
     public TypeCompteAuxiliaire fromCode(String code) { return repo.find(code); }
+    public TypeCompteAuxiliaire getOne(Integer id) { return repo.getOne(id); }
 }

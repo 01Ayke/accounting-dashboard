@@ -29,31 +29,26 @@ public class CompteAuxiliaireController extends Controller {
         }
         CreationCompteAuxiliaireRequest request = mapper.readValue(ctx.body(), CreationCompteAuxiliaireRequest.class);
 
-        File dossier = fileService.getOne(request.getIdDossier());
+        String nouveauNumero = request.getNumero();
 
-        if (!request.getNumero().matches("[0-9]*")) {
+        Compte compteRattachement = compteService.find(request.getIdCompteRattachement());
+
+        if (!request.getNumero().matches("[0-9]*")|| !nouveauNumero.contains(compteRattachement.getNumeroCompte())) {
             Response response = new Response("error", "Numéro de compte invalide", 400);
             response.setContext(ctx);
             return;
         }
 
-        if (dossier == null) {
-            Response response = new Response("error", "Dossier invalide", 400);
+        TypeCompteAuxiliaire type = typeCompteAuxiliaireService.getOne(request.getIdTypeCompteAuxiliaire());
+
+        try {
+            CompteAuxiliaire compteAuxiliaireClient = new CompteAuxiliaire(request.getLibelle(), request.getNumero(), compteRattachement, type);
+            compteAuxiliaireService.create(compteAuxiliaireClient);
+        } catch (Exception e) {
+            Response response = new Response("error", "Compte déjà existant", 400);
             response.setContext(ctx);
             return;
         }
-
-        TypeCompteAuxiliaire typeClient = typeCompteAuxiliaireService.fromCode("CLI");
-        TypeCompteAuxiliaire typeFournisseur = typeCompteAuxiliaireService.fromCode("FRS");
-
-        Compte compteFournisseur = compteService.findByFileAndNumero(dossier, "401");
-        Compte compteClient = compteService.findByFileAndNumero(dossier, "411");
-
-        CompteAuxiliaire compteAuxiliaireClient = new CompteAuxiliaire( request.getLibelle(), "411" + request.getNumero(), compteClient, typeClient);
-        compteAuxiliaireService.create(compteAuxiliaireClient);
-
-        CompteAuxiliaire compteAuxiliaireFournisseur = new CompteAuxiliaire( request.getLibelle(), "401" + request.getNumero(), compteFournisseur, typeFournisseur);
-        compteAuxiliaireService.create(compteAuxiliaireFournisseur);
 
         Response response = new Response("ok", "Compte auxiliaire créé", 201);
         response.setContext(ctx);

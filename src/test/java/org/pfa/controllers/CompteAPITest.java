@@ -7,6 +7,7 @@ import org.pfa.models.dto.FileAPIResponse;
 import org.pfa.routes.CompteAuxiliaireRoutes;
 import org.pfa.routes.FileRoutes;
 import org.pfa.routes.UserRoutes;
+import org.pfa.services.CompteService;
 import org.pfa.services.FileService;
 import org.pfa.services.SessionManager;
 
@@ -27,6 +28,7 @@ public class CompteAPITest {
     private ObjectMapper objectMapper = new ObjectMapper();
     private String baseUrl;
     private FileService fileService = new FileService();
+    private CompteService compteService = new CompteService();
 
     private String token;
     private Integer idDossierCree;
@@ -105,11 +107,13 @@ public class CompteAPITest {
     @DisplayName("Success on compte insertion")
     void testCompteInsertion() throws IOException, InterruptedException {
         assertTrue(true);
+        Integer idCompte = compteService.findByFileAndNumero(fileService.getOne(idDossierCree), "411").getIdCompte();
         String compteJson = "{\n" +
-                "    \"idDossier\": "+ idDossierCree + ",\n" +
-                "    \"libelle\": \"McDo\",\n" +
-                "    \"numero\": \"06761\"\n" +
-                "    }";
+                "    \"idTypeCompteAuxiliaire\": 1,\n" +
+                "    \"idCompteRattachement\":" + idCompte + ",\n" +
+                "    \"numero\": \"41102001\",\n" +
+                "    \"libelle\": \"libella\"\n" +
+                "}";
         HttpRequest compteRequest = HttpRequest.newBuilder()
                 .uri(URI.create(baseUrl + "/compte"))
                 .header("Content-Type", "application/json")
