@@ -1,18 +1,147 @@
-﻿<Window x:Class="App.MainWindow"
+<Window x:Class="App.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:views="clr-namespace:App.Views"
         mc:Ignorable="d"
-        Title="Application"
+        Title="LAKONTA 2026"
         WindowState="Maximized"
         WindowStyle="SingleBorderWindow"
         ResizeMode="CanResize">
 
-    <!-- UN SEUL root -->
-    <Grid>
-        <ContentControl x:Name="MainContent"/>
-    </Grid>
+    <Window.Resources>
+        <!-- Bouton navbar vert (Accueil, Déconnexion) -->
+        <Style x:Key="NavGreenButton" TargetType="Button">
+            <Setter Property="Background" Value="#4CAF50"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="20,0"/>
+            <Setter Property="Height" Value="42"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd" Background="{TemplateBinding Background}"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#388E3C"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#2E7D32"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
+        <!-- Bouton navbar jaune (menus déroulants) -->
+        <Style x:Key="NavYellowButton" TargetType="Button">
+            <Setter Property="Background" Value="#FFC107"/>
+            <Setter Property="Foreground" Value="#1A1A1A"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="20,0"/>
+            <Setter Property="Height" Value="42"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd" Background="{TemplateBinding Background}"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#F9A825"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#F57F17"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid Background="#E0E0E0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- ======== AppShell : Titre + Navbar (masqué sur Login) ======== -->
+        <Grid x:Name="AppShell" Grid.Row="0" Visibility="Collapsed">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="42"/>
+            </Grid.RowDefinitions>
+
+            <!-- Titre -->
+            <Border Grid.Row="0" Background="#E0E0E0" BorderBrush="Black" BorderThickness="1">
+                <TextBlock Text="LAKONTA 2026"
+                           FontSize="22" FontWeight="Bold"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"
+                           Foreground="#1A1A1A"/>
+            </Border>
+
+            <!-- Navbar -->
+            <Border Grid.Row="1" Background="#1565C0" BorderBrush="Black" BorderThickness="1,0,1,1">
+                <DockPanel LastChildFill="True">
+
+                    <!-- Accueil -->
+                    <Button DockPanel.Dock="Left"
+                            Content="Accueil"
+                            Style="{StaticResource NavGreenButton}"
+                            Click="NavAccueil_Click"/>
+
+                    <!-- Administration (menu déroulant) -->
+                    <Button x:Name="BtnAdmin"
+                            DockPanel.Dock="Left"
+                            Content="Administration  ▾"
+                            Style="{StaticResource NavYellowButton}"
+                            Click="AdminMenu_Click">
+                        <Button.ContextMenu>
+                            <ContextMenu FontSize="13">
+                                <MenuItem Header="Nouvel utilisateur" Click="NavNouvelUtilisateur_Click"/>
+                                <MenuItem Header="Nouveau rôle"       Click="NavNouveauRole_Click"/>
+                            </ContextMenu>
+                        </Button.ContextMenu>
+                    </Button>
+
+                    <!-- Gestion dossier (menu déroulant) -->
+                    <Button x:Name="BtnGestionDossier"
+                            DockPanel.Dock="Left"
+                            Content="Gestion dossier  ▾"
+                            Style="{StaticResource NavYellowButton}"
+                            Click="GestionDossierMenu_Click">
+                        <Button.ContextMenu>
+                            <ContextMenu FontSize="13">
+                                <MenuItem Header="Nouveau dossier" Click="NavNouveauDossier_Click"/>
+                            </ContextMenu>
+                        </Button.ContextMenu>
+                    </Button>
+
+                    <!-- Déconnexion (aligné à droite) -->
+                    <Button DockPanel.Dock="Right"
+                            Content="Déconnexion"
+                            Style="{StaticResource NavGreenButton}"
+                            Click="NavDeconnexion_Click"/>
+
+                    <!-- Fond bleu central -->
+                    <Border Background="#1565C0"/>
+                </DockPanel>
+            </Border>
+        </Grid>
+
+        <!-- Zone de contenu des pages -->
+        <ContentControl Grid.Row="1" x:Name="MainContent"/>
+    </Grid>
 </Window>
