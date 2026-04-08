@@ -1,5 +1,6 @@
 package org.pfa.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -29,6 +30,7 @@ public class File {
 
     @OneToMany(mappedBy = "file", fetch = FetchType.LAZY)
     @JsonManagedReference(value = "file-documents")
+    @JsonIgnore
     private Set<Document> documents;
 
     @OneToMany(mappedBy = "file", fetch = FetchType.LAZY)

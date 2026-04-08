@@ -1,9 +1,11 @@
 package org.pfa.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "type_compte_auxiliaire")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class TypeCompteAuxiliaire {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

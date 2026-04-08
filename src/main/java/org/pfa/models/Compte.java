@@ -38,6 +38,7 @@ public class Compte {
     private Set<Immobilisation> immobilisations;
 
     @OneToMany(mappedBy = "compteRattachement", fetch = FetchType.LAZY)
+    @JsonManagedReference(value = "compte-compte_aux")
     @JsonIgnore
     private Set<CompteAuxiliaire> comptesAuxiliaires;
 
