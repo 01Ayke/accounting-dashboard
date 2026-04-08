@@ -79,6 +79,19 @@ public class RoleController extends Controller {
         }
     }
 
+    public void get_my_roles(Context ctx) {
+        if(super.checkToken(ctx)) {
+            Integer userId = sessionManager.getUserIdFromToken(ctx.header("Authorization"));
+            List<Roles_enum> roles = userService.getRoles(userId);
+            List<String> roleNames = roles.stream().map(Enum::name).toList();
+            Response response = new Response("success", "Voici vos rôles", 200, roleNames);
+            Log.log("Retrieving roles for user " + userId + ": " + roleNames, Log_Type.INFO, Log_Location.Controller);
+            response.setContextData(ctx);
+            return;
+        }
+        Log.log("Permission denied for retrieving user roles", Log_Type.ERROR, Log_Location.Controller);
+    }
+
     public void get_all_roles(Context ctx) {
         if(super.checkToken(ctx) && super.checkRole(ctx, Roles_enum.ADMIN)) {
             List<String> roles = roleService.getAllRoles();

@@ -250,6 +250,23 @@ Succes `200`:
   "data": ["ADMIN", "EXPERT", ... ]
 }
 ```
+
+### GET `/get-my-roles`
+
+Description: Récupérer mes roles sous forme de liste.
+
+- Auth requise: oui
+- Role requis: `/`
+
+Succes `200`:
+
+```json
+{
+  "status": "success",
+  "message": "Voici vos rôles",
+  "data": ["ADMIN", ...]
+}
+```
 ---
 ## 3) `DocumentRoutes.java`
 

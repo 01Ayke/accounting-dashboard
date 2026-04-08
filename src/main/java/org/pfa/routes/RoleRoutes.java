@@ -13,6 +13,7 @@ public class RoleRoutes {
         app.post("/role-manager/{id}", roleController::change_role);
         app.post("/is-admin", roleController::is_Admin);
         app.get("/get-all-roles", roleController::get_all_roles);
+        app.get("/get-my-roles", roleController::get_my_roles);
     }
 
 }
