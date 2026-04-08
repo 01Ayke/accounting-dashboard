@@ -15,6 +15,7 @@ public class FileRepository {
         if (file == null) return;
         
         Hibernate.initialize(file.getJournaux());
+        Hibernate.initialize(file.getUtilisateurs());
         for (Journal journal: file.getJournaux()) {
             Hibernate.initialize(journal.getEcrituresComptables());
         }

@@ -1,5 +1,6 @@
 package org.pfa.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -14,10 +15,12 @@ public class AffectationDossier {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_utilisateur", nullable = false)
+    @JsonBackReference(value = "affectation-user")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_dossier", nullable = false)
+    @JsonBackReference(value = "affectation-dossier")
     private File file;
 
     @Column(name = "date_attribution")

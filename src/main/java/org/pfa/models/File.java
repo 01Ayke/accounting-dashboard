@@ -1,5 +1,6 @@
 package org.pfa.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -7,6 +8,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "dossier")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
