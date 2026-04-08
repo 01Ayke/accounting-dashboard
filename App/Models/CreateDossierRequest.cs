@@ -25,6 +25,9 @@ public class CreateDossierRequest
     [JsonPropertyName("regimeFiscal")]
     public RegimeFiscalRef RegimeFiscal { get; set; } = new();
 
+    [JsonPropertyName("regimeTVA")]
+    public RegimeTvaRef RegimeTVA { get; set; } = new();
+
     [JsonPropertyName("adresse")]
     public AdresseRequest Adresse { get; set; } = new();
 }

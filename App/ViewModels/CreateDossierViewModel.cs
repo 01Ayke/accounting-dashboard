@@ -24,6 +24,7 @@ public class CreateDossierViewModel : INotifyPropertyChanged
 
     private FormeJuridique? _selectedFormeJuridique;
     private RegimeFiscal? _selectedRegimeFiscal;
+    private RegimeTva? _selectedRegimeTVA;
 
     private string _ville = "";
     private string _codePostal = "";
@@ -42,6 +43,7 @@ public class CreateDossierViewModel : INotifyPropertyChanged
 
     public ObservableCollection<FormeJuridique> FormesJuridiques { get; } = new();
     public ObservableCollection<RegimeFiscal> RegimesFiscaux { get; } = new();
+    public ObservableCollection<RegimeTva> RegimesTVA { get; } = new();
 
     // ─── Bindings ─────────────────────────────────────────────────────────────
 
@@ -99,6 +101,12 @@ public class CreateDossierViewModel : INotifyPropertyChanged
     {
         get => _selectedRegimeFiscal;
         set { if (_selectedRegimeFiscal != value) { _selectedRegimeFiscal = value; OnPropertyChanged(); } }
+    }
+
+    public RegimeTva? SelectedRegimeTVA
+    {
+        get => _selectedRegimeTVA;
+        set { if (_selectedRegimeTVA != value) { _selectedRegimeTVA = value; OnPropertyChanged(); } }
     }
 
     public string Ville
@@ -193,11 +201,13 @@ public class CreateDossierViewModel : INotifyPropertyChanged
         {
             var formesTask = _refService.GetFormesJuridiquesAsync();
             var regimesTask = _refService.GetRegimesFiscauxAsync();
+            var tvaTask = _refService.GetRegimesTVAAsync();
 
-            await Task.WhenAll(formesTask, regimesTask);
+            await Task.WhenAll(formesTask, regimesTask, tvaTask);
 
             foreach (var f in formesTask.Result) FormesJuridiques.Add(f);
             foreach (var r in regimesTask.Result) RegimesFiscaux.Add(r);
+            foreach (var t in tvaTask.Result) RegimesTVA.Add(t);
 
             Message = null;
         }
@@ -227,6 +237,9 @@ public class CreateDossierViewModel : INotifyPropertyChanged
         if (SelectedRegimeFiscal == null)
         { Message = "Veuillez sélectionner un régime fiscal."; return; }
 
+        if (SelectedRegimeTVA == null)
+        { Message = "Veuillez sélectionner un régime de TVA."; return; }
+
         if (!double.TryParse(Capital.Replace(',', '.'),
             System.Globalization.NumberStyles.Any,
             System.Globalization.CultureInfo.InvariantCulture,
@@ -247,6 +260,7 @@ public class CreateDossierViewModel : INotifyPropertyChanged
             Capital             = capitalValue,
             FormeJuridique      = new FormeJuridiqueRef { IdFormeJuridique = SelectedFormeJuridique.IdFormeJuridique },
             RegimeFiscal        = new RegimeFiscalRef   { IdRegimeFiscal   = SelectedRegimeFiscal.IdRegimeFiscal   },
+            RegimeTVA           = new RegimeTvaRef       { IdRegimeTVA      = SelectedRegimeTVA.IdRegimeTVA         },
             Adresse             = new AdresseRequest
             {
                 Pays      = Pays,
@@ -277,6 +291,7 @@ public class CreateDossierViewModel : INotifyPropertyChanged
                 Pays = "France";
                 SelectedFormeJuridique = null;
                 SelectedRegimeFiscal = null;
+                SelectedRegimeTVA = null;
                 DossierCree?.Invoke(this, EventArgs.Empty);
             }
         }
