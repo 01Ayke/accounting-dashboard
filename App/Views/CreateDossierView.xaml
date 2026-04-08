@@ -88,29 +88,11 @@
                                       DisplayMemberPath="Libelle"
                                       Margin="0,4,0,12" Height="36"/>
 
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="10"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-
-                                <StackPanel Grid.Column="0">
-                                    <TextBlock Text="Régime fiscal *" FontSize="12" Foreground="#374151"/>
-                                    <ComboBox ItemsSource="{Binding RegimesFiscaux}"
-                                              SelectedItem="{Binding SelectedRegimeFiscal}"
-                                              DisplayMemberPath="Libelle"
-                                              Height="36" Margin="0,4,0,0"/>
-                                </StackPanel>
-
-                                <StackPanel Grid.Column="2">
-                                    <TextBlock Text="Régime TVA *" FontSize="12" Foreground="#374151"/>
-                                    <ComboBox ItemsSource="{Binding RegimesTVA}"
-                                              SelectedItem="{Binding SelectedRegimeTVA}"
-                                              DisplayMemberPath="Libelle"
-                                              Height="36" Margin="0,4,0,0"/>
-                                </StackPanel>
-                            </Grid>
+                            <TextBlock Text="Régime fiscal *" FontSize="12" Foreground="#374151"/>
+                            <ComboBox ItemsSource="{Binding RegimesFiscaux}"
+                                      SelectedItem="{Binding SelectedRegimeFiscal}"
+                                      DisplayMemberPath="Libelle"
+                                      Height="36" Margin="0,4,0,0"/>
                         </StackPanel>
                     </Border>
 
