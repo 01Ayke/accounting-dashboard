@@ -10,29 +10,29 @@
         ResizeMode="CanResize">
 
     <Window.Resources>
-        <!-- Bouton navbar vert (Accueil, Déconnexion) -->
+        <!-- Bouton navbar vert (Accueil) -->
         <Style x:Key="NavGreenButton" TargetType="Button">
-            <Setter Property="Background" Value="#4CAF50"/>
+            <Setter Property="Background" Value="#16A34A"/>
             <Setter Property="Foreground" Value="White"/>
-            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Padding" Value="20,0"/>
-            <Setter Property="Height" Value="42"/>
+            <Setter Property="Padding" Value="18,0"/>
+            <Setter Property="Height" Value="36"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="bd" Background="{TemplateBinding Background}"
-                                Padding="{TemplateBinding Padding}">
+                                CornerRadius="6" Padding="{TemplateBinding Padding}">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="bd" Property="Background" Value="#388E3C"/>
+                                <Setter TargetName="bd" Property="Background" Value="#15803D"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="bd" Property="Background" Value="#2E7D32"/>
+                                <Setter TargetName="bd" Property="Background" Value="#166534"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -40,29 +40,63 @@
             </Setter>
         </Style>
 
-        <!-- Bouton navbar jaune (menus déroulants) -->
-        <Style x:Key="NavYellowButton" TargetType="Button">
-            <Setter Property="Background" Value="#FFC107"/>
-            <Setter Property="Foreground" Value="#1A1A1A"/>
-            <Setter Property="FontWeight" Value="Bold"/>
+        <!-- Bouton navbar rouge (Déconnexion) -->
+        <Style x:Key="NavRedButton" TargetType="Button">
+            <Setter Property="Background" Value="#DC2626"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Padding" Value="20,0"/>
-            <Setter Property="Height" Value="42"/>
+            <Setter Property="Padding" Value="18,0"/>
+            <Setter Property="Height" Value="36"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="bd" Background="{TemplateBinding Background}"
-                                Padding="{TemplateBinding Padding}">
+                                CornerRadius="6" Padding="{TemplateBinding Padding}">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="bd" Property="Background" Value="#F9A825"/>
+                                <Setter TargetName="bd" Property="Background" Value="#B91C1C"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="bd" Property="Background" Value="#F57F17"/>
+                                <Setter TargetName="bd" Property="Background" Value="#991B1B"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Bouton navbar menus déroulants -->
+        <Style x:Key="NavMenuButton" TargetType="Button">
+            <Setter Property="Background" Value="#334155"/>
+            <Setter Property="Foreground" Value="#E2E8F0"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#475569"/>
+            <Setter Property="Padding" Value="18,0"/>
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#475569"/>
+                                <Setter TargetName="bd" Property="BorderBrush" Value="#64748B"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#1E293B"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -93,51 +127,82 @@
             </Border>
 
             <!-- Navbar -->
-            <Border Grid.Row="1" Background="#1565C0" BorderBrush="Black" BorderThickness="1,0,1,1">
-                <DockPanel LastChildFill="True">
+            <Border Grid.Row="1" Background="#1E293B">
+                <Grid Margin="12,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
-                    <!-- Accueil -->
-                    <Button DockPanel.Dock="Left"
-                            Content="Accueil"
+                    <!-- Gauche : Accueil -->
+                    <Button Grid.Column="0"
+                            Content="⌂  Accueil"
                             Style="{StaticResource NavGreenButton}"
-                            Click="NavAccueil_Click"/>
+                            Click="NavAccueil_Click"
+                            VerticalAlignment="Center"/>
 
-                    <!-- Administration (menu déroulant) -->
-                    <Button x:Name="BtnAdmin"
-                            DockPanel.Dock="Left"
-                            Content="Administration  ▾"
-                            Style="{StaticResource NavYellowButton}"
-                            Click="AdminMenu_Click">
-                        <Button.ContextMenu>
-                            <ContextMenu FontSize="13">
-                                <MenuItem Header="Nouvel utilisateur" Click="NavNouvelUtilisateur_Click"/>
-                                <MenuItem Header="Nouveau rôle"       Click="NavNouveauRole_Click"/>
-                            </ContextMenu>
-                        </Button.ContextMenu>
-                    </Button>
+                    <!-- Centre : menus déroulants -->
+                    <StackPanel Grid.Column="1" Orientation="Horizontal"
+                                HorizontalAlignment="Center" VerticalAlignment="Center">
 
-                    <!-- Gestion dossier (menu déroulant) -->
-                    <Button x:Name="BtnGestionDossier"
-                            DockPanel.Dock="Left"
-                            Content="Gestion dossier  ▾"
-                            Style="{StaticResource NavYellowButton}"
-                            Click="GestionDossierMenu_Click">
-                        <Button.ContextMenu>
-                            <ContextMenu FontSize="13">
-                                <MenuItem Header="Nouveau dossier" Click="NavNouveauDossier_Click"/>
-                            </ContextMenu>
-                        </Button.ContextMenu>
-                    </Button>
+                        <!-- Administration -->
+                        <Button x:Name="BtnAdmin"
+                                Content="⚙  Administration  ▾"
+                                Style="{StaticResource NavMenuButton}"
+                                Click="AdminMenu_Click"
+                                Margin="6,0">
+                            <Button.ContextMenu>
+                                <ContextMenu Background="White" BorderBrush="#E2E8F0"
+                                             BorderThickness="1" HasDropShadow="True">
+                                    <ContextMenu.Resources>
+                                        <Style TargetType="MenuItem">
+                                            <Setter Property="FontSize" Value="13"/>
+                                            <Setter Property="FontWeight" Value="SemiBold"/>
+                                            <Setter Property="Foreground" Value="#1E293B"/>
+                                            <Setter Property="Padding" Value="14,10"/>
+                                            <Setter Property="Cursor" Value="Hand"/>
+                                        </Style>
+                                    </ContextMenu.Resources>
+                                    <MenuItem Header="👤  Nouvel utilisateur" Click="NavNouvelUtilisateur_Click"/>
+                                    <Separator/>
+                                    <MenuItem Header="🔑  Nouveau rôle"       Click="NavNouveauRole_Click"/>
+                                </ContextMenu>
+                            </Button.ContextMenu>
+                        </Button>
 
-                    <!-- Déconnexion (aligné à droite) -->
-                    <Button DockPanel.Dock="Right"
-                            Content="Déconnexion"
-                            Style="{StaticResource NavGreenButton}"
-                            Click="NavDeconnexion_Click"/>
+                        <!-- Gestion dossier -->
+                        <Button x:Name="BtnGestionDossier"
+                                Content="📁  Gestion dossier  ▾"
+                                Style="{StaticResource NavMenuButton}"
+                                Click="GestionDossierMenu_Click"
+                                Margin="6,0">
+                            <Button.ContextMenu>
+                                <ContextMenu Background="White" BorderBrush="#E2E8F0"
+                                             BorderThickness="1" HasDropShadow="True">
+                                    <ContextMenu.Resources>
+                                        <Style TargetType="MenuItem">
+                                            <Setter Property="FontSize" Value="13"/>
+                                            <Setter Property="FontWeight" Value="SemiBold"/>
+                                            <Setter Property="Foreground" Value="#1E293B"/>
+                                            <Setter Property="Padding" Value="14,10"/>
+                                            <Setter Property="Cursor" Value="Hand"/>
+                                        </Style>
+                                    </ContextMenu.Resources>
+                                    <MenuItem Header="📂  Nouveau dossier" Click="NavNouveauDossier_Click"/>
+                                </ContextMenu>
+                            </Button.ContextMenu>
+                        </Button>
 
-                    <!-- Fond bleu central -->
-                    <Border Background="#1565C0"/>
-                </DockPanel>
+                    </StackPanel>
+
+                    <!-- Droite : Déconnexion -->
+                    <Button Grid.Column="2"
+                            Content="⏻  Déconnexion"
+                            Style="{StaticResource NavRedButton}"
+                            Click="NavDeconnexion_Click"
+                            VerticalAlignment="Center"/>
+                </Grid>
             </Border>
         </Grid>
 

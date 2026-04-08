@@ -49,10 +49,10 @@ namespace App
         }
 
         private void NavNouvelUtilisateur_Click(object sender, RoutedEventArgs e)
-            => NavigateToUserManagement();
+            => NavigateToUserManagement(0);
 
         private void NavNouveauRole_Click(object sender, RoutedEventArgs e)
-            => NavigateToUserManagement();
+            => NavigateToUserManagement(1);
 
         private void NavNouveauDossier_Click(object sender, RoutedEventArgs e)
             => NavigateToCreateDossier();
@@ -102,10 +102,10 @@ namespace App
             MainContent.Content = new AssignDossierView();
         }
 
-        public void NavigateToUserManagement()
+        public void NavigateToUserManagement(int tab = 0)
         {
             ShowAppShell(true);
-            MainContent.Content = new UserManagementView();
+            MainContent.Content = new UserManagementView(tab);
         }
 
         public void NavigateToCreateCompte()
