@@ -10,13 +10,13 @@ public class CompteAuxiliaireService {
 
     public void create(CompteAuxiliaire compteAuxiliaire) { repo.save(compteAuxiliaire); }
 
-    private Boolean exists(CompteAuxiliaire compteAuxiliaire) {
-        return (repo.getByCompteAndLibelle(compteAuxiliaire.getCompte(), compteAuxiliaire.getNumeroCompteAuxiliaire()) != null);
-    }
-
-    public Boolean createIfNotExists(CompteAuxiliaire compteAuxiliaire) {
-        Boolean exists = exists(compteAuxiliaire);
-        if (!exists) create(compteAuxiliaire);
-        return !exists;
-    }
+//    private Boolean exists(CompteAuxiliaire compteAuxiliaire) {
+//        return (repo.getByCompteAndLibelle(compteAuxiliaire.getCompte(), compteAuxiliaire.getNumeroCompteAuxiliaire()) != null);
+//    }
+//
+//    public Boolean createIfNotExists(CompteAuxiliaire compteAuxiliaire) {
+//        Boolean exists = exists(compteAuxiliaire);
+//        if (!exists) create(compteAuxiliaire);
+//        return !exists;
+//    }
 }

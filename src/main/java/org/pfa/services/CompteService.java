@@ -29,4 +29,9 @@ public class CompteService {
     }
 
     public List<Compte> findByFile(File file) { return repo.getByFile(file); }
+
+    public List<Compte> getByFileMatchingExp(File file, String exp) {
+        List<Compte> comptes = findByFile(file);
+        return comptes.stream().filter(compte -> compte.getNumeroCompte().matches(exp)).toList();
+    }
 }

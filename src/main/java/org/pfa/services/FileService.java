@@ -3,6 +3,7 @@ package org.pfa.services;
 import org.pfa.models.Compte;
 import org.pfa.models.CompteAuxiliaire;
 import org.pfa.models.File;
+import org.pfa.models.User;
 import org.pfa.models.dto.FileLight;
 import org.pfa.repositories.CompteAuxiliaireRepository;
 import org.pfa.repositories.CompteRepository;
@@ -18,6 +19,7 @@ public class FileService {
 
     public List<File> getAll() { return fileRepository.findAll(); }
     public List<FileLight> getAllLight() { return fileRepository.findAllLight(); }
+    public List<FileLight> getAllUserFilesLight(User user) { return fileRepository.findUserFilesLight(user); }
     public File getOne(Integer id) { return fileRepository.findById(id); }
 
     public File create(File file) {

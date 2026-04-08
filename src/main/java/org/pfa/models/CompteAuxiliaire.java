@@ -1,6 +1,8 @@
 package org.pfa.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
@@ -60,7 +62,7 @@ public class CompteAuxiliaire {
         return typeCompteAuxiliaire;
     }
 
-    public Compte getCompte() {
-        return compteRattachement;
-    }
+//    public Compte getCompte() {
+//        return compteRattachement;
+//    }
 }

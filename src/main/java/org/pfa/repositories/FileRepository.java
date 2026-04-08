@@ -15,6 +15,7 @@ public class FileRepository {
         if (file == null) return;
         
         Hibernate.initialize(file.getJournaux());
+        Hibernate.initialize(file.getUtilisateurs());
         for (Journal journal: file.getJournaux()) {
             Hibernate.initialize(journal.getEcrituresComptables());
         }
@@ -41,6 +42,25 @@ public class FileRepository {
         }
         session.close();
         return files;
+    }
+
+    public List<FileLight> findUserFilesLight(User user) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+
+        List<AffectationDossier> affectations = session.createQuery("FROM AffectationDossier WHERE user = :user AND actif = true", AffectationDossier.class)
+                .setParameter("user", user)
+                .list();
+
+        List<FileLight> filesLight = new ArrayList<>();
+        for (AffectationDossier affectation : affectations) {
+            File file = affectation.getFile();
+            if (file != null) {
+                Hibernate.initialize(file.getRepresentants());
+                filesLight.add(new FileLight(file));
+            }
+        }
+        session.close();
+        return filesLight;
     }
 
     public List<FileLight> findAllLight() {

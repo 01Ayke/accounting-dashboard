@@ -1,5 +1,7 @@
 package org.pfa.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -7,6 +9,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "dossier")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,6 +30,7 @@ public class File {
 
     @OneToMany(mappedBy = "file", fetch = FetchType.LAZY)
     @JsonManagedReference(value = "file-documents")
+    @JsonIgnore
     private Set<Document> documents;
 
     @OneToMany(mappedBy = "file", fetch = FetchType.LAZY)
@@ -56,6 +60,9 @@ public class File {
             inverseJoinColumns = { @JoinColumn(name = "id_representant") }
     )
     private Set<Representant> representants;
+
+    @OneToMany(mappedBy = "file")
+    private Set<AffectationDossier> utilisateurs;
 
     public Integer getId() {
         return this.idDossier;
@@ -115,5 +122,9 @@ public class File {
 
     public void setAdresse(Address adresse) {
         this.adresse = adresse;
+    }
+
+    public Set<AffectationDossier> getUtilisateurs() {
+        return utilisateurs;
     }
 }

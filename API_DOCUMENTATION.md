@@ -250,6 +250,23 @@ Succes `200`:
   "data": ["ADMIN", "EXPERT", ... ]
 }
 ```
+
+### GET `/get-my-roles`
+
+Description: Récupérer mes roles sous forme de liste.
+
+- Auth requise: oui
+- Role requis: `/`
+
+Succes `200`:
+
+```json
+{
+  "status": "success",
+  "message": "Voici vos rôles",
+  "data": ["ADMIN", ...]
+}
+```
 ---
 ## 3) `DocumentRoutes.java`
 
@@ -457,7 +474,7 @@ Succes `200`:
 
 ### POST `/compte`
 
-Description: cree deux comptes auxiliaires (client `411...` et fournisseur `401...`) pour un dossier.
+Description: cree un compte auxiliaire rattaché au compte de rattachement indiqué.
 
 - Auth requise: oui
 - Content-Type attendu: `application/json`
@@ -465,9 +482,10 @@ Description: cree deux comptes auxiliaires (client `411...` et fournisseur `401.
 
 ```json
 {
-  "idDossier": 1,
-  "numero": "0001",
-  "libelle": "Client ABC"
+  "idTypeCompteAuxiliaire": 1,
+  "idCompteRattachement": 2096,
+  "numero": "41102001",
+  "libelle": "libelle"
 }
 ```
 

@@ -14,6 +14,8 @@ import org.pfa.models.Roles_enum;
 public class UserService {
     private final UserRepository repo = new UserRepository();
 
+    public User getById(Integer id) { return repo.findById(id); }
+
     public User getOne(String mail, String password) {
         User user = repo.findByMail(mail);
         if (user != null && BCrypt.checkpw(password, user.getMot_de_passe())) {

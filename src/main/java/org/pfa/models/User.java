@@ -1,6 +1,9 @@
 package org.pfa.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+
+import java.util.Set;
 
 @Entity
 @Table(name = "utilisateur")
@@ -16,6 +19,18 @@ public class User {
     private String mot_de_passe;
     private String code;
 
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private Set<AffectationDossier> dossiers;
+
+    @ManyToMany
+    @JoinTable(
+            name = "utilisateur_role",
+            joinColumns = { @JoinColumn(name = "id_utilisateur") },
+            inverseJoinColumns = { @JoinColumn(name = "id_role") }
+    )
+    private Set<Roles> roles;
+
     // Constructeur par défaut requis par Hibernate
     public User() {}
 
@@ -24,7 +39,12 @@ public class User {
         this.mot_de_passe = mot_de_passe;
         this.nom = nom;
         this.prenom = prenom;
-        this.code = code;
+        if (code.isEmpty()) {
+            this.code = prenom + nom;
+        }
+        else {
+            this.code = code;
+        }
     }
 
     public String getMail() {
@@ -49,5 +69,13 @@ public class User {
     
     public String getCode() {
         return code;
+    }
+
+    public Set<Roles> getRoles() {
+        return roles;
+    }
+
+    public Set<AffectationDossier> getDossiers() {
+        return dossiers;
     }
 }

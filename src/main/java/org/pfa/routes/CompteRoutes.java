@@ -9,5 +9,6 @@ public class CompteRoutes implements RouteInterface {
         CompteController compteController = new CompteController(sessionManager);
         app.get("/dossier-comptes/{id}", compteController::getAll);
         app.get("/dossier-comptes-agregation/{id}", compteController::getAllAgregation);
+        app.get("/dossier-comptes-rattachement/{id}", compteController::getAllComptesRattachement);
     }
 }
