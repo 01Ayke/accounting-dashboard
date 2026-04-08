@@ -1,6 +1,7 @@
 package org.pfa.models.dto;
 
 import java.util.List;
+import java.util.Objects;
 
 import io.javalin.http.Context;
 import org.pfa.models.Roles_enum;
@@ -20,15 +21,10 @@ public class RegisterRequest {
         this.password = ctx.formParam("password");
         this.nom = ctx.formParam("nom");
         this.prenom = ctx.formParam("prenom");
-        try {
-            this.code = ctx.formParam("code");
-        }
-        catch (Exception e) {
-            this.code = this.prenom + this.nom;
-        }
+        this.code = ctx.formParam("code");
         String rolesParam = ctx.formParam("roles");
         if (rolesParam == null || rolesParam.isBlank()) {
-            this.roles = List.of(Roles_enum.USER.name());
+            this.roles = List.of(Roles_enum.COMPTA_JR.name());
         } else {
             this.roles = List.of(rolesParam.split(","));
         }

@@ -72,11 +72,6 @@ namespace App
             MainContent.Content = new GrandLivreView();
         }
 
-        public void NavigateToDocuments()
-        {
-            MainContent.Content = new DocumentView();
-        }
-
         public void NavigateToLogin()
         {
             _homeView = null;

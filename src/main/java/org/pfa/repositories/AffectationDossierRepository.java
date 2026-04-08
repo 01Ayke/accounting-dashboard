@@ -39,7 +39,7 @@ public class AffectationDossierRepository {
 
     public AffectationDossier findActiveByUserAndFile(Integer userId, Integer fileId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("FROM AffectationDossier a WHERE a.user.id_utilisateur = :userId AND a.file.idDossier = :fileId AND a.actif = true", AffectationDossier.class)
+            return session.createQuery("SELECT a FROM AffectationDossier a JOIN FETCH a.user JOIN FETCH a.file WHERE a.user.id_utilisateur = :userId AND a.file.idDossier = :fileId AND a.actif = true", AffectationDossier.class)
                     .setParameter("userId", userId)
                     .setParameter("fileId", fileId)
                     .uniqueResult();
@@ -48,7 +48,7 @@ public class AffectationDossierRepository {
 
     public List<AffectationDossier> findAll() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("FROM AffectationDossier", AffectationDossier.class).list();
+            return session.createQuery("SELECT a FROM AffectationDossier a JOIN FETCH a.user JOIN FETCH a.file", AffectationDossier.class).list();
         }
     }
 }

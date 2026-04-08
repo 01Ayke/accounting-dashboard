@@ -12,51 +12,41 @@
     </UserControl.DataContext>
 
     <Grid Background="#F5F7FA" Margin="20">
-        <Border Background="White" CornerRadius="12" Padding="30"
-                MaxWidth="620" HorizontalAlignment="Center" VerticalAlignment="Center"
-                Effect="{DynamicResource DropShadowEffect}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Formulaire d'attribution -->
+        <Border Grid.Row="0" Background="White" CornerRadius="12" Padding="30"
+                MaxWidth="620" HorizontalAlignment="Center" VerticalAlignment="Top"
+                Margin="0,0,0,20" Effect="{DynamicResource DropShadowEffect}">
             <StackPanel>
+                <TextBlock Text="Attribuer un dossier" FontSize="26" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,5"/>
+                <TextBlock Text="Associez un dossier à un collaborateur" FontSize="13" Foreground="Gray" HorizontalAlignment="Center" Margin="0,0,0,25"/>
 
-                <!-- Titre -->
-                <TextBlock Text="Attribuer un dossier"
-                           FontSize="26" FontWeight="Bold"
-                           HorizontalAlignment="Center" Margin="0,0,0,5"/>
-                <TextBlock Text="Associez un dossier à un collaborateur"
-                           FontSize="13" Foreground="Gray"
-                           HorizontalAlignment="Center" Margin="0,0,0,25"/>
-
-                <!-- Dossier -->
                 <Border Background="#EFF6FF" CornerRadius="8" Padding="12" Margin="0,0,0,15">
                     <StackPanel>
-                        <TextBlock Text="Dossier" FontSize="14" FontWeight="SemiBold"
-                                   Foreground="#1D4ED8" Margin="0,0,0,8"/>
-                        <TextBlock Text="ID du dossier *" FontSize="12" Foreground="#374151"/>
-                        <TextBox Text="{Binding DossierId, UpdateSourceTrigger=PropertyChanged}"
-                                 Margin="0,4,0,0" Height="36" Padding="8,0"/>
+                        <TextBlock Text="Dossier" FontSize="14" FontWeight="SemiBold" Foreground="#1D4ED8" Margin="0,0,0,8"/>
+                        <TextBlock Text="Sélectionner un dossier *" FontSize="12" Foreground="#374151"/>
+                        <ComboBox ItemsSource="{Binding Dossiers}" SelectedItem="{Binding SelectedDossier}" DisplayMemberPath="DenominationSociale" Margin="0,4,0,0" Height="36"/>
                     </StackPanel>
                 </Border>
 
-                <!-- Utilisateur -->
                 <Border Background="#F0FDF4" CornerRadius="8" Padding="12" Margin="0,0,0,20">
                     <StackPanel>
-                        <TextBlock Text="Collaborateur" FontSize="14" FontWeight="SemiBold"
-                                   Foreground="#16A34A" Margin="0,0,0,8"/>
-                        <TextBlock Text="ID de l'utilisateur *" FontSize="12" Foreground="#374151"/>
-                        <TextBox Text="{Binding UserId, UpdateSourceTrigger=PropertyChanged}"
-                                 Margin="0,4,0,0" Height="36" Padding="8,0"/>
+                        <TextBlock Text="Collaborateur" FontSize="14" FontWeight="SemiBold" Foreground="#16A34A" Margin="0,0,0,8"/>
+                        <TextBlock Text="Sélectionner un utilisateur *" FontSize="12" Foreground="#374151"/>
+                        <ComboBox ItemsSource="{Binding Users}" SelectedItem="{Binding SelectedUser}" DisplayMemberPath="Mail" Margin="0,4,0,0" Height="36"/>
                     </StackPanel>
                 </Border>
 
-                <!-- Message -->
-                <Border Margin="0,0,0,20" CornerRadius="8" Padding="12"
-                        Visibility="{Binding Message, Converter={StaticResource StringToVisibilityConverter}}">
+                <Border Margin="0,0,0,20" CornerRadius="8" Padding="12" Visibility="{Binding Message, Converter={StaticResource StringToVisibilityConverter}}">
                     <Border.Style>
                         <Style TargetType="Border">
                             <Setter Property="Background" Value="#FEF2F2"/>
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsSuccess}" Value="True">
-                                    <Setter Property="Background" Value="#F0FDF4"/>
-                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsSuccess}" Value="True"><Setter Property="Background" Value="#F0FDF4"/></DataTrigger>
                             </Style.Triggers>
                         </Style>
                     </Border.Style>
@@ -65,98 +55,86 @@
                             <Style TargetType="TextBlock">
                                 <Setter Property="Foreground" Value="#DC2626"/>
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsSuccess}" Value="True">
-                                        <Setter Property="Foreground" Value="#16A34A"/>
-                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsSuccess}" Value="True"><Setter Property="Foreground" Value="#16A34A"/></DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </TextBlock.Style>
                     </TextBlock>
                 </Border>
 
-                <!-- Boutons -->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button Content="← Retour" Width="110" Height="42" Margin="5"
-                            Click="BackButton_Click">
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Background" Value="White"/>
-                                <Setter Property="Foreground" Value="#374151"/>
-                                <Setter Property="BorderBrush" Value="#D1D5DB"/>
-                                <Setter Property="BorderThickness" Value="1"/>
-                                <Setter Property="Cursor" Value="Hand"/>
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="Button">
-                                            <Border Background="{TemplateBinding Background}"
-                                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                                    CornerRadius="8">
-                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                            </Border>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </Button.Style>
+                    <Button Content="← Retour" Width="110" Height="42" Margin="5" Click="BackButton_Click">
+                        <Button.Style><Style TargetType="Button"><Setter Property="Background" Value="White"/><Setter Property="Foreground" Value="#374151"/><Setter Property="BorderBrush" Value="#D1D5DB"/><Setter Property="BorderThickness" Value="1"/><Setter Property="Cursor" Value="Hand"/><Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Button"><Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="8"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border></ControlTemplate></Setter.Value></Setter></Style></Button.Style>
                     </Button>
-
-                    <Button Content="✓ Attribuer" Width="140" Height="42" Margin="5"
-                            Command="{Binding AssignCommand}">
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Background" Value="#1D4ED8"/>
-                                <Setter Property="Foreground" Value="White"/>
-                                <Setter Property="BorderThickness" Value="0"/>
-                                <Setter Property="FontWeight" Value="SemiBold"/>
-                                <Setter Property="Cursor" Value="Hand"/>
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="Button">
-                                            <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="8">
-                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                            </Border>
-                                            <ControlTemplate.Triggers>
-                                                <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter TargetName="bd" Property="Background" Value="#1E40AF"/>
-                                                </Trigger>
-                                            </ControlTemplate.Triggers>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </Button.Style>
+                    <Button Content="✓ Attribuer" Width="140" Height="42" Margin="5" Command="{Binding AssignCommand}">
+                        <Button.Style><Style TargetType="Button"><Setter Property="Background" Value="#1D4ED8"/><Setter Property="Foreground" Value="White"/><Setter Property="BorderThickness" Value="0"/><Setter Property="FontWeight" Value="SemiBold"/><Setter Property="Cursor" Value="Hand"/><Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Button"><Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="8"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border><ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Background" Value="#1E40AF"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Setter.Value></Setter></Style></Button.Style>
                     </Button>
-
-                    <Button Content="✗ Révoquer" Width="140" Height="42" Margin="5"
-                            Command="{Binding RevokeCommand}">
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Background" Value="#DC2626"/>
-                                <Setter Property="Foreground" Value="White"/>
-                                <Setter Property="BorderThickness" Value="0"/>
-                                <Setter Property="FontWeight" Value="SemiBold"/>
-                                <Setter Property="Cursor" Value="Hand"/>
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="Button">
-                                            <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="8">
-                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                            </Border>
-                                            <ControlTemplate.Triggers>
-                                                <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter TargetName="bd" Property="Background" Value="#B91C1C"/>
-                                                </Trigger>
-                                            </ControlTemplate.Triggers>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </Button.Style>
+                    <Button Content="✗ Révoquer" Width="140" Height="42" Margin="5" Command="{Binding RevokeCommand}">
+                        <Button.Style><Style TargetType="Button"><Setter Property="Background" Value="#DC2626"/><Setter Property="Foreground" Value="White"/><Setter Property="BorderThickness" Value="0"/><Setter Property="FontWeight" Value="SemiBold"/><Setter Property="Cursor" Value="Hand"/><Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Button"><Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="8"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border><ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Background" Value="#B91C1C"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Setter.Value></Setter></Style></Button.Style>
                     </Button>
                 </StackPanel>
-
             </StackPanel>
+        </Border>
+
+        <!-- Historique (DataGrid) -->
+        <Border Grid.Row="1" Background="White" CornerRadius="12" Padding="20" Effect="{DynamicResource DropShadowEffect}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Text="Historique des affectations" FontSize="18" FontWeight="SemiBold" Foreground="#374151" Margin="0,0,0,15"/>
+
+                <DataGrid Grid.Row="1" ItemsSource="{Binding Histories}" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column" RowHeight="36" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#F3F4F6" BorderThickness="0" Background="White">
+                    <DataGrid.ColumnHeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Background" Value="#F9FAFB"/>
+                            <Setter Property="Foreground" Value="#374151"/>
+                            <Setter Property="FontWeight" Value="SemiBold"/>
+                            <Setter Property="Padding" Value="10,8"/>
+                            <Setter Property="BorderBrush" Value="#E5E7EB"/>
+                            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                        </Style>
+                    </DataGrid.ColumnHeaderStyle>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Dossier" Binding="{Binding NomDossier}" Width="*"/>
+                        <DataGridTextColumn Header="Utilisateur" Binding="{Binding PrenomUser}" Width="*"/>
+                        <DataGridTextColumn Header="Date Attribution" Binding="{Binding DateAffectationDisplay}" Width="150"/>
+                        <DataGridTextColumn Header="Date Fin" Binding="{Binding DateFinAffectationDisplay}" Width="150"/>
+                        <DataGridTemplateColumn Header="Statut" Width="80">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Border CornerRadius="8" Padding="6,2" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Setter Property="Background" Value="#FEE2E2"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding StatutDisplay}" Value="Actif">
+                                                        <Setter Property="Background" Value="#DCFCE7"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <TextBlock Text="{Binding StatutDisplay}" FontSize="12" FontWeight="SemiBold">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Foreground" Value="#991B1B"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding StatutDisplay}" Value="Actif">
+                                                            <Setter Property="Foreground" Value="#166534"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </Border>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
         </Border>
     </Grid>
 </UserControl>

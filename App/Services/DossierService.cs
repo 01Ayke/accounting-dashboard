@@ -30,43 +30,23 @@ public class DossierService
     }
 
     // ─── GET /files ────────────────────────────────────────────────────────────
-    // Pas d'authentification requise.
-    // Réponse : { "status": "ok", "message": [ ...dossiers ] }
     public async Task<List<DossierFactice>> GetTousLesDossiersAsync()
     {
         try
         {
+			SetAuthHeader();
             System.Diagnostics.Debug.WriteLine("DossierService.GetTousLesDossiersAsync: Appel GET /files");
             var json = await _httpClient.GetStringAsync("files");
 
             using var doc = JsonDocument.Parse(json);
             var root = doc.RootElement;
-            var filesArray = root.GetProperty("message").EnumerateArray();
+            var filesArray = root.GetProperty("message");
 
-            var dossiers = new List<DossierFactice>();
-            foreach (var fileObj in filesArray)
-            {
-                string prenom = "", nom = "", emailRepresentant = "";
-                if (fileObj.TryGetProperty("representants", out var representants) && representants.GetArrayLength() > 0)
-                {
-                    var firstRep = representants[0];
-                    prenom = firstRep.TryGetProperty("prenom", out var p) ? p.GetString() ?? "" : "";
-                    nom    = firstRep.TryGetProperty("nom",    out var n) ? n.GetString() ?? "" : "";
-                    emailRepresentant = firstRep.TryGetProperty("mail", out var m) ? m.GetString() ?? "" : "";
-                }
+            var dossiers = System.Text.Json.JsonSerializer.Deserialize<List<DossierFactice>>(
+                filesArray.GetRawText(),
+                new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+            ) ?? new List<DossierFactice>();
 
-                dossiers.Add(new DossierFactice
-                {
-                    IdDossier    = fileObj.GetProperty("id").GetInt32(),
-                    NomEntreprise = fileObj.GetProperty("denominationSociale").GetString() ?? "",
-                    Siret        = fileObj.GetProperty("id").GetInt32().ToString(),
-                    Prenom       = prenom,
-                    Nom          = nom,
-                    EmailContact = emailRepresentant,
-                    Secteur      = "Comptabilité",
-                    Statut       = "Actif"
-                });
-            }
             return dossiers;
         }
         catch (Exception ex)
@@ -76,9 +56,8 @@ public class DossierService
         }
     }
 
-    // ─── GET /files/{id} (FileRoutes — objet File brut sans enveloppe) ────────
-    // Pas d'authentification requise.
-    // Réponse : objet File direct (pas de status/message)
+
+    // ─── GET /files/{id} ──────────────────────────────────────────────────────
     public async Task<DossierFactice?> GetDossierFileAsync(int dossierId)
     {
         try
@@ -92,29 +71,11 @@ public class DossierService
             }
 
             var json = await response.Content.ReadAsStringAsync();
-            using var doc = JsonDocument.Parse(json);
-            var root = doc.RootElement;
-
-            string prenom = "", nom = "", emailRepresentant = "";
-            if (root.TryGetProperty("representants", out var representants) && representants.GetArrayLength() > 0)
-            {
-                var firstRep = representants[0];
-                prenom = firstRep.TryGetProperty("prenom", out var p) ? p.GetString() ?? "" : "";
-                nom    = firstRep.TryGetProperty("nom",    out var n) ? n.GetString() ?? "" : "";
-                emailRepresentant = firstRep.TryGetProperty("mail", out var m) ? m.GetString() ?? "" : "";
-            }
-
-            return new DossierFactice
-            {
-                IdDossier    = root.GetProperty("id").GetInt32(),
-                NomEntreprise = root.GetProperty("denominationSociale").GetString() ?? "",
-                Siret        = root.GetProperty("id").GetInt32().ToString(),
-                Prenom       = prenom,
-                Nom          = nom,
-                EmailContact = emailRepresentant,
-                Secteur      = "Comptabilité",
-                Statut       = "Actif"
-            };
+            var dossier = System.Text.Json.JsonSerializer.Deserialize<DossierFactice>(
+                json,
+                new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+            );
+            return dossier;
         }
         catch (Exception ex)
         {
@@ -155,14 +116,10 @@ public class DossierService
 
             return new DossierFactice
             {
-                IdDossier    = dossierId,
-                NomEntreprise = fileObj.GetProperty("denominationSociale").GetString() ?? "",
-                Siret        = fileObj.GetProperty("id").GetInt32().ToString(),
-                Prenom       = prenom,
-                Nom          = nom,
-                EmailContact = emailRepresentant,
-                Secteur      = "Comptabilité",
-                Statut       = "Actif"
+                IdDossier           = dossierId,
+                DenominationSociale = fileObj.GetProperty("denominationSociale").GetString() ?? "",
+                Secteur             = "Comptabilité",
+                Statut              = "Actif"
             };
         }
         catch (Exception ex)
@@ -286,6 +243,36 @@ public class DossierService
         catch (Exception ex)
         {
             return (false, $"Erreur de connexion : {ex.Message}");
+        }
+    }
+
+    // ─── GET /affectations ────────────────────────────────────────────────────
+    // Authentification requise.
+    // Réponse : { "status": "ok", "message": [ ... historique ... ] }
+    public async Task<List<AffectationHistory>> GetHistoriqueAffectationsAsync()
+    {
+        try
+        {
+            SetAuthHeader();
+            var response = await _httpClient.GetAsync("affectations");
+            if (!response.IsSuccessStatusCode) return new List<AffectationHistory>();
+
+            var json = await response.Content.ReadAsStringAsync();
+            using var doc = JsonDocument.Parse(json);
+            var root = doc.RootElement;
+            var array = root.GetProperty("message");
+
+            var historique = System.Text.Json.JsonSerializer.Deserialize<List<AffectationHistory>>(
+                array.GetRawText(),
+                new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+            ) ?? new List<AffectationHistory>();
+
+            return historique;
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"DossierService.GetHistoriqueAffectationsAsync: Exception = {ex.Message}");
+            return new List<AffectationHistory>();
         }
     }
 }

@@ -57,6 +57,9 @@ public class File {
     )
     private Set<Representant> representants;
 
+    @OneToMany(mappedBy = "file")
+    private Set<AffectationDossier> utilisateurs;
+
     public Integer getId() {
         return this.idDossier;
     }
@@ -115,5 +118,9 @@ public class File {
 
     public void setAdresse(Address adresse) {
         this.adresse = adresse;
+    }
+
+    public Set<AffectationDossier> getUtilisateurs() {
+        return utilisateurs;
     }
 }

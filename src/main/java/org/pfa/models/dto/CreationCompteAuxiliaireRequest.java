@@ -1,12 +1,13 @@
 package org.pfa.models.dto;
 
 public class CreationCompteAuxiliaireRequest {
-    private Integer idDossier;
+    private Integer idCompteRattachement;
+    private Integer idTypeCompteAuxiliaire;
     private String numero;
     private String libelle;
 
-    public Integer getIdDossier() {
-        return idDossier;
+    public Integer getIdCompteRattachement() {
+        return idCompteRattachement;
     }
 
     public String getNumero() {
@@ -15,4 +16,7 @@ public class CreationCompteAuxiliaireRequest {
 
     public String getLibelle() { return libelle; }
 
+    public Integer getIdTypeCompteAuxiliaire() {
+        return idTypeCompteAuxiliaire;
+    }
 }

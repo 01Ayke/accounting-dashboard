@@ -474,7 +474,7 @@ Succes `200`:
 
 ### POST `/compte`
 
-Description: cree deux comptes auxiliaires (client `411...` et fournisseur `401...`) pour un dossier.
+Description: cree un compte auxiliaire rattaché au compte de rattachement indiqué.
 
 - Auth requise: oui
 - Content-Type attendu: `application/json`
@@ -482,9 +482,10 @@ Description: cree deux comptes auxiliaires (client `411...` et fournisseur `401.
 
 ```json
 {
-  "idDossier": 1,
-  "numero": "0001",
-  "libelle": "Client ABC"
+  "idTypeCompteAuxiliaire": 1,
+  "idCompteRattachement": 2096,
+  "numero": "41102001",
+  "libelle": "libelle"
 }
 ```
 

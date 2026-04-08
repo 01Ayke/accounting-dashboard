@@ -143,7 +143,7 @@ public class UserManagementViewModel : INotifyPropertyChanged
     public event PropertyChangedEventHandler? PropertyChanged;
 
     private static readonly string[] AvailableRoleNames =
-        { "USER", "ADMIN", "EXPERT", "COMPTA_CONF", "COMPTA_JR", "ASSISTANT", "STAGIAIRE", "CLIENT" };
+        { "ADMIN", "EXPERT", "COMPTA_CONF", "COMPTA_JR", "ASSISTANT", "STAGIAIRE", "CLIENT" };
 
     public UserManagementViewModel()
     {

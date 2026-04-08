@@ -2,6 +2,7 @@ package org.pfa.repositories;
 
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.pfa.config.HibernateUtil;
 import org.pfa.models.User;
@@ -12,9 +13,17 @@ import org.pfa.models.Roles_enum;
 
 public class UserRepository {
 
+    private void initializeUser(User user) {
+        if (user == null) return;
+        Hibernate.initialize(user.getRoles());
+    }
+
     public List<User> findAll() {
         Session session = HibernateUtil.getSessionFactory().openSession();
         List<User> users = session.createSelectionQuery("FROM User", User.class).list();
+        for (User user: users) {
+            initializeUser(user);
+        }
         session.close();
         Log.log("All users retrieved: " + users, Log_Type.INFO, Log_Location.Repository);
         return users;
@@ -25,6 +34,7 @@ public class UserRepository {
         User user = session.createSelectionQuery("FROM User WHERE mail = :mail", User.class)
                 .setParameter("mail", mail)
                 .getSingleResultOrNull();
+        initializeUser(user);
         session.close();
         Log.log("User retrieved for mail " + mail + ": " + user, Log_Type.INFO, Log_Location.Repository);
         return user;
@@ -44,6 +54,7 @@ public class UserRepository {
         try (org.hibernate.Session session = org.pfa.config.HibernateUtil.getSessionFactory().openSession()) {
             User user = session.get(org.pfa.models.User.class, id);
             Log.log("User retrieved for ID " + id + ": " + user, Log_Type.INFO, Log_Location.Repository);
+            initializeUser(user);
             return user;
         }
         catch( Exception e) {

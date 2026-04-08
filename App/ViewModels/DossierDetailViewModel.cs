@@ -22,10 +22,9 @@ public class DossierDetailViewModel : INotifyPropertyChanged
             {
                 _dossier = value;
                 OnPropertyChanged();
-                System.Diagnostics.Debug.WriteLine($"DossierDetailViewModel: Dossier changé = {value?.NomEntreprise}");
                 if (value != null)
                 {
-                    _ = FetchSIGFromBackendAsync();
+                    _ = LoadFullDossierAsync(value.IdDossier);
                 }
             }
         }
@@ -50,6 +49,18 @@ public class DossierDetailViewModel : INotifyPropertyChanged
     public DossierDetailViewModel()
     {
         _sigAffichage = new ObservableCollection<SIGAffichage>();
+    }
+
+    private async Task LoadFullDossierAsync(int dossierId)
+    {
+        var full = await _dossierService.GetDossierFileAsync(dossierId);
+        if (full != null)
+        {
+            _dossier = full;
+            OnPropertyChanged(nameof(Dossier));
+        }
+        // Puis charge les SIG
+        await FetchSIGFromBackendAsync();
     }
 
     private async Task FetchSIGFromBackendAsync()

@@ -5,10 +5,11 @@ import jakarta.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "affectation_dossier")
+@Table(name = "comptable_dossier")
 public class AffectationDossier {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_comptable_dossier")
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -19,17 +20,24 @@ public class AffectationDossier {
     @JoinColumn(name = "id_dossier", nullable = false)
     private File file;
 
+    @Column(name = "date_attribution")
     private Date dateAffectation;
+
+    @Column(name = "date_fin_attribution")
     private Date dateFinAffectation;
     private Boolean actif;
 
+    @Column(name = "responsable_principal")
+    private Boolean responsablePrincipal;
+
     public AffectationDossier() {}
 
-    public AffectationDossier(User user, File file, Date dateAffectation, Boolean actif) {
+    public AffectationDossier(User user, File file, Date dateAffectation, Boolean actif, Boolean responsablePrincipal) {
         this.user = user;
         this.file = file;
         this.dateAffectation = dateAffectation;
         this.actif = actif;
+        this.responsablePrincipal = responsablePrincipal;
     }
 
     public Integer getId() { return id; }

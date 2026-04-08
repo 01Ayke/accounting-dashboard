@@ -12,27 +12,30 @@ namespace App.ViewModels;
 public class GrandLivreViewModel : INotifyPropertyChanged
 {
     private readonly GrandLivreService _grandLivreService = new GrandLivreService();
+    private readonly DossierService _dossierService = new DossierService();
 
-    private string _idDossier = "";
-    private string _dateDebut = "";
-    private string _dateFin = "";
+    private DossierFactice? _selectedDossier;
+    private DateTime? _dateDebut;
+    private DateTime? _dateFin;
     private string? _message;
     private string _denominationSociale = "";
     private bool _isLoading;
 
-    public string IdDossier
+    public ObservableCollection<DossierFactice> Dossiers { get; } = new();
+
+    public DossierFactice? SelectedDossier
     {
-        get => _idDossier;
-        set { if (_idDossier != value) { _idDossier = value; OnPropertyChanged(); } }
+        get => _selectedDossier;
+        set { if (_selectedDossier != value) { _selectedDossier = value; OnPropertyChanged(); } }
     }
 
-    public string DateDebut
+    public DateTime? DateDebut
     {
         get => _dateDebut;
         set { if (_dateDebut != value) { _dateDebut = value; OnPropertyChanged(); } }
     }
 
-    public string DateFin
+    public DateTime? DateFin
     {
         get => _dateFin;
         set { if (_dateFin != value) { _dateFin = value; OnPropertyChanged(); } }
@@ -65,6 +68,20 @@ public class GrandLivreViewModel : INotifyPropertyChanged
     public GrandLivreViewModel()
     {
         LoadGrandLivreCommand = new RelayCommand<object>(_ => _ = LoadAsync());
+        _ = LoadDossiersAsync();
+    }
+
+    private async Task LoadDossiersAsync()
+    {
+        var dossiers = await _dossierService.GetTousLesDossiersAsync();
+        if (dossiers != null)
+        {
+            Dossiers.Clear();
+            foreach (var d in dossiers)
+            {
+                Dossiers.Add(d);
+            }
+        }
     }
 
     private async Task LoadAsync()
@@ -73,15 +90,21 @@ public class GrandLivreViewModel : INotifyPropertyChanged
         Lignes.Clear();
         DenominationSociale = "";
 
-        if (!int.TryParse(IdDossier, out int idDossier))
+        if (SelectedDossier == null)
         {
-            Message = "Veuillez saisir un identifiant de dossier valide.";
+            Message = "Veuillez sélectionner un dossier.";
             return;
         }
 
-        if (string.IsNullOrWhiteSpace(DateDebut) || string.IsNullOrWhiteSpace(DateFin))
+        if (!DateDebut.HasValue || !DateFin.HasValue)
         {
             Message = "Veuillez saisir les dates de début et de fin.";
+            return;
+        }
+
+        if (DateDebut.Value > DateFin.Value)
+        {
+            Message = "La date de début ne peut pas être supérieure à la date de fin.";
             return;
         }
 
@@ -89,7 +112,11 @@ public class GrandLivreViewModel : INotifyPropertyChanged
         try
         {
             var (lignes, denomination, error) =
-                await _grandLivreService.GetGrandLivreAsync(idDossier, DateDebut, DateFin);
+                await _grandLivreService.GetGrandLivreAsync(
+                    SelectedDossier.IdDossier, 
+                    DateDebut.Value.ToString("yyyy-MM-dd"), 
+                    DateFin.Value.ToString("yyyy-MM-dd")
+                );
 
             if (!string.IsNullOrEmpty(error))
             {

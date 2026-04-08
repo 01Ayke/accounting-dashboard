@@ -144,7 +144,7 @@ public class HomeViewModel : INotifyPropertyChanged
             foreach (var dossier in dossiers)
             {
                 Dossiers.Add(dossier);
-                System.Diagnostics.Debug.WriteLine($"RefreshAsync: Dossier ajouté - {dossier.NomEntreprise}");
+                System.Diagnostics.Debug.WriteLine($"RefreshAsync: Dossier ajouté - {dossier.DenominationSociale}");
             }
 
             FiltrerEtTrier();
@@ -170,11 +170,8 @@ public class HomeViewModel : INotifyPropertyChanged
 
         foreach (var dossier in Dossiers)
         {
-            if ((dossier.NomEntreprise ?? "").ToLower().Contains(searchLower))
-                suggestions.Add(dossier.NomEntreprise ?? "");
-
-            if ((dossier.Siret ?? "").ToLower().Contains(searchLower))
-                suggestions.Add(dossier.Siret ?? "");
+            if ((dossier.DenominationSociale ?? "").ToLower().Contains(searchLower))
+                suggestions.Add(dossier.DenominationSociale ?? "");
 
             if ((dossier.PrenomNomContact ?? "").ToLower().Contains(searchLower))
                 suggestions.Add(dossier.PrenomNomContact ?? "");
@@ -202,8 +199,7 @@ public class HomeViewModel : INotifyPropertyChanged
         {
             var searchLower = SearchText.ToLower();
             résultat = résultat.Where(d =>
-                (d.NomEntreprise ?? "").ToLower().Contains(searchLower) ||
-                (d.Siret ?? "").ToLower().Contains(searchLower) ||
+                (d.DenominationSociale ?? "").ToLower().Contains(searchLower) ||
                 (d.PrenomNomContact ?? "").ToLower().Contains(searchLower) ||
                 (d.EmailContact ?? "").ToLower().Contains(searchLower) ||
                 (d.Secteur ?? "").ToLower().Contains(searchLower));
@@ -211,8 +207,8 @@ public class HomeViewModel : INotifyPropertyChanged
 
         résultat = SelectedSortIndex switch
         {
-            1 => résultat.OrderBy(d => d.NomEntreprise),
-            2 => résultat.OrderByDescending(d => d.NomEntreprise),
+            1 => résultat.OrderBy(d => d.DenominationSociale),
+            2 => résultat.OrderByDescending(d => d.DenominationSociale),
             _ => résultat
         };
 

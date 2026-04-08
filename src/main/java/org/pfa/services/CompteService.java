@@ -4,6 +4,8 @@ import org.pfa.models.Compte;
 import org.pfa.models.File;
 import org.pfa.repositories.CompteRepository;
 
+import java.util.List;
+
 public class CompteService {
     private final CompteRepository repo = new CompteRepository();
 
@@ -25,4 +27,6 @@ public class CompteService {
     public Compte findByFileAndNumero(File file, String numero) {
         return repo.getByFileAndNumero(file, numero);
     }
+
+    public List<Compte> findByFile(File file) { return repo.getByFile(file); }
 }

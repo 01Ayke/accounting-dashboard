@@ -16,6 +16,22 @@ public class ReferenceDataService
 {
     private readonly HttpClient _httpClient;
 
+    private static string FixEncoding(string input)
+    {
+        if (string.IsNullOrEmpty(input)) return input;
+        try
+        {
+            // La DB contient parfois du mojibake (les bytes UTF-8 ont été interprétés comme du Latin1 à l'insertion).
+            // On convertit le string corrompu (ex: "ImpÃ´t") en ses bytes d'origine, puis on les relit en UTF-8.
+            var bytes = System.Text.Encoding.GetEncoding("ISO-8859-1").GetBytes(input);
+            return System.Text.Encoding.UTF8.GetString(bytes);
+        }
+        catch
+        {
+            return input;
+        }
+    }
+
     private static readonly HttpClient _geoHttpClient = new HttpClient
     {
         BaseAddress = new Uri("https://geo.api.gouv.fr/")
@@ -63,7 +79,7 @@ public class ReferenceDataService
                 list.Add(new FormeJuridique
                 {
                     IdFormeJuridique = item.GetProperty("idFormeJuridique").GetInt32(),
-                    Libelle = item.TryGetProperty("libelle", out var lib) ? lib.GetString() ?? "" : $"Forme {item.GetProperty("idFormeJuridique").GetInt32()}"
+                    Libelle = FixEncoding(item.TryGetProperty("libelle", out var lib) ? lib.GetString() ?? "" : $"Forme {item.GetProperty("idFormeJuridique").GetInt32()}")
                 });
             }
             return list;
@@ -88,7 +104,7 @@ public class ReferenceDataService
                 list.Add(new RegimeFiscal
                 {
                     IdRegimeFiscal = item.GetProperty("idRegimeFiscal").GetInt32(),
-                    Libelle = item.TryGetProperty("libelle", out var lib) ? lib.GetString() ?? "" : $"Régime {item.GetProperty("idRegimeFiscal").GetInt32()}"
+                    Libelle = FixEncoding(item.TryGetProperty("libelle", out var lib) ? lib.GetString() ?? "" : $"Régime {item.GetProperty("idRegimeFiscal").GetInt32()}")
                 });
             }
             return list;
@@ -113,7 +129,7 @@ public class ReferenceDataService
                 list.Add(new RegimeTva
                 {
                     IdRegimeTVA = item.GetProperty("idRegimeTVA").GetInt32(),
-                    Libelle = item.TryGetProperty("libelle", out var lib) ? lib.GetString() ?? "" : $"TVA {item.GetProperty("idRegimeTVA").GetInt32()}"
+                    Libelle = FixEncoding(item.TryGetProperty("libelle", out var lib) ? lib.GetString() ?? "" : $"TVA {item.GetProperty("idRegimeTVA").GetInt32()}")
                 });
             }
             return list;

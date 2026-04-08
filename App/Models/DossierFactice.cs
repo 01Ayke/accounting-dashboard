@@ -1,18 +1,42 @@
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
+
 namespace App.Models;
 
-
+/// <summary>
+/// Représente un dossier tel que retourné par GET /files du backend.
+/// Les noms de propriétés correspondent exactement aux champs JSON du backend Java.
+/// </summary>
 public class DossierFactice
 {
+    [JsonPropertyName("id")]
     public int IdDossier { get; set; }
-    public required string NomEntreprise { get; set; }
-    public required string Siret { get; set; }
 
-    public required string Prenom { get; set; }
-    public required string Nom { get; set; }
-    public required string EmailContact { get; set; }
+    [JsonPropertyName("denominationSociale")]
+    public string DenominationSociale { get; set; } = "";
 
-    public string Secteur { get; set; } = "";
+    [JsonPropertyName("telephone")]
+    public string Telephone { get; set; } = "";
+
+    [JsonPropertyName("mail")]
+    public string Mail { get; set; } = "";
+
+    [JsonPropertyName("capital")]
+    public float Capital { get; set; }
+
+    [JsonPropertyName("representants")]
+    public List<Representant> Representants { get; set; } = new();
+
+    public string Secteur { get; set; } = "Comptabilité";
     public string Statut { get; set; } = "Actif";
 
-    public string PrenomNomContact => $"{Prenom} {Nom}";
+    [JsonIgnore]
+    public string PrenomNomContact => Representants.Count > 0
+        ? $"{Representants[0].Prenom} {Representants[0].Nom}"
+        : "";
+
+    [JsonIgnore]
+    public string EmailContact => Representants.Count > 0
+        ? Representants[0].Mail
+        : "";
 }
