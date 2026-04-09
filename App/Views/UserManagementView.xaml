@@ -19,25 +19,54 @@
 
         <!-- Titre page -->
         <StackPanel Grid.Row="0" Margin="0,0,0,20">
-            <TextBlock Text="Gestion des utilisateurs"
+            <TextBlock Text="Administration"
                        FontSize="26" FontWeight="Bold"
                        HorizontalAlignment="Center"/>
             <TextBlock Text="Créez des comptes et attribuez des rôles (rôle ADMIN requis)"
                        FontSize="13" Foreground="Gray" HorizontalAlignment="Center"/>
         </StackPanel>
 
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="15"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+        <TabControl x:Name="MainTabControl" Grid.Row="1"
+                    Background="Transparent" BorderThickness="0">
+            <TabControl.Resources>
+                <Style TargetType="TabItem">
+                    <Setter Property="FontSize" Value="14"/>
+                    <Setter Property="FontWeight" Value="SemiBold"/>
+                    <Setter Property="Padding" Value="22,10"/>
+                    <Setter Property="Foreground" Value="#64748B"/>
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="TabItem">
+                                <Border x:Name="bd" Padding="{TemplateBinding Padding}"
+                                        Background="Transparent" BorderThickness="0,0,0,3"
+                                        BorderBrush="Transparent" Margin="0,0,4,0">
+                                    <ContentPresenter ContentSource="Header"
+                                                      HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="bd" Property="BorderBrush" Value="#3B82F6"/>
+                                        <Setter Property="Foreground" Value="#1E3A8A"/>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="bd" Property="Background" Value="#EFF6FF"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TabControl.Resources>
 
-            <!-- ── Panneau Création utilisateur ── -->
-            <Border Grid.Column="0" Background="White" CornerRadius="12" Padding="25"
+            <!-- ── Onglet Création utilisateur ── -->
+            <TabItem Header="👤  Nouvel utilisateur">
+            <Border Background="White" CornerRadius="12" Padding="25" Margin="0,12,0,0"
                     Effect="{DynamicResource DropShadowEffect}">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <StackPanel>
+                    <StackPanel MaxWidth="600" HorizontalAlignment="Center">
                         <TextBlock Text="Créer un compte" FontSize="20" FontWeight="Bold"
                                    Margin="0,0,0,20" Foreground="#0D1B2A"/>
 
@@ -184,11 +213,13 @@
                     </StackPanel>
                 </ScrollViewer>
             </Border>
+            </TabItem>
 
-            <!-- ── Panneau Attribution de rôle ── -->
-            <Border Grid.Column="2" Background="White" CornerRadius="12" Padding="25"
+            <!-- ── Onglet Attribution de rôle ── -->
+            <TabItem Header="🔑  Nouveau rôle">
+            <Border Background="White" CornerRadius="12" Padding="25" Margin="0,12,0,0"
                     Effect="{DynamicResource DropShadowEffect}">
-                <StackPanel>
+                <StackPanel MaxWidth="600" HorizontalAlignment="Center">
                     <TextBlock Text="Attribuer des rôles" FontSize="20" FontWeight="Bold"
                                Margin="0,0,0,20" Foreground="#0D1B2A"/>
 
@@ -299,6 +330,8 @@
                     </Border>
                 </StackPanel>
             </Border>
-        </Grid>
+            </TabItem>
+
+        </TabControl>
     </Grid>
 </UserControl>

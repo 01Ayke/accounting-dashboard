@@ -2,6 +2,7 @@ using System.Windows;
 using System.Windows.Controls;
 using App.Models;
 using App.Services;
+using App.ViewModels;
 
 namespace App.Views;
 
@@ -17,20 +18,7 @@ public partial class HomeView : UserControl
         if (sender is ListBox listBox && listBox.SelectedItem is DossierFactice dossier)
         {
             var mainWindow = Window.GetWindow(this) as MainWindow;
-            if (mainWindow != null)
-            {
-                mainWindow.NavigateToDossierDetail(dossier);
-            }
-        }
-    }
-
-    private void OpenContextMenu(object sender, RoutedEventArgs e)
-    {
-        if (sender is Button button && button.ContextMenu != null)
-        {
-            button.ContextMenu.PlacementTarget = button;
-            button.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
-            button.ContextMenu.IsOpen = true;
+            mainWindow?.NavigateToDossierDetail(dossier);
         }
     }
 
@@ -44,7 +32,6 @@ public partial class HomeView : UserControl
                 ResearchBox.Text = suggestion;
                 ResearchBox.CaretIndex = ResearchBox.Text.Length;
             }
-
             e.Handled = true;
         }
         else if (e.Key == System.Windows.Input.Key.Escape)
@@ -72,53 +59,6 @@ public partial class HomeView : UserControl
     private void AddButton_Click(object sender, RoutedEventArgs e)
     {
         var mainWindow = Window.GetWindow(this) as MainWindow;
-        if (mainWindow != null)
-        {
-            mainWindow.NavigateToCreateDossier();
-        }
-    }
-
-    private void AssignDossierButton_Click(object sender, RoutedEventArgs e)
-    {
-        var mainWindow = Window.GetWindow(this) as MainWindow;
-        if (mainWindow != null)
-        {
-            mainWindow.NavigateToAssignDossier();
-        }
-    }
-
-    private void UserManagementButton_Click(object sender, RoutedEventArgs e)
-    {
-        var mainWindow = Window.GetWindow(this) as MainWindow;
-        if (mainWindow != null)
-        {
-            mainWindow.NavigateToUserManagement();
-        }
-    }
-
-    private void CreateCompteButton_Click(object sender, RoutedEventArgs e)
-    {
-        var mainWindow = Window.GetWindow(this) as MainWindow;
-        if (mainWindow != null)
-        {
-            mainWindow.NavigateToCreateCompte();
-        }
-    }
-
-    private void GrandLivreButton_Click(object sender, RoutedEventArgs e)
-    {
-        var mainWindow = Window.GetWindow(this) as MainWindow;
-        if (mainWindow != null)
-        {
-            mainWindow.NavigateToGrandLivre();
-        }
-    }
-
-    private async void LogoutButton_Click(object sender, RoutedEventArgs e)
-    {
-        var authService = new AuthService();
-        await authService.LogoutAsync();
-        var mainWindow = Window.GetWindow(this) as MainWindow;
-        mainWindow?.NavigateToLogin();
+        mainWindow?.NavigateToCreateDossier();
     }
 }

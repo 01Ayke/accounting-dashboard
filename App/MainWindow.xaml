@@ -1,18 +1,212 @@
-﻿<Window x:Class="App.MainWindow"
+<Window x:Class="App.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:views="clr-namespace:App.Views"
         mc:Ignorable="d"
-        Title="Application"
+        Title="LAKONTA 2026"
         WindowState="Maximized"
         WindowStyle="SingleBorderWindow"
         ResizeMode="CanResize">
 
-    <!-- UN SEUL root -->
-    <Grid>
-        <ContentControl x:Name="MainContent"/>
-    </Grid>
+    <Window.Resources>
+        <!-- Bouton navbar vert (Accueil) -->
+        <Style x:Key="NavGreenButton" TargetType="Button">
+            <Setter Property="Background" Value="#16A34A"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="18,0"/>
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd" Background="{TemplateBinding Background}"
+                                CornerRadius="6" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#15803D"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#166534"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
+        <!-- Bouton navbar rouge (Déconnexion) -->
+        <Style x:Key="NavRedButton" TargetType="Button">
+            <Setter Property="Background" Value="#DC2626"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="18,0"/>
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd" Background="{TemplateBinding Background}"
+                                CornerRadius="6" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#B91C1C"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#991B1B"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Bouton navbar menus déroulants -->
+        <Style x:Key="NavMenuButton" TargetType="Button">
+            <Setter Property="Background" Value="#334155"/>
+            <Setter Property="Foreground" Value="#E2E8F0"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#475569"/>
+            <Setter Property="Padding" Value="18,0"/>
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#475569"/>
+                                <Setter TargetName="bd" Property="BorderBrush" Value="#64748B"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#1E293B"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid Background="#E0E0E0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- ======== AppShell : Titre + Navbar (masqué sur Login) ======== -->
+        <Grid x:Name="AppShell" Grid.Row="0" Visibility="Collapsed">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="42"/>
+            </Grid.RowDefinitions>
+
+            <!-- Titre -->
+            <Border Grid.Row="0" Background="#E0E0E0" BorderBrush="Black" BorderThickness="1">
+                <TextBlock Text="LAKONTA 2026"
+                           FontSize="22" FontWeight="Bold"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"
+                           Foreground="#1A1A1A"/>
+            </Border>
+
+            <!-- Navbar -->
+            <Border Grid.Row="1" Background="#1E293B">
+                <Grid Margin="12,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Gauche : Accueil -->
+                    <Button Grid.Column="0"
+                            Content="⌂  Accueil"
+                            Style="{StaticResource NavGreenButton}"
+                            Click="NavAccueil_Click"
+                            VerticalAlignment="Center"/>
+
+                    <!-- Centre : menus déroulants -->
+                    <StackPanel Grid.Column="1" Orientation="Horizontal"
+                                HorizontalAlignment="Center" VerticalAlignment="Center">
+
+                        <!-- Administration -->
+                        <Button x:Name="BtnAdmin"
+                                Content="⚙  Administration  ▾"
+                                Style="{StaticResource NavMenuButton}"
+                                Click="AdminMenu_Click"
+                                Margin="6,0">
+                            <Button.ContextMenu>
+                                <ContextMenu Background="White" BorderBrush="#E2E8F0"
+                                             BorderThickness="1" HasDropShadow="True">
+                                    <ContextMenu.Resources>
+                                        <Style TargetType="MenuItem">
+                                            <Setter Property="FontSize" Value="13"/>
+                                            <Setter Property="FontWeight" Value="SemiBold"/>
+                                            <Setter Property="Foreground" Value="#1E293B"/>
+                                            <Setter Property="Padding" Value="14,10"/>
+                                            <Setter Property="Cursor" Value="Hand"/>
+                                        </Style>
+                                    </ContextMenu.Resources>
+                                    <MenuItem Header="👤  Nouvel utilisateur" Click="NavNouvelUtilisateur_Click"/>
+                                    <Separator/>
+                                    <MenuItem Header="🔑  Nouveau rôle"       Click="NavNouveauRole_Click"/>
+                                </ContextMenu>
+                            </Button.ContextMenu>
+                        </Button>
+
+                        <!-- Gestion dossier -->
+                        <Button x:Name="BtnGestionDossier"
+                                Content="📁  Gestion dossier  ▾"
+                                Style="{StaticResource NavMenuButton}"
+                                Click="GestionDossierMenu_Click"
+                                Margin="6,0">
+                            <Button.ContextMenu>
+                                <ContextMenu Background="White" BorderBrush="#E2E8F0"
+                                             BorderThickness="1" HasDropShadow="True">
+                                    <ContextMenu.Resources>
+                                        <Style TargetType="MenuItem">
+                                            <Setter Property="FontSize" Value="13"/>
+                                            <Setter Property="FontWeight" Value="SemiBold"/>
+                                            <Setter Property="Foreground" Value="#1E293B"/>
+                                            <Setter Property="Padding" Value="14,10"/>
+                                            <Setter Property="Cursor" Value="Hand"/>
+                                        </Style>
+                                    </ContextMenu.Resources>
+                                    <MenuItem Header="📂  Nouveau dossier" Click="NavNouveauDossier_Click"/>
+                                </ContextMenu>
+                            </Button.ContextMenu>
+                        </Button>
+
+                    </StackPanel>
+
+                    <!-- Droite : Déconnexion -->
+                    <Button Grid.Column="2"
+                            Content="⏻  Déconnexion"
+                            Style="{StaticResource NavRedButton}"
+                            Click="NavDeconnexion_Click"
+                            VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- Zone de contenu des pages -->
+        <ContentControl Grid.Row="1" x:Name="MainContent"/>
+    </Grid>
 </Window>

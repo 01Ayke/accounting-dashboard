@@ -6,9 +6,10 @@ namespace App.Views;
 
 public partial class UserManagementView : UserControl
 {
-    public UserManagementView()
+    public UserManagementView(int initialTab = 0)
     {
         InitializeComponent();
+        MainTabControl.SelectedIndex = initialTab;
     }
 
     private void BackButton_Click(object sender, RoutedEventArgs e)
