@@ -144,6 +144,29 @@ public class UserService
     }
 
     /// <summary>
+    /// Récupère les rôles de l'utilisateur courant via GET /get-my-roles.
+    /// </summary>
+    public async Task<List<string>> GetMyRolesAsync()
+    {
+        try
+        {
+            SetAuthHeader();
+            var json = await _httpClient.GetStringAsync("get-my-roles");
+            using var doc = JsonDocument.Parse(json);
+            var data = doc.RootElement.GetProperty("data");
+            var roles = new List<string>();
+            foreach (var item in data.EnumerateArray())
+                roles.Add(item.GetString() ?? "");
+            return roles;
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"UserService.GetMyRoles: Exception — {ex.Message}");
+            return new List<string>();
+        }
+    }
+
+    /// <summary>
     /// Vérifie si l'utilisateur courant est admin en appelant un endpoint admin-only.
     /// Retourne true si la réponse est 200 OK.
     /// </summary>

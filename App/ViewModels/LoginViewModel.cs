@@ -78,6 +78,10 @@ public class LoginViewModel : INotifyPropertyChanged
                 SessionManager.IsAdmin = await _userService.CheckIsAdminAsync();
                 System.Diagnostics.Debug.WriteLine($"LoginViewModel: IsAdmin = {SessionManager.IsAdmin}");
 
+                // Récupérer les rôles de l'utilisateur
+                SessionManager.UserRoles = await _userService.GetMyRolesAsync();
+                System.Diagnostics.Debug.WriteLine($"LoginViewModel: Rôles = {string.Join(", ", SessionManager.UserRoles)}");
+
                 LoginSucceeded?.Invoke();
             }
             else

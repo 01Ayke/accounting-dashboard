@@ -143,10 +143,13 @@
                             VerticalAlignment="Center"/>
 
                     <!-- Centre : menus déroulants -->
-                    <StackPanel Grid.Column="1" Orientation="Horizontal"
+
+                    <!-- === ZONE 1 : Accueil === -->
+                    <StackPanel x:Name="NavZone1"
+                                Grid.Column="1" Orientation="Horizontal"
                                 HorizontalAlignment="Center" VerticalAlignment="Center">
 
-                        <!-- Administration -->
+                        <!-- Administration (admin uniquement) -->
                         <Button x:Name="BtnAdmin"
                                 Content="⚙  Administration  ▾"
                                 Style="{StaticResource NavMenuButton}"
@@ -171,7 +174,7 @@
                             </Button.ContextMenu>
                         </Button>
 
-                        <!-- Gestion dossier -->
+                        <!-- Gestion dossier (expert / comptable) -->
                         <Button x:Name="BtnGestionDossier"
                                 Content="📁  Gestion dossier  ▾"
                                 Style="{StaticResource NavMenuButton}"
@@ -190,6 +193,85 @@
                                         </Style>
                                     </ContextMenu.Resources>
                                     <MenuItem Header="📂  Nouveau dossier" Click="NavNouveauDossier_Click"/>
+                                </ContextMenu>
+                            </Button.ContextMenu>
+                        </Button>
+
+                    </StackPanel>
+
+                    <!-- === ZONE 2 : Intérieur d'un dossier === -->
+                    <StackPanel x:Name="NavZone2"
+                                Grid.Column="1" Orientation="Horizontal"
+                                HorizontalAlignment="Center" VerticalAlignment="Center"
+                                Visibility="Collapsed">
+
+                        <!-- Administration dossier -->
+                        <Button x:Name="BtnDossierAdmin"
+                                Content="⚙  Administration  ▾"
+                                Style="{StaticResource NavMenuButton}"
+                                Click="DossierAdminMenu_Click"
+                                Margin="6,0">
+                            <Button.ContextMenu>
+                                <ContextMenu Background="White" BorderBrush="#E2E8F0"
+                                             BorderThickness="1" HasDropShadow="True">
+                                    <ContextMenu.Resources>
+                                        <Style TargetType="MenuItem">
+                                            <Setter Property="FontSize" Value="13"/>
+                                            <Setter Property="FontWeight" Value="SemiBold"/>
+                                            <Setter Property="Foreground" Value="#1E293B"/>
+                                            <Setter Property="Padding" Value="14,10"/>
+                                            <Setter Property="Cursor" Value="Hand"/>
+                                        </Style>
+                                    </ContextMenu.Resources>
+                                    <MenuItem Header="📓  Nouveau journal" Click="NavNouveauJournal_Click"/>
+                                </ContextMenu>
+                            </Button.ContextMenu>
+                        </Button>
+
+                        <!-- Comptabilité -->
+                        <Button x:Name="BtnComptabilite"
+                                Content="💼  Comptabilité  ▾"
+                                Style="{StaticResource NavMenuButton}"
+                                Click="ComptabiliteMenu_Click"
+                                Margin="6,0">
+                            <Button.ContextMenu>
+                                <ContextMenu Background="White" BorderBrush="#E2E8F0"
+                                             BorderThickness="1" HasDropShadow="True">
+                                    <ContextMenu.Resources>
+                                        <Style TargetType="MenuItem">
+                                            <Setter Property="FontSize" Value="13"/>
+                                            <Setter Property="FontWeight" Value="SemiBold"/>
+                                            <Setter Property="Foreground" Value="#1E293B"/>
+                                            <Setter Property="Padding" Value="14,10"/>
+                                            <Setter Property="Cursor" Value="Hand"/>
+                                        </Style>
+                                    </ContextMenu.Resources>
+                                    <MenuItem Header="✏️  Saisie"        Click="NavSaisie_Click"/>
+                                    <Separator/>
+                                    <MenuItem Header="🏢  Nouveau tiers" Click="NavNouveauTiers_Click"/>
+                                </ContextMenu>
+                            </Button.ContextMenu>
+                        </Button>
+
+                        <!-- Consultation -->
+                        <Button x:Name="BtnConsultation"
+                                Content="📊  Consultation  ▾"
+                                Style="{StaticResource NavMenuButton}"
+                                Click="ConsultationMenu_Click"
+                                Margin="6,0">
+                            <Button.ContextMenu>
+                                <ContextMenu Background="White" BorderBrush="#E2E8F0"
+                                             BorderThickness="1" HasDropShadow="True">
+                                    <ContextMenu.Resources>
+                                        <Style TargetType="MenuItem">
+                                            <Setter Property="FontSize" Value="13"/>
+                                            <Setter Property="FontWeight" Value="SemiBold"/>
+                                            <Setter Property="Foreground" Value="#1E293B"/>
+                                            <Setter Property="Padding" Value="14,10"/>
+                                            <Setter Property="Cursor" Value="Hand"/>
+                                        </Style>
+                                    </ContextMenu.Resources>
+                                    <MenuItem Header="📒  Grand livre" Click="NavGrandLivre_Click"/>
                                 </ContextMenu>
                             </Button.ContextMenu>
                         </Button>
