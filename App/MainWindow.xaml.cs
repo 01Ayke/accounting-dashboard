@@ -104,6 +104,7 @@ namespace App
         {
             ShowAppShell(true);
             _currentDossier = dossier;
+            SessionManager.CurrentDossierId = dossier.IdDossier; // Fix: enregistrer pour le journal
             SetNavZone(2);
             var viewModel = new DossierDetailViewModel { Dossier = dossier };
             var dashboardView = new DashboardView { DataContext = viewModel };
@@ -113,6 +114,7 @@ namespace App
         public void NavigateBackToHome()
         {
             _currentDossier = null;
+            SessionManager.CurrentDossierId = null; // Nettoyer
             ShowAppShell(true);
             SetNavZone(1);
             _homeView ??= new HomeView();

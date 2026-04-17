@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using App.Helpers;
 
 namespace App.ViewModels;
@@ -44,12 +45,14 @@ public class NouveauJournalViewModel : INotifyPropertyChanged
 
     public RelayCommand<object> ValiderCommand { get; }
 
+    private readonly App.Services.JournalService _journalService = new();
+
     public NouveauJournalViewModel()
     {
-        ValiderCommand = new RelayCommand<object>(_ => Valider());
+        ValiderCommand = new RelayCommand<object>(_ => _ = ValiderAsync());
     }
 
-    private void Valider()
+    private async Task ValiderAsync()
     {
         ErrorMessage = null;
         SuccessMessage = null;
@@ -60,14 +63,49 @@ public class NouveauJournalViewModel : INotifyPropertyChanged
             return;
         }
 
-        if (string.IsNullOrWhiteSpace(Code))
+        if (string.IsNullOrWhiteSpace(Code) || Code.Trim().Length != 5)
         {
-            ErrorMessage = "Le code du journal est obligatoire.";
+            ErrorMessage = "Le code du journal est obligatoire et doit faire exactement 5 caractères.";
             return;
         }
 
-        // TODO : appel API création journal
-        SuccessMessage = $"Journal « {Nom} » ({Code}) créé avec succès.";
+        if (string.IsNullOrWhiteSpace(Commentaire))
+        {
+            ErrorMessage = "Le commentaire est obligatoire.";
+            return;
+        }
+
+        var dossierId = App.Services.SessionManager.CurrentDossierId;
+        if (!dossierId.HasValue)
+        {
+            ErrorMessage = "Erreur : Impossible d'identifier le dossier en cours.";
+            return;
+        }
+
+        // Pour l'instant on met un IdTypeJournal factice par défaut (ex: 1)
+        // car le formulaire XAML ne permet pas encore de choisir le type.
+        int defaultTypeJournal = 1;
+
+        var (success, msg) = await _journalService.CreateJournalAsync(
+            dossierId.Value, 
+            defaultTypeJournal, 
+            Code, 
+            Nom, 
+            Commentaire
+        );
+
+        if (success)
+        {
+            SuccessMessage = msg;
+            // Optionnel: Vider les champs après création
+            Nom = "";
+            Code = "";
+            Commentaire = "";
+        }
+        else
+        {
+            ErrorMessage = msg;
+        }
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
