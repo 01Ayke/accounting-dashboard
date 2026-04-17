@@ -11,6 +11,7 @@ namespace App
     public partial class MainWindow : Window
     {
         private HomeView? _homeView;
+        private DossierFactice? _currentDossier;
 
         public MainWindow()
         {
@@ -23,12 +24,28 @@ namespace App
             AppShell.Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
         }
 
+        // Bascule entre Zone 1 (accueil) et Zone 2 (intérieur dossier)
+        private void SetNavZone(int zone)
+        {
+            NavZone1.Visibility = zone == 1 ? Visibility.Visible : Visibility.Collapsed;
+            NavZone2.Visibility = zone == 2 ? Visibility.Visible : Visibility.Collapsed;
+
+            if (zone == 1)
+            {
+                // Restrictions de rôle Zone 1
+                BtnAdmin.Visibility = SessionManager.IsAdmin
+                    ? Visibility.Visible : Visibility.Collapsed;
+                BtnGestionDossier.Visibility = (SessionManager.IsAdmin || SessionManager.IsExpert || SessionManager.IsComptable)
+                    ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
         // ── Handlers navbar ──────────────────────────────────────────────
 
         private void NavAccueil_Click(object sender, RoutedEventArgs e)
             => NavigateBackToHome();
 
-        private void AdminMenu_Click(object sender, RoutedEventArgs e)
+        private void OpenContextMenu(object sender)
         {
             if (sender is Button btn && btn.ContextMenu != null)
             {
@@ -38,24 +55,33 @@ namespace App
             }
         }
 
-        private void GestionDossierMenu_Click(object sender, RoutedEventArgs e)
+        private void AdminMenu_Click(object sender, RoutedEventArgs e)          => OpenContextMenu(sender);
+        private void GestionDossierMenu_Click(object sender, RoutedEventArgs e) => OpenContextMenu(sender);
+        private void DossierAdminMenu_Click(object sender, RoutedEventArgs e)   => OpenContextMenu(sender);
+        private void ComptabiliteMenu_Click(object sender, RoutedEventArgs e)   => OpenContextMenu(sender);
+        private void ConsultationMenu_Click(object sender, RoutedEventArgs e)   => OpenContextMenu(sender);
+
+        // Zone 1
+        private void NavNouvelUtilisateur_Click(object sender, RoutedEventArgs e) => NavigateToUserManagement(0);
+        private void NavNouveauRole_Click(object sender, RoutedEventArgs e)        => NavigateToUserManagement(1);
+        private void NavNouveauDossier_Click(object sender, RoutedEventArgs e)     => NavigateToCreateDossier();
+
+        // Zone 2
+        private void NavNouveauJournal_Click(object sender, RoutedEventArgs e)
+            => NavigateToNouveauJournal();
+
+        private void NavSaisie_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button btn && btn.ContextMenu != null)
-            {
-                btn.ContextMenu.PlacementTarget = btn;
-                btn.ContextMenu.Placement = PlacementMode.Bottom;
-                btn.ContextMenu.IsOpen = true;
-            }
+            // TODO : vue Saisie à implémenter
         }
 
-        private void NavNouvelUtilisateur_Click(object sender, RoutedEventArgs e)
-            => NavigateToUserManagement(0);
+        private void NavNouveauTiers_Click(object sender, RoutedEventArgs e)
+        {
+            // TODO : vue Nouveau tiers à implémenter
+        }
 
-        private void NavNouveauRole_Click(object sender, RoutedEventArgs e)
-            => NavigateToUserManagement(1);
-
-        private void NavNouveauDossier_Click(object sender, RoutedEventArgs e)
-            => NavigateToCreateDossier();
+        private void NavGrandLivre_Click(object sender, RoutedEventArgs e)
+            => NavigateToGrandLivre();
 
         private async void NavDeconnexion_Click(object sender, RoutedEventArgs e)
         {
@@ -69,6 +95,7 @@ namespace App
         public void NavigateToHome()
         {
             ShowAppShell(true);
+            SetNavZone(1);
             _homeView ??= new HomeView();
             MainContent.Content = _homeView;
         }
@@ -76,6 +103,8 @@ namespace App
         public void NavigateToDossierDetail(DossierFactice dossier)
         {
             ShowAppShell(true);
+            _currentDossier = dossier;
+            SetNavZone(2);
             var viewModel = new DossierDetailViewModel { Dossier = dossier };
             var dashboardView = new DashboardView { DataContext = viewModel };
             MainContent.Content = dashboardView;
@@ -83,7 +112,9 @@ namespace App
 
         public void NavigateBackToHome()
         {
+            _currentDossier = null;
             ShowAppShell(true);
+            SetNavZone(1);
             _homeView ??= new HomeView();
             MainContent.Content = _homeView;
             if (_homeView.DataContext is HomeViewModel vm)
@@ -120,10 +151,17 @@ namespace App
             MainContent.Content = new GrandLivreView();
         }
 
+        public void NavigateToNouveauJournal()
+        {
+            ShowAppShell(true);
+            MainContent.Content = new NouveauJournalView();
+        }
+
         public void NavigateToLogin()
         {
             ShowAppShell(false);
             _homeView = null;
+            _currentDossier = null;
             MainContent.Content = new LoginView();
         }
     }
