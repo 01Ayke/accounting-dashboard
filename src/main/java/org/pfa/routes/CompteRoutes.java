@@ -10,5 +10,7 @@ public class CompteRoutes implements RouteInterface {
         app.get("/dossier-comptes/{id}", compteController::getAll);
         app.get("/dossier-comptes-agregation/{id}", compteController::getAllAgregation);
         app.get("/dossier-comptes-rattachement/{id}", compteController::getAllComptesRattachement);
+        app.get("/dossier-comptes-tiers/{id}", compteController::getAllComptesTiers);
+        app.post("/compte-tiers", compteController::create);
     }
 }

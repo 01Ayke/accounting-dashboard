@@ -1,0 +1,154 @@
+<UserControl x:Class="App.Views.NouveauTiersView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:App.ViewModels"
+             Background="#F0F2F5">
+
+    <UserControl.DataContext>
+        <vm:NouveauTiersViewModel/>
+    </UserControl.DataContext>
+
+    <UserControl.Resources>
+        <Style x:Key="Label" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#374151"/>
+            <Setter Property="Margin" Value="0,0,0,5"/>
+        </Style>
+        <Style x:Key="Input" TargetType="TextBox">
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="Padding" Value="10,0"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="BorderBrush" Value="#D1D5DB"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="BtnBlue" TargetType="Button">
+            <Setter Property="Background" Value="#1D4ED8"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="6">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20,0"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#1E40AF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="32">
+        <StackPanel MaxWidth="560" HorizontalAlignment="Left">
+
+            <!-- En-tête -->
+            <TextBlock Text="Ajouter un compte auxiliaire"
+                       FontSize="22" FontWeight="Bold" Foreground="#111827" Margin="0,0,0,4"/>
+            <TextBlock Text="Plan comptable général — Fournisseurs (40) et Clients (41)"
+                       FontSize="13" Foreground="#6B7280" Margin="0,0,0,24"/>
+
+            <Border Background="White" CornerRadius="12" Padding="28">
+                <StackPanel>
+
+                    <!-- ① Type de compte -->
+                    <StackPanel Margin="0,0,0,18">
+                        <TextBlock Text="Type de compte *" Style="{StaticResource Label}"/>
+                        <ComboBox ItemsSource="{Binding Types}"
+                                  SelectedItem="{Binding SelectedType, Mode=TwoWay}"
+                                  Height="36" FontSize="13" Padding="10,0"
+                                  Background="White" BorderBrush="#D1D5DB"
+                                  VerticalContentAlignment="Center"/>
+                    </StackPanel>
+
+                    <!-- ② Compte d'agrégation -->
+                    <CheckBox Content="Compte d'agrégation"
+                              IsChecked="{Binding IsAgregation, Mode=TwoWay}"
+                              FontSize="13" FontWeight="SemiBold" Foreground="#1D4ED8"
+                              Margin="0,0,0,18"/>
+
+                    <!-- ③ Compte de rattachement -->
+                    <StackPanel Margin="0,0,0,18">
+                        <TextBlock Text="{Binding RattachementLabel}" Style="{StaticResource Label}"/>
+                        <ComboBox ItemsSource="{Binding RattachementItems}"
+                                  SelectedItem="{Binding SelectedRattachement, Mode=TwoWay}"
+                                  DisplayMemberPath="DisplayText"
+                                  Height="36" FontSize="13" Padding="10,0"
+                                  Background="White" BorderBrush="#D1D5DB"
+                                  VerticalContentAlignment="Center"/>
+                    </StackPanel>
+
+                    <!-- ④ Code -->
+                    <StackPanel Margin="0,0,0,18">
+                        <TextBlock Text="{Binding CodeLabel}" Style="{StaticResource Label}"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="12"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Grid.Column="0"
+                                     Text="{Binding Code, UpdateSourceTrigger=PropertyChanged}"
+                                     Style="{StaticResource Input}" MaxLength="3"/>
+                            <TextBlock Grid.Column="2" Text="{Binding CodeHint}"
+                                       FontSize="12" Foreground="#9CA3AF" VerticalAlignment="Center"/>
+                        </Grid>
+                    </StackPanel>
+
+                    <!-- ⑤ Libellé -->
+                    <StackPanel Margin="0,0,0,18">
+                        <TextBlock Text="Libellé *" Style="{StaticResource Label}"/>
+                        <TextBox Text="{Binding Libelle, UpdateSourceTrigger=PropertyChanged}"
+                                 Style="{StaticResource Input}"/>
+                    </StackPanel>
+
+                    <!-- Aperçu numéro -->
+                    <Border Background="#EFF6FF" CornerRadius="8" Padding="14,10"
+                            Margin="0,0,0,20" BorderBrush="#BFDBFE" BorderThickness="1">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Numéro généré : " FontSize="13"
+                                       Foreground="#374151" FontWeight="SemiBold"
+                                       VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding NumeroPreview}" FontSize="16"
+                                       FontWeight="Bold" Foreground="#1D4ED8"
+                                       FontFamily="Consolas" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Bouton -->
+                    <Button Content="✚  Créer le compte"
+                            Style="{StaticResource BtnBlue}"
+                            Command="{Binding CreerCommand}"
+                            HorizontalAlignment="Stretch"/>
+
+                    <!-- Erreur -->
+                    <TextBlock Text="{Binding ErrorAux}" Foreground="#DC2626"
+                               TextWrapping="Wrap" Margin="0,12,0,0" FontSize="13"
+                               Visibility="{Binding ErrorAux, Converter={StaticResource StringToVisibilityConverter}}"/>
+                    <!-- Succès -->
+                    <Border Background="#F0FDF4" CornerRadius="8" Padding="14,10"
+                            Margin="0,12,0,0" BorderBrush="#BBF7D0" BorderThickness="1"
+                            Visibility="{Binding SuccessAux, Converter={StaticResource StringToVisibilityConverter}}">
+                        <TextBlock Text="{Binding SuccessAux}" Foreground="#15803D"
+                                   TextWrapping="Wrap" FontSize="13"/>
+                    </Border>
+
+                </StackPanel>
+            </Border>
+
+            <!-- Note -->
+            <TextBlock Margin="0,20,0,0" FontSize="11" Foreground="#9CA3AF" TextWrapping="Wrap"
+                       Text="Format — Agrégation : 401 + 01 + 000 = 40101000  |  Tiers : 40101 + 001 = 40101001&#10;Les comptes 401, 411… sont déjà présents (créés automatiquement à l'ouverture du dossier)."/>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

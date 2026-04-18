@@ -113,4 +113,35 @@ public class CompteController extends Controller {
             response.setContext(ctx);
         }
     }
+
+    // Retourne les comptes tiers (8 chiffres : 40101001, 41101001…)
+    public void getAllComptesTiers(Context ctx) {
+        try {
+            Integer id = Integer.parseInt(ctx.pathParam("id"));
+            File file = fileService.getOne(id);
+
+            List<Compte> comptes = compteService.findByFile(file)
+                    .stream()
+                    .filter(c -> c.getNumeroCompte().matches("(40[0-9])|(41[0-9])"))
+                    .toList();
+
+            List<CompteAuxiliaire> tiers = new ArrayList<>();
+
+            for (Compte compte : comptes) {
+                for (CompteAuxiliaire aux : compte.getComptesAuxiliaires()) {
+                    // 8 chiffres : 40101001, 41101001…
+                    if (aux.getNumeroCompteAuxiliaire().matches("(40|41)[0-9][0-9][0-9][0-9][0-9][0-9]")) {
+                        tiers.add(aux);
+                    }
+                }
+            }
+
+            Response response = new Response("ok", tiers, 200);
+            response.setContext(ctx);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Response response = new Response("error", "Erreur serveur", 500);
+            response.setContext(ctx);
+        }
+    }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace App.Models;
@@ -7,9 +7,9 @@ public class Dossier
 {
     public Representant Representant { get; set; } = new();
 
-    public FormeJuridique FormeJuridique { get; set; }
-    public RegimeTva RegimeTva { get; set; }
-    public RegimeFiscal RegimeFiscal { get; set; }
+    public FormeJuridique? FormeJuridique { get; set; }
+    public RegimeTva? RegimeTva { get; set; }
+    public RegimeFiscal? RegimeFiscal { get; set; }
 
     public DateTime DateDerniereModification { get; private set; } = DateTime.Now;
     

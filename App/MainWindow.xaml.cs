@@ -72,12 +72,14 @@ namespace App
 
         private void NavSaisie_Click(object sender, RoutedEventArgs e)
         {
-            // TODO : vue Saisie à implémenter
+            ShowAppShell(true);
+            MainContent.Content = new SaisieEcritureView();
         }
 
         private void NavNouveauTiers_Click(object sender, RoutedEventArgs e)
         {
-            // TODO : vue Nouveau tiers à implémenter
+            ShowAppShell(true);
+            MainContent.Content = new NouveauTiersView();
         }
 
         private void NavGrandLivre_Click(object sender, RoutedEventArgs e)

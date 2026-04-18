@@ -90,9 +90,9 @@ public class CreateCompteViewModel : INotifyPropertyChanged
 
         var request = new CreateCompteRequest
         {
-            IdDossier = SelectedDossier.IdDossier,
-            Numero    = NumeroCompte,
-            Libelle   = Libelle
+            IdDossier    = SelectedDossier.IdDossier,
+            NumeroCompte = NumeroCompte,
+            Libelle      = Libelle
         };
 
         var (success, msg) = await _compteService.CreateCompteAsync(request);
