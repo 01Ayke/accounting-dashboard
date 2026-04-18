@@ -5,6 +5,7 @@ import java.util.List;
 
 public class CreationEcritureBatchRequest {
     private Integer idJournal;
+    private Integer idOperateur;
     private Date dateSaisie;
     private String libelle;
     private List<LigneEcritureDTO> lignes;
@@ -17,6 +18,14 @@ public class CreationEcritureBatchRequest {
 
     public void setIdJournal(Integer idJournal) {
         this.idJournal = idJournal;
+    }
+
+    public Integer getIdOperateur() {
+        return idOperateur;
+    }
+
+    public void setIdOperateur(Integer idOperateur) {
+        this.idOperateur = idOperateur;
     }
 
     public Date getDateSaisie() {

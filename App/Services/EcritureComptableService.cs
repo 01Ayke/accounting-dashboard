@@ -48,8 +48,8 @@ public class EcritureComptableService
                 formatedLignes.Add(new
                 {
                     idCompte = ligne.Item1,
-                    debit = ligne.Item2,
-                    credit = ligne.Item3
+                    debit    = ligne.Item2 > 0 ? (decimal?)ligne.Item2 : null,
+                    credit   = ligne.Item3 > 0 ? (decimal?)ligne.Item3 : null
                 });
             }
 

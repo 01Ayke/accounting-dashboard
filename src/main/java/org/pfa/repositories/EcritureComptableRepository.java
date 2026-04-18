@@ -33,19 +33,20 @@ public class EcritureComptableRepository {
 
                 EcritureComptable ecriture = new EcritureComptable(
                         dateSaisie,
-                        ligne.getDebit() != null ? ligne.getDebit() : 0.0,
-                        ligne.getCredit() != null ? ligne.getCredit() : 0.0,
+                        ligne.getDebit(),
+                        ligne.getCredit(),
                         request.getLibelle(),
                         compte,
-                        journal);
+                        journal,
+                        request.getIdOperateur());
 
                 session.persist(ecriture);
             }
 
             transaction.commit();
         } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
+            if (transaction != null && transaction.isActive()) {
+                try { transaction.rollback(); } catch (Exception rb) { e.addSuppressed(rb); }
             }
             e.printStackTrace();
             throw e;

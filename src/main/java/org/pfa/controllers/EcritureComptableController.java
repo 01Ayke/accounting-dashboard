@@ -21,6 +21,7 @@ public class EcritureComptableController extends Controller {
         if (super.checkToken(ctx)) {
             try {
                 CreationEcritureBatchRequest request = mapper.readValue(ctx.body(), CreationEcritureBatchRequest.class);
+                request.setIdOperateur(super.getUserId(ctx));
                 ecritureService.createBatch(request);
                 
                 Response response = new Response("ok", "Ecriture comptable bien saisie", 200);

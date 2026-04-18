@@ -24,6 +24,12 @@ public class EcritureComptable {
 
     private String libelle;
 
+    @Column(name = "id_operateur")
+    private Integer idOperateur;
+
+    @Column(name = "code_operation")
+    private String codeOperation;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_compte")
     @JsonBackReference(value = "compte-ecriture")
@@ -36,13 +42,15 @@ public class EcritureComptable {
 
     public EcritureComptable() {}
 
-    public EcritureComptable(Date date_saisie, Double debit, Double credit, String libelle, Compte compte, Journal journal) {
+    public EcritureComptable(Date date_saisie, Double debit, Double credit, String libelle, Compte compte, Journal journal, Integer idOperateur) {
         this.date_saisie = date_saisie;
         this.debit = debit;
         this.credit = credit;
         this.libelle = libelle;
         this.compte = compte;
         this.journal = journal;
+        this.idOperateur = idOperateur;
+        this.codeOperation = "SAI";
     }
 
     public Integer getId_ecriture_comptable() {
