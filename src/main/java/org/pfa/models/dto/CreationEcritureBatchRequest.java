@@ -5,10 +5,8 @@ import java.util.List;
 
 public class CreationEcritureBatchRequest {
     private Integer idJournal;
-    private Date dateFacture;
+    private Date dateSaisie;
     private String libelle;
-    private String numeroFacture;
-    private String codeOperation;
     private List<LigneEcritureDTO> lignes;
 
     public CreationEcritureBatchRequest() {}
@@ -21,12 +19,12 @@ public class CreationEcritureBatchRequest {
         this.idJournal = idJournal;
     }
 
-    public Date getDateFacture() {
-        return dateFacture;
+    public Date getDateSaisie() {
+        return dateSaisie;
     }
 
-    public void setDateFacture(Date dateFacture) {
-        this.dateFacture = dateFacture;
+    public void setDateSaisie(Date dateSaisie) {
+        this.dateSaisie = dateSaisie;
     }
 
     public String getLibelle() {
@@ -35,22 +33,6 @@ public class CreationEcritureBatchRequest {
 
     public void setLibelle(String libelle) {
         this.libelle = libelle;
-    }
-
-    public String getNumeroFacture() {
-        return numeroFacture;
-    }
-
-    public void setNumeroFacture(String numeroFacture) {
-        this.numeroFacture = numeroFacture;
-    }
-
-    public String getCodeOperation() {
-        return codeOperation;
-    }
-
-    public void setCodeOperation(String codeOperation) {
-        this.codeOperation = codeOperation;
     }
 
     public List<LigneEcritureDTO> getLignes() {

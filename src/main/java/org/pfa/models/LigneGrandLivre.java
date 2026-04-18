@@ -5,16 +5,14 @@ import java.util.Date;
 public class LigneGrandLivre {
     private Date date;
     private String codeJournal;
-    private String numeroFacture;
     private String libelle;
     private Double debit;
     private Double credit;
     private Double soldeProgressif;
 
     public LigneGrandLivre(EcritureComptable ecriture, Double solde) {
-        this.date = ecriture.getDate_facture();
+        this.date = ecriture.getDate_saisie();
         this.codeJournal = ecriture.getJournal().getCode();
-        this.numeroFacture = ecriture.getNumero_facture();
         this.libelle = ecriture.getLibelle();
         this.debit = ecriture.debit;
         this.credit = ecriture.credit;
@@ -30,10 +28,6 @@ public class LigneGrandLivre {
 
     public String getCodeJournal() {
         return codeJournal;
-    }
-
-    public String getNumeroFacture() {
-        return numeroFacture;
     }
 
     public String getLibelle() {

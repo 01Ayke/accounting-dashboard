@@ -13,7 +13,7 @@ public class GrandLivre {
             List<LigneGrandLivre> lignes = new ArrayList<>();
             Double solde = 0.0;
             for (EcritureComptable ecriture: compte.getEcrituresComptables()) {
-                if (ecriture.getDate_facture().after(debut) && ecriture.getDate_facture().before(fin)) {
+                if (ecriture.getDate_saisie().after(debut) && ecriture.getDate_saisie().before(fin)) {
                     LigneGrandLivre ligne = new LigneGrandLivre(ecriture, solde);
                     solde = ligne.getSoldeProgressif();
                     lignes.add(ligne);

@@ -14,13 +14,7 @@ public class EcritureComptable {
     private Integer id_ecriture_comptable;
 
     private Date date_saisie;
-    private Date date_validation;
-
     public Date getDate_saisie() { return date_saisie; }
-
-    public Date getDate_validation() {
-        return date_validation;
-    }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public Double debit; // public car sinon problème avec le serializer json
@@ -28,13 +22,7 @@ public class EcritureComptable {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public Double credit;
 
-    private String code_operation;
-
-    private String numero_facture;
-
     private String libelle;
-
-    private Date date_facture;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_compte")
@@ -48,14 +36,11 @@ public class EcritureComptable {
 
     public EcritureComptable() {}
 
-    public EcritureComptable(Date date_saisie, Double debit, Double credit, String code_operation, String numero_facture, String libelle, Date date_facture, Compte compte, Journal journal) {
+    public EcritureComptable(Date date_saisie, Double debit, Double credit, String libelle, Compte compte, Journal journal) {
         this.date_saisie = date_saisie;
         this.debit = debit;
         this.credit = credit;
-        this.code_operation = code_operation;
-        this.numero_facture = numero_facture;
         this.libelle = libelle;
-        this.date_facture = date_facture;
         this.compte = compte;
         this.journal = journal;
     }
@@ -74,19 +59,7 @@ public class EcritureComptable {
 //        return debit;
 //    }
 
-    public String getCode_operation() {
-        return code_operation;
-    }
-
-    public String getNumero_facture() {
-        return numero_facture;
-    }
-
     public String getLibelle() { return libelle; }
-
-    public Date getDate_facture() {
-        return date_facture;
-    }
 
     public Compte getCompte() {
         return compte;
