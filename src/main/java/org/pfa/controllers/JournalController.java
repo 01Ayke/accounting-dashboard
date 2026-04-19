@@ -24,6 +24,20 @@ public class JournalController extends Controller {
         super(sessionManager);
     }
 
+    public void getByDossier(Context ctx) {
+        if (super.checkToken(ctx)) {
+            try {
+                Integer dossierId = Integer.parseInt(ctx.pathParam("id"));
+                var journaux = journalService.getByDossierId(dossierId);
+                Response response = new Response("ok", journaux, 200);
+                response.setContext(ctx);
+            } catch (Exception e) {
+                Response response = new Response("error", "Dossier invalide", 400);
+                response.setContext(ctx);
+            }
+        }
+    }
+
     public void create(Context ctx) throws JsonProcessingException {
         if (super.checkToken(ctx)) {
             try {

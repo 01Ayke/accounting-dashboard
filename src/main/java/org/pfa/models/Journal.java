@@ -23,6 +23,7 @@ public class Journal {
 
     @OneToMany(mappedBy = "journal", fetch = FetchType.LAZY)
     @JsonManagedReference(value = "ecriture-journal")
+    @com.fasterxml.jackson.annotation.JsonIgnore
     Set<EcritureComptable> ecrituresComptables;
 
     private String commentaire;

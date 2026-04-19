@@ -84,15 +84,26 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="16"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="16"/>
                         <ColumnDefinition Width="2*"/>
                     </Grid.ColumnDefinitions>
 
                     <StackPanel Grid.Column="0">
+                        <TextBlock Text="Journal *" Style="{StaticResource FieldLabel}"/>
+                        <ComboBox ItemsSource="{Binding JournauxDisponibles}"
+                                  SelectedItem="{Binding SelectedJournal, Mode=TwoWay}"
+                                  DisplayMemberPath="DisplayText"
+                                  Height="32" Background="White" BorderBrush="#D1D5DB" BorderThickness="1"
+                                  VerticalContentAlignment="Center" FontSize="13" Padding="8,0"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2">
                         <TextBlock Text="Date comptable *" Style="{StaticResource FieldLabel}"/>
                         <TextBox Text="{Binding DateSaisie, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FormInput}"/>
                     </StackPanel>
 
-                    <StackPanel Grid.Column="2">
+                    <StackPanel Grid.Column="4">
                         <TextBlock Text="Libellé de l'écriture *" Style="{StaticResource FieldLabel}"/>
                         <TextBox Text="{Binding LibelleEcriture, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FormInput}"/>
                     </StackPanel>

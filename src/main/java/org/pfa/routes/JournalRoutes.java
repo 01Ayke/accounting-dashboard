@@ -7,6 +7,7 @@ import org.pfa.services.SessionManager;
 public class JournalRoutes implements RouteInterface {
     public static void register(Javalin app, SessionManager sessionManager) {
         JournalController journalController = new JournalController(sessionManager);
+        app.get("/dossier-journaux/{id}", journalController::getByDossier);
         app.post("/journal", journalController::create);
     }
 }

@@ -43,23 +43,23 @@ public class SaisieLigneViewModel : INotifyPropertyChanged
 
 public class SaisieEcritureViewModel : INotifyPropertyChanged
 {
-    private string _journal = "";
     private string _dateSaisie = System.DateTime.Now.ToString("dd/MM/yyyy");
     private string _libelleEcriture = "";
-    
-    // Pour la dropdown
-    public ObservableCollection<CompteDto> ComptesDisponibles { get; } = new();
 
-    private CompteDto? _selectedCompte;
-    private decimal? _nouveauDebit;
-    private decimal? _nouveauCredit;
-    private string? _errorMessage;
-    private string? _successMessage;
+    public ObservableCollection<CompteDto>  ComptesDisponibles  { get; } = new();
+    public ObservableCollection<JournalDto> JournauxDisponibles { get; } = new();
 
-    public string Journal
+    private JournalDto? _selectedJournal;
+    private CompteDto?  _selectedCompte;
+    private decimal?    _nouveauDebit;
+    private decimal?    _nouveauCredit;
+    private string?     _errorMessage;
+    private string?     _successMessage;
+
+    public JournalDto? SelectedJournal
     {
-        get => _journal;
-        set { if (_journal != value) { _journal = value; OnPropertyChanged(); } }
+        get => _selectedJournal;
+        set { if (_selectedJournal != value) { _selectedJournal = value; OnPropertyChanged(); } }
     }
 
     public string DateSaisie
@@ -129,6 +129,7 @@ public class SaisieEcritureViewModel : INotifyPropertyChanged
     public async Task InitAsync()
     {
         await ChargerComptesAsync();
+        await ChargerJournauxAsync();
     }
 
     private async Task ChargerComptesAsync()
@@ -158,6 +159,22 @@ public class SaisieEcritureViewModel : INotifyPropertyChanged
         }
     }
 
+    private async Task ChargerJournauxAsync()
+    {
+        var dossierId = SessionManager.CurrentDossierId;
+        if (!dossierId.HasValue) return;
+        try
+        {
+            var journaux = await new JournalService().GetJournauxAsync(dossierId.Value);
+            JournauxDisponibles.Clear();
+            foreach (var j in journaux) JournauxDisponibles.Add(j);
+            if (JournauxDisponibles.Count > 0) SelectedJournal = JournauxDisponibles[0];
+        }
+        catch (System.Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Erreur chargement journaux: {ex.Message}");
+        }
+    }
 
     private void AjouterLigne()
     {
@@ -206,6 +223,12 @@ public class SaisieEcritureViewModel : INotifyPropertyChanged
         ErrorMessage = null;
         SuccessMessage = null;
 
+        if (SelectedJournal == null)
+        {
+            ErrorMessage = "Vous devez sélectionner un journal.";
+            return;
+        }
+
         if (Lignes.Count < 2)
         {
             ErrorMessage = "Une écriture doit comporter au moins deux lignes.";
@@ -218,17 +241,15 @@ public class SaisieEcritureViewModel : INotifyPropertyChanged
             return;
         }
 
-        var dossierId = SessionManager.CurrentDossierId;
-        if (!dossierId.HasValue)
+        if (!SessionManager.CurrentDossierId.HasValue)
         {
             ErrorMessage = "Erreur : Impossible d'identifier le dossier en cours.";
             return;
         }
 
-        // Appel de l'API /ecritures
         var ecritureService = new EcritureComptableService();
         var (success, msg) = await ecritureService.CreateBatchAsync(
-            1, // IdJournal par défaut
+            SelectedJournal.Id,
             System.DateTime.Now,
             LibelleEcriture,
             Lignes.Select(l => new Tuple<int, decimal, decimal>(l.IdCompte, l.Debit ?? 0, l.Credit ?? 0)).ToList()
@@ -241,8 +262,6 @@ public class SaisieEcritureViewModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(TotalDebit));
             OnPropertyChanged(nameof(TotalCredit));
             OnPropertyChanged(nameof(Equilibre));
-
-            Journal = "";
             LibelleEcriture = "";
         }
         else
