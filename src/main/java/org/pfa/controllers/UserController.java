@@ -50,7 +50,9 @@ public class UserController extends Controller {
             response.setContext(ctx);
             return;
         } 
-        Log.log("Invalid token for logout attempt", Log_Type.ERROR, Log_Location.Controller);
+        else{
+            Log.log("Invalid token for logout attempt", Log_Type.ERROR, Log_Location.Controller);
+        }
     }
 
     public void handleRegister(Context ctx) {
@@ -79,7 +81,9 @@ public class UserController extends Controller {
                 return;
             }
         }
-        Log.log("Permission denied for registration", Log_Type.ERROR, Log_Location.Controller);
+        else{
+            Log.log("Permission denied for registration", Log_Type.ERROR, Log_Location.Controller);
+        }
     }
 
     public void handleGetRole(Context ctx) {
@@ -100,7 +104,9 @@ public class UserController extends Controller {
                 response.setContext(ctx);
             }
         }
-        Log.log("Permission denied for retrieving user roles", Log_Type.ERROR, Log_Location.Controller);
+        else{
+            Log.log("Permission denied for getting roles", Log_Type.ERROR, Log_Location.Controller);
+        }
     }
 }
 

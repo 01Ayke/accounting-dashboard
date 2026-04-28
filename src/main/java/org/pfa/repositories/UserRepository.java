@@ -92,7 +92,7 @@ public class UserRepository {
         }
     }
 
-    public boolean changeRoleByID(Integer id_user, Integer id_role) {
+    public boolean addRoleByID(Integer id_user, Integer id_role) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
 
@@ -103,10 +103,29 @@ public class UserRepository {
                 .executeUpdate();
 
             session.getTransaction().commit();
-            Log.log("Role " + id_role + " changed for user " + id_user, Log_Type.INFO, Log_Location.Repository);
+            Log.log("Role " + id_role + " added for user " + id_user, Log_Type.INFO, Log_Location.Repository);
             return true;
         } catch (Exception e) {
-            Log.log("Failed to change role for user " + id_user + ": " + e.getMessage(), Log_Type.ERROR, Log_Location.Repository);
+            Log.log("Failed to add role for user " + id_user + ": " + e.getMessage(), Log_Type.ERROR, Log_Location.Repository);
+            return false;
+        }
+    }
+
+    public boolean removeRoleByID(Integer id_user, Integer id_role) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            session.beginTransaction();
+
+            session.createNativeQuery(
+                    "DELETE FROM utilisateur_role WHERE id_utilisateur = :id_user AND id_role = :id_role")
+                .setParameter("id_user", id_user)
+                .setParameter("id_role", id_role)
+                .executeUpdate();
+
+            session.getTransaction().commit();
+            Log.log("Role " + id_role + " removed for user " + id_user, Log_Type.INFO, Log_Location.Repository);
+            return true;
+        } catch (Exception e) {
+            Log.log("Failed to remove role for user " + id_user + ": " + e.getMessage(), Log_Type.ERROR, Log_Location.Repository);
             return false;
         }
     }

@@ -44,7 +44,25 @@ public class UserService {
                 Log.log("Role not found for " + role, Log_Type.ERROR, Log_Location.Service);
                 return false; // Role not found
             }
-            if(!repo.changeRoleByID(userId, roleId)){
+
+            List<Roles_enum> currentRoles = repo.findRolesByID(userId);
+            for (Roles_enum currentRole : currentRoles) {
+                if(!newRoles.contains(currentRole)) {
+                    Integer currentRoleId = roleService.getRoleIdByCode(currentRole);
+                    if (currentRoleId != null) {
+                        repo.removeRoleByID(userId, currentRoleId);
+                        Log.log("Role " + currentRole + " removed from user " + userId, Log_Type.INFO, Log_Location.Service);
+                    } else {
+                        Log.log("Current role not found for " + currentRole, Log_Type.ERROR, Log_Location.Service);
+                    }
+                }
+            }
+
+            if(currentRoles.contains(role)) {
+                continue; // Skip roles that are not in the new list
+            }
+
+            if(!repo.addRoleByID(userId, roleId)){
                 Log.log("User " + userId + " already has role " + role, Log_Type.WARNING, Log_Location.Service);
                 //return false; // Failed to change role
             }
@@ -75,7 +93,7 @@ public class UserService {
             RoleService roleService = new RoleService();
             Integer roleId = roleService.getRoleIdByCode(roleEnum);
             if (roleId != null) {
-                repo.changeRoleByID(newUser.getId(), roleId);
+                repo.addRoleByID(newUser.getId(), roleId);
                 Log.log("Role " + roleEnum + " assigned to user " + newUser.getId(), Log_Type.INFO, Log_Location.Service);
             } else {
                 Log.log("Role not found for code: " + roleCode, Log_Type.ERROR, Log_Location.Service);
