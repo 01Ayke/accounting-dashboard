@@ -43,7 +43,7 @@ public class SaisieLigneViewModel : INotifyPropertyChanged
 
 public class SaisieEcritureViewModel : INotifyPropertyChanged
 {
-    private string _dateSaisie = System.DateTime.Now.ToString("dd/MM/yyyy");
+    private System.DateTime? _dateSaisie = System.DateTime.Now;
     private string _libelleEcriture = "";
 
     public ObservableCollection<CompteDto>  ComptesDisponibles  { get; } = new();
@@ -62,7 +62,7 @@ public class SaisieEcritureViewModel : INotifyPropertyChanged
         set { if (_selectedJournal != value) { _selectedJournal = value; OnPropertyChanged(); } }
     }
 
-    public string DateSaisie
+    public System.DateTime? DateSaisie
     {
         get => _dateSaisie;
         set { if (_dateSaisie != value) { _dateSaisie = value; OnPropertyChanged(); } }
@@ -247,10 +247,16 @@ public class SaisieEcritureViewModel : INotifyPropertyChanged
             return;
         }
 
+        if (DateSaisie == null)
+        {
+            ErrorMessage = "Vous devez sélectionner une date comptable.";
+            return;
+        }
+
         var ecritureService = new EcritureComptableService();
         var (success, msg) = await ecritureService.CreateBatchAsync(
             SelectedJournal.Id,
-            System.DateTime.Now,
+            DateSaisie.Value,
             LibelleEcriture,
             Lignes.Select(l => new Tuple<int, decimal, decimal>(l.IdCompte, l.Debit ?? 0, l.Credit ?? 0)).ToList()
         );

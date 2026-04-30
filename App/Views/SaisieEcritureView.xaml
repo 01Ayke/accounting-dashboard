@@ -100,7 +100,8 @@
 
                     <StackPanel Grid.Column="2">
                         <TextBlock Text="Date comptable *" Style="{StaticResource FieldLabel}"/>
-                        <TextBox Text="{Binding DateSaisie, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FormInput}"/>
+                        <DatePicker SelectedDate="{Binding DateSaisie, Mode=TwoWay}"
+                                    Height="32" FontSize="13"/>
                     </StackPanel>
 
                     <StackPanel Grid.Column="4">
