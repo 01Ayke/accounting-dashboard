@@ -179,9 +179,13 @@
 
                     <StackPanel Grid.Column="0">
                         <TextBlock Text="N° Compte *" Style="{StaticResource FieldLabel}"/>
-                        <ComboBox ItemsSource="{Binding ComptesDisponibles}"
+                        <ComboBox ItemsSource="{Binding ComptesView}"
                                   SelectedItem="{Binding SelectedCompte, UpdateSourceTrigger=PropertyChanged}"
                                   DisplayMemberPath="DisplayText"
+                                  IsEditable="True"
+                                  IsTextSearchEnabled="False"
+                                  StaysOpenOnEdit="True"
+                                  Text="{Binding FiltreCompte, UpdateSourceTrigger=PropertyChanged}"
                                   Height="32" Background="White" BorderBrush="#D1D5DB" BorderThickness="1"
                                   VerticalContentAlignment="Center" FontSize="13" Padding="8,0" />
                     </StackPanel>

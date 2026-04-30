@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using System.Windows.Data;
 using App.Helpers;
 using App.Services;
 
@@ -48,6 +49,22 @@ public class SaisieEcritureViewModel : INotifyPropertyChanged
 
     public ObservableCollection<CompteDto>  ComptesDisponibles  { get; } = new();
     public ObservableCollection<JournalDto> JournauxDisponibles { get; } = new();
+
+    private readonly ICollectionView _comptesView;
+    public ICollectionView ComptesView => _comptesView;
+
+    private string _filtreCompte = "";
+    public string FiltreCompte
+    {
+        get => _filtreCompte;
+        set
+        {
+            if (_filtreCompte == value) return;
+            _filtreCompte = value;
+            OnPropertyChanged();
+            _comptesView.Refresh();
+        }
+    }
 
     private JournalDto? _selectedJournal;
     private CompteDto?  _selectedCompte;
@@ -115,6 +132,12 @@ public class SaisieEcritureViewModel : INotifyPropertyChanged
 
     public SaisieEcritureViewModel()
     {
+        _comptesView = CollectionViewSource.GetDefaultView(ComptesDisponibles);
+        _comptesView.Filter = obj =>
+            obj is CompteDto c &&
+            (string.IsNullOrEmpty(_filtreCompte) ||
+             c.DisplayText.Contains(_filtreCompte, System.StringComparison.OrdinalIgnoreCase));
+
         AjouterLigneCommand = new RelayCommand<object>(_ => AjouterLigne());
         ValiderEcritureCommand = new RelayCommand<object>(_ => _ = ValiderEcritureAsync());
         // NE PAS appeler ChargerComptesAsync() ici — CurrentDossierId n'est pas encore disponible
@@ -214,6 +237,7 @@ public class SaisieEcritureViewModel : INotifyPropertyChanged
 
         // Remise à zéro des champs de saisie
         SelectedCompte = null;
+        FiltreCompte = "";
         NouveauDebit = null;
         NouveauCredit = null;
     }
