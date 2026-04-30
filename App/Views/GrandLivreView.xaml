@@ -155,8 +155,9 @@
                     </Style>
                 </DataGrid.ColumnHeaderStyle>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Compte" Binding="{Binding NumeroCompte}" Width="90"/>
+                    <DataGridTextColumn Header="Compte"  Binding="{Binding NumeroCompte}" Width="90"/>
                     <DataGridTextColumn Header="Date"    Binding="{Binding Date}"          Width="120"/>
+                    <DataGridTextColumn Header="Journal" Binding="{Binding JournalDisplay}" Width="160"/>
                     <DataGridTextColumn Header="Libellé" Binding="{Binding Libelle}"       Width="*"/>
                     <DataGridTextColumn Header="Débit"   Binding="{Binding Debit, StringFormat={}{0:N2}}"   Width="110"/>
                     <DataGridTextColumn Header="Crédit"  Binding="{Binding Credit, StringFormat={}{0:N2}}"  Width="110"/>

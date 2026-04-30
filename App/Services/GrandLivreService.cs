@@ -137,12 +137,16 @@ public class GrandLivreService
                         }
                     }
 
-                    string libelle = ecriture.TryGetProperty("libelle", out var lib) ? lib.GetString() ?? "" : "";
+                    string libelle        = ecriture.TryGetProperty("libelle",        out var lib) ? lib.GetString() ?? "" : "";
+                    string codeJournal    = ecriture.TryGetProperty("codeJournal",    out var cj)  ? cj.GetString()  ?? "" : "";
+                    string libelleJournal = ecriture.TryGetProperty("libelleJournal", out var lj)  ? lj.GetString()  ?? "" : "";
 
                     lignes.Add(new LigneGrandLivre
                     {
                         NumeroCompte    = numeroCompte,
                         Date            = dateStr,
+                        CodeJournal     = codeJournal,
+                        LibelleJournal  = libelleJournal,
                         Libelle         = libelle,
                         Debit           = debit,
                         Credit          = credit,

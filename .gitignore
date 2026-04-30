@@ -9,3 +9,4 @@ App/.idea/*
 App/.vs/*
 App/obj/*
 App/bin/*
+BDD-MySQL/log*
