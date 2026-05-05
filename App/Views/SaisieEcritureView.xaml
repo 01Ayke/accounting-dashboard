@@ -212,8 +212,32 @@
         </Border>
 
         <!-- Submit global -->
-        <Button Grid.Row="3" Content="✔  Valider l'ensemble des lignes" 
-                Style="{StaticResource SubmitButton}" Command="{Binding ValiderEcritureCommand}"
-                HorizontalAlignment="Right"/>
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0" Content="← Retour"
+                    Height="40" Padding="16,0"
+                    Click="BackButton_Click" Cursor="Hand"
+                    Background="White" Foreground="#374151"
+                    BorderBrush="#D1D5DB" BorderThickness="1">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+
+            <Button Grid.Column="2" Content="✔  Valider l'ensemble des lignes"
+                    Style="{StaticResource SubmitButton}" Command="{Binding ValiderEcritureCommand}"/>
+        </Grid>
     </Grid>
 </UserControl>

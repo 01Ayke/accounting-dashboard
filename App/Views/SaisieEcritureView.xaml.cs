@@ -9,7 +9,6 @@ public partial class SaisieEcritureView : UserControl
     public SaisieEcritureView()
     {
         InitializeComponent();
-        // S'abonner à Loaded pour charger les comptes APRÈS que la session soit disponible
         Loaded += OnLoaded;
     }
 
@@ -19,5 +18,11 @@ public partial class SaisieEcritureView : UserControl
         {
             await vm.InitAsync();
         }
+    }
+
+    private void BackButton_Click(object sender, RoutedEventArgs e)
+    {
+        var mainWindow = Window.GetWindow(this) as MainWindow;
+        mainWindow?.NavigateBackToDossierDetail();
     }
 }

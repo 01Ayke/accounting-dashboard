@@ -13,6 +13,6 @@ public partial class GrandLivreView : UserControl
     private void BackButton_Click(object sender, RoutedEventArgs e)
     {
         var mainWindow = Window.GetWindow(this) as MainWindow;
-        mainWindow?.NavigateBackToHome();
+        mainWindow?.NavigateBackToDossierDetail();
     }
 }

@@ -155,6 +155,14 @@ namespace App
             MainContent.Content = new GrandLivreView();
         }
 
+        public void NavigateBackToDossierDetail()
+        {
+            if (_currentDossier != null)
+                NavigateToDossierDetail(_currentDossier);
+            else
+                NavigateBackToHome();
+        }
+
         public void NavigateToNouveauJournal()
         {
             ShowAppShell(true);
