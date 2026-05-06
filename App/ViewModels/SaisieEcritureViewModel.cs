@@ -47,6 +47,8 @@ public class SaisieEcritureViewModel : INotifyPropertyChanged
     private System.DateTime? _dateSaisie = System.DateTime.Now;
     private string _libelleEcriture = "";
 
+    public string NomDossier => SessionManager.CurrentDossierName ?? "";
+
     public ObservableCollection<CompteDto>  ComptesDisponibles  { get; } = new();
     public ObservableCollection<JournalDto> JournauxDisponibles { get; } = new();
 

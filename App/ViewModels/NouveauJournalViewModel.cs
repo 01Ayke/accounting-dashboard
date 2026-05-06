@@ -7,6 +7,8 @@ namespace App.ViewModels;
 
 public class NouveauJournalViewModel : INotifyPropertyChanged
 {
+    public string NomDossier => App.Services.SessionManager.CurrentDossierName ?? "";
+
     private string _nom = "";
     private string _code = "";
     private string _commentaire = "";

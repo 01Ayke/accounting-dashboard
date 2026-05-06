@@ -79,6 +79,8 @@
         <!-- Titre et infos générales (Facture, etc.) -->
         <Border Grid.Row="0" Background="White" CornerRadius="12" Padding="20" Margin="0,0,0,16">
             <StackPanel>
+                <TextBlock Text="{Binding NomDossier}" FontSize="18" FontWeight="SemiBold" Foreground="#1D4ED8"
+                           HorizontalAlignment="Center" Margin="0,0,0,4"/>
                 <TextBlock Text="Saisie d'écritures comptables" FontSize="22" FontWeight="Bold" Margin="0,0,0,16"/>
                 <Grid>
                     <Grid.ColumnDefinitions>

@@ -13,6 +13,8 @@ namespace App.ViewModels;
 
 public class NouveauTiersViewModel : INotifyPropertyChanged
 {
+    public string NomDossier => App.Services.SessionManager.CurrentDossierName ?? "";
+
     private readonly CompteComptableService _service = new();
 
     private List<CompteDto> _comptesBase       = new();

@@ -106,7 +106,8 @@ namespace App
         {
             ShowAppShell(true);
             _currentDossier = dossier;
-            SessionManager.CurrentDossierId = dossier.IdDossier; // Fix: enregistrer pour le journal
+            SessionManager.CurrentDossierId   = dossier.IdDossier;
+            SessionManager.CurrentDossierName = dossier.DenominationSociale;
             SetNavZone(2);
             var viewModel = new DossierDetailViewModel { Dossier = dossier };
             var dashboardView = new DashboardView { DataContext = viewModel };

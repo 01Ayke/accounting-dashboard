@@ -9,7 +9,8 @@ public static class SessionManager
     public static bool IsAdmin { get; set; }
     public static string? CurrentUserEmail { get; set; }
     public static List<string> UserRoles { get; set; } = new();
-    public static int? CurrentDossierId { get; set; } // Identifiant du dossier en cours (Zone 2)
+    public static int? CurrentDossierId { get; set; }
+    public static string? CurrentDossierName { get; set; }
 
     public static bool IsAuthenticated => !string.IsNullOrEmpty(Token);
 
@@ -23,5 +24,6 @@ public static class SessionManager
         CurrentUserEmail = null;
         UserRoles = new();
         CurrentDossierId = null;
+        CurrentDossierName = null;
     }
 }
