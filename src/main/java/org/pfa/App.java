@@ -29,7 +29,6 @@ public class App {
         JournalRoutes.register(app, sessionManager);
         EcritureComptableRoutes.register(app, sessionManager);
         AffectationRoutes.register(app, sessionManager);
-        ModeAmortissementRoutes.register(app, sessionManager);
         CompteRoutes.register(app, sessionManager);
         Runtime.getRuntime().addShutdownHook(new Thread(sessionManager::shutdown));
         Log.log("Server started on http://localhost:7070", Log_Type.INFO, Log_Location.App);

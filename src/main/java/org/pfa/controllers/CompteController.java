@@ -6,6 +6,11 @@ import io.javalin.http.Context;
 import org.pfa.models.Compte;
 import org.pfa.models.CompteAuxiliaire;
 import org.pfa.models.File;
+import org.pfa.models.LOG.Log;
+import org.pfa.models.LOG.Log_Location;
+import org.pfa.models.LOG.Log_Type;
+import org.pfa.models.dto.CompteLight;
+import org.pfa.models.dto.CompteUnion;
 import org.pfa.models.dto.CreationCompteRequest;
 import org.pfa.models.dto.Response;
 import org.pfa.services.CompteService;
@@ -43,10 +48,12 @@ public class CompteController extends Controller {
 
         if (compteService.createIfNotExists(compte)) {
             Response response = new Response("ok", "Compte créé", 201);
+            Log.log("Account successfully created", Log_Type.INFO, Log_Location.Controller);
             response.setContext(ctx);
         }
         else {
             Response response = new Response("error", "Compte déjà existant", 400);
+            Log.log("Account already exists", Log_Type.ERROR, Log_Location.Controller);
             response.setContext(ctx);
         }
     }
@@ -57,9 +64,45 @@ public class CompteController extends Controller {
             File file = fileService.getOne(id);
             List<Compte> comptes = compteService.findByFile(file);
             Response response = new Response("ok", comptes, 200);
+            Log.log("List of accounts successfully retrieved", Log_Type.INFO, Log_Location.Controller);
             response.setContext(ctx);
         } catch (Exception e) {
             Response response = new Response("error", "Numéro de dossier invalide", 400);
+            Log.log("Invalid file", Log_Type.ERROR, Log_Location.Controller);
+            response.setContext(ctx);
+        }
+    }
+
+    public void getAllLight(Context ctx) {
+        try {
+            Integer id = Integer.parseInt(ctx.pathParam("id"));
+            File file = fileService.getOne(id);
+            List<CompteLight> comptes = compteService.findByFileLight(file);
+            List<CompteUnion> allComptes = new ArrayList<>();
+            for (CompteLight compteLight: comptes) {
+                for (CompteAuxiliaire compteAuxiliaire: compteLight.getComptesAuxiliaires()) {
+                    allComptes.add(new CompteUnion(
+                            compteAuxiliaire.getIdCompteAuxiliaire(),
+                            compteAuxiliaire.getNumeroCompteAuxiliaire(),
+                            compteAuxiliaire.getLibelle(),
+                            compteAuxiliaire.getSolde(),
+                            compteAuxiliaire.getActif()));
+                }
+                allComptes.add(new CompteUnion(
+                        compteLight.getIdCompte(),
+                        compteLight.getNumeroCompte(),
+                        compteLight.getLibelle(),
+                        compteLight.getSolde(),
+                        compteLight.getActif()
+                ));
+            }
+            Response response = new Response("ok", allComptes, 200);
+            Log.log("List of accounts successfully retrieved", Log_Type.INFO, Log_Location.Controller);
+            response.setContext(ctx);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Response response = new Response("error", "Numéro de dossier invalide", 400);
+            Log.log("Invalid file", Log_Type.INFO, Log_Location.Controller);
             response.setContext(ctx);
         }
     }
@@ -68,15 +111,17 @@ public class CompteController extends Controller {
         try {
             Integer id = Integer.parseInt(ctx.pathParam("id"));
             File file = fileService.getOne(id);
-            List<Compte> comptes = compteService.findByFile(file)
+            List<CompteLight> comptes = compteService.findByFileLight(file)
                     .stream()
                     .filter(compte ->
                             compte.getNumeroCompte().toString().matches("(40[0-9])|(41[0-9])"))
                     .toList();
             Response response = new Response("ok", comptes, 200);
+            Log.log("Aggregation accounts successfully retrieved", Log_Type.INFO, Log_Location.Controller);
             response.setContext(ctx);
         } catch (Exception e) {
             Response response = new Response("error", "Numéro de dossier invalide", 400);
+            Log.log("Invalid file", Log_Type.INFO, Log_Location.Controller);
             response.setContext(ctx);
         }
     }
@@ -106,6 +151,7 @@ public class CompteController extends Controller {
             }
 
             Response response = new Response("ok", comptesAuxiliaires, 200);
+            Log.log("Auxiliary accounts successfully retrieved", Log_Type.INFO, Log_Location.Controller);
             response.setContext(ctx);
         } catch (Exception e) {
             e.printStackTrace();

@@ -2,6 +2,7 @@ package org.pfa.services;
 
 import org.pfa.models.Compte;
 import org.pfa.models.File;
+import org.pfa.models.dto.CompteLight;
 import org.pfa.repositories.CompteRepository;
 
 import java.util.List;
@@ -29,6 +30,8 @@ public class CompteService {
     }
 
     public List<Compte> findByFile(File file) { return repo.getByFile(file); }
+
+    public List<CompteLight> findByFileLight(File file) { return repo.getByFileLight(file); }
 
     public List<Compte> getByFileMatchingExp(File file, String exp) {
         List<Compte> comptes = findByFile(file);

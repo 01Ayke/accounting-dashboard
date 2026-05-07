@@ -20,7 +20,6 @@ public class FileRepository {
             Hibernate.initialize(journal.getEcrituresComptables());
         }
         for (Compte compte: file.getComptes()) {
-            Hibernate.initialize(compte.getImmobilisations());
             Hibernate.initialize(compte.getEcrituresComptables());
             Hibernate.initialize(compte.getComptesAuxiliaires());
             for (EcritureComptable ecriture: compte.getEcrituresComptables()) {

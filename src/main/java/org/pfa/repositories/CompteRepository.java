@@ -7,7 +7,9 @@ import org.pfa.config.HibernateUtil;
 import org.pfa.models.Compte;
 import org.pfa.models.CompteAuxiliaire;
 import org.pfa.models.File;
+import org.pfa.models.dto.CompteLight;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CompteRepository {
@@ -36,7 +38,6 @@ public class CompteRepository {
                 .getResultList();
         for (Compte compte: comptes) {
             Hibernate.initialize(compte.getEcrituresComptables());
-            Hibernate.initialize(compte.getImmobilisations());
             Hibernate.initialize(compte.getComptesAuxiliaires());
             for (CompteAuxiliaire aux: compte.getComptesAuxiliaires()) {
                 Hibernate.initialize(aux.getTypeCompteAuxiliaire());
@@ -44,6 +45,29 @@ public class CompteRepository {
         }
         session.close();
         return comptes;
+    }
+
+    public List<CompteLight> getByFileLight(File dossier) {
+//        Session session = HibernateUtil.getSessionFactory().openSession();
+//        List<Compte> comptes = session.createSelectionQuery("from Compte WHERE file = :dossier", Compte.class)
+//                .setParameter("dossier", dossier)
+//                .getResultList();
+//        List<CompteLight> comptesLight = new ArrayList<>();
+//        for (Compte compte: comptes) {
+//            comptesLight.add(new CompteLight(compte));
+//        }
+//        session.close();
+//        return comptesLight;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List<Compte> comptes = session.createQuery("FROM Compte where file = :dossier", Compte.class)
+                .setParameter("dossier", dossier)
+                .getResultList();
+        List<CompteLight> comptesLight = new ArrayList<>();
+        for (Compte compte: comptes) {
+            Hibernate.initialize(compte.getComptesAuxiliaires());
+            comptesLight.add(new CompteLight(compte));
+        }
+        return comptesLight;
     }
 
     public Compte findById(Integer id) {

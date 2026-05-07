@@ -33,10 +33,6 @@ public class Compte {
     @JsonManagedReference(value = "compte-ecriture")
     private Set<EcritureComptable> ecrituresComptables;
 
-    @OneToMany(mappedBy = "compte", fetch = FetchType.LAZY)
-    @JsonManagedReference(value = "compte-immobilisation")
-    private Set<Immobilisation> immobilisations;
-
     @OneToMany(mappedBy = "compteRattachement", fetch = FetchType.LAZY)
     @JsonManagedReference(value = "compte-compte_aux")
     @JsonIgnore
@@ -82,9 +78,5 @@ public class Compte {
 
     public Set<CompteAuxiliaire> getComptesAuxiliaires() {
         return comptesAuxiliaires;
-    }
-
-    public Set<Immobilisation> getImmobilisations() {
-        return immobilisations;
     }
 }
