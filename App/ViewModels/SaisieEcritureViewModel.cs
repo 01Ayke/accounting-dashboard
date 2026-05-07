@@ -167,12 +167,12 @@ public class SaisieEcritureViewModel : INotifyPropertyChanged
             var service = new App.Services.CompteComptableService();
 
             var comptes    = await service.GetAllComptesAsync(dossierId.Value);
-            var agregation = await service.GetAllCompteAuxiliairesAsync(dossierId.Value);
-            var tiers      = await service.GetAllComptesTiersAsync(dossierId.Value);
+            //var agregation = await service.GetAllCompteAuxiliairesAsync(dossierId.Value);
+            //var tiers      = await service.GetAllComptesTiersAsync(dossierId.Value);
 
             var sorted = comptes
-                .Concat(agregation)
-                .Concat(tiers)
+                //.Concat(agregation)
+                //.Concat(tiers)
                 .OrderBy(c => long.TryParse(c.NumeroCompte, out var n) ? n : long.MaxValue);
 
             ComptesDisponibles.Clear();
