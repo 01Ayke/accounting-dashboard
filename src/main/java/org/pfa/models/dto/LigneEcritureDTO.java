@@ -2,6 +2,7 @@ package org.pfa.models.dto;
 
 public class LigneEcritureDTO {
     private Integer idCompte;
+    private Integer idCompteAuxiliaire;
     private Double debit;
     private Double credit;
 
@@ -13,6 +14,10 @@ public class LigneEcritureDTO {
 
     public void setIdCompte(Integer idCompte) {
         this.idCompte = idCompte;
+    }
+
+    public Integer getIdCompteAuxiliaire() {
+        return idCompteAuxiliaire;
     }
 
     public Double getDebit() {

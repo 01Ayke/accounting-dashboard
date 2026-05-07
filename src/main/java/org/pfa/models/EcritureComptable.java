@@ -36,6 +36,11 @@ public class EcritureComptable {
     private Compte compte;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_compte_auxiliaire")
+    @JsonBackReference(value = "compteaux-ecriture")
+    private CompteAuxiliaire compteAuxiliaire;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_journal")
     @JsonBackReference(value = "ecriture-journal")
     private Journal journal;
@@ -48,6 +53,18 @@ public class EcritureComptable {
         this.credit = credit;
         this.libelle = libelle;
         this.compte = compte;
+        this.journal = journal;
+        this.idOperateur = idOperateur;
+        this.codeOperation = "SAI";
+    }
+
+    public EcritureComptable(Date date_saisie, Double debit, Double credit, String libelle, Compte compte, CompteAuxiliaire compteAuxiliaire, Journal journal, Integer idOperateur) {
+        this.date_saisie = date_saisie;
+        this.debit = debit;
+        this.credit = credit;
+        this.libelle = libelle;
+        this.compte = compte;
+        this.compteAuxiliaire = compteAuxiliaire;
         this.journal = journal;
         this.idOperateur = idOperateur;
         this.codeOperation = "SAI";
@@ -71,6 +88,10 @@ public class EcritureComptable {
 
     public Compte getCompte() {
         return compte;
+    }
+
+    public CompteAuxiliaire getCompteAuxiliaire() {
+        return compteAuxiliaire;
     }
 
     public Journal getJournal() {
