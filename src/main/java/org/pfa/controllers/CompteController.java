@@ -82,6 +82,7 @@ public class CompteController extends Controller {
             for (CompteLight compteLight: comptes) {
                 for (CompteAuxiliaire compteAuxiliaire: compteLight.getComptesAuxiliaires()) {
                     allComptes.add(new CompteUnion(
+                            compteLight.getIdCompte(),
                             compteAuxiliaire.getIdCompteAuxiliaire(),
                             compteAuxiliaire.getNumeroCompteAuxiliaire(),
                             compteAuxiliaire.getLibelle(),
