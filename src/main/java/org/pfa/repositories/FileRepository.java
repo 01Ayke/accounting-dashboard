@@ -99,11 +99,20 @@ public class FileRepository {
     }
 
     public void save(File file) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = session.beginTransaction();
-        session.persist(file);
-        tx.commit();
-        session.close();
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction tx = null;
+            try {
+                tx = session.beginTransaction();
+                session.persist(file);
+                tx.commit();
+            } catch (Exception e) {
+                if (tx != null && tx.isActive()) {
+                    tx.rollback();
+                }
+                e.printStackTrace();
+                throw e;
+            }
+        }
     }
 
     public void deleteByName(String name) {

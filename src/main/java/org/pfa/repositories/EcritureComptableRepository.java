@@ -11,7 +11,7 @@ import org.pfa.models.dto.LigneEcritureDTO;
 
 import java.util.Date;
 
-public class EcritureComptableRepository {
+public class    EcritureComptableRepository {
 
     public void createBatchWithSession(CreationEcritureBatchRequest request) throws Exception {
         Transaction transaction = null;

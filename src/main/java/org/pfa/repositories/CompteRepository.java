@@ -14,11 +14,20 @@ import java.util.List;
 
 public class CompteRepository {
     public void save(Compte compte) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = session.beginTransaction();
-        session.persist(compte);
-        tx.commit();
-        session.close();
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction tx = null;
+            try {
+                tx = session.beginTransaction();
+                session.persist(compte);
+                tx.commit();
+            } catch (Exception e) {
+                if (tx != null && tx.isActive()) {
+                    tx.rollback();
+                }
+                e.printStackTrace();
+                throw e;
+            }
+        }
     }
 
     public Compte getByFileAndNumero(File dossier, String numero) {

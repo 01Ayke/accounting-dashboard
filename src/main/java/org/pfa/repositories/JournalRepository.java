@@ -8,11 +8,20 @@ import java.util.List;
 
 public class JournalRepository {
     public void save(Journal journal) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = session.beginTransaction();
-        session.persist(journal);
-        tx.commit();
-        session.close();
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction tx = null;
+            try {
+                tx = session.beginTransaction();
+                session.persist(journal);
+                tx.commit();
+            } catch (Exception e) {
+                if (tx != null && tx.isActive()) {
+                    tx.rollback();
+                }
+                e.printStackTrace();
+                throw e;
+            }
+        }
     }
 
     public Journal findById(Integer id) {

@@ -10,11 +10,20 @@ import java.util.List;
 
 public class CompteAuxiliaireRepository {
     public void save(CompteAuxiliaire compteAuxiliaire) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = session.beginTransaction();
-        session.persist(compteAuxiliaire);
-        tx.commit();
-        session.close();
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction tx = null;
+            try {
+                tx = session.beginTransaction();
+                session.persist(compteAuxiliaire);
+                tx.commit();
+            } catch (Exception e) {
+                if (tx != null && tx.isActive()) {
+                    tx.rollback();
+                }
+                e.printStackTrace();
+                throw e;
+            }
+        }
     }
 
     public CompteAuxiliaire getByCompteAndLibelle(Compte compte, String numero) {
